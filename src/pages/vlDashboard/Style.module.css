@@ -1,0 +1,392 @@
+.cdcSpeedWallboard {
+    position: relative;
+    line-height: 32px;
+}
+.pepfarLogo1Icon {
+    width: 43.1px;
+    position: relative;
+    height: 32px;
+    overflow: hidden;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+.pngwing2Icon {
+    width: 32.1px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.pngwing1Icon {
+    width: 48px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.icon {
+    width: 99.6px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.pepfarLogo1Parent {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.lastUpdate28 {
+    position: relative;
+    font-size: 12px;
+    line-height: 24px;
+}
+.cdcSpeedWallboardParent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.icons {
+    width: 16px;
+    position: relative;
+    height: 16px;
+}
+.iconsWrapper {
+    border-radius: 100px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+}
+.iconsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+}
+.frameParent {
+    border-radius: 100px;
+    background-color: #ebebe4;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    height: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    cursor: pointer;
+}
+.frameDiv {
+    border-radius: 100px;
+    background-color: #ebebe4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+    cursor: pointer;
+}
+.frameGroup {
+    border-radius: 100px;
+    background-color: #ebebe4;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    height: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.jd {
+    position: absolute;
+    top: calc(50% - 16px);
+    left: calc(50% - 10px);
+    line-height: 32px;
+}
+.jdWrapper {
+    width: 32px;
+    position: relative;
+    border-radius: 100px;
+    background-color: #fff;
+    height: 32px;
+}
+.iconsWrapper1 {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 100px;
+    background-color: #ebebe4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+    cursor: pointer;
+}
+.frameContainer {
+    border-radius: 100px;
+    background-color: #ebebe4;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    height: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 16px;
+    color: #000;
+}
+.controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    font-size: 12px;
+}
+.topBarLight {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1440px;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 48px;
+    box-sizing: border-box;
+    font-size: 24px;
+}
+.icons5 {
+    width: 24px;
+    position: relative;
+    height: 24px;
+}
+.iconsWrapper2 {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    background-color: #fff;
+    border: 0.5px solid #d9d9d9;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 4px 16px;
+    cursor: pointer;
+}
+.frameParent1 {
+    position: absolute;
+    bottom: 8px;
+    left: 1002px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+}
+.mapOfOsunStateShowingTheIcon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 8px;
+    width: 660px;
+    height: 710px;
+    object-fit: cover;
+}
+.ayedire {
+    margin: 0;
+}
+.p {
+    margin: 0;
+    font-size: 25px;
+}
+.ayedire1000 {
+    position: relative;
+    letter-spacing: 0.01em;
+    font-weight: 600;
+}
+.ayedire1000Wrapper {
+    position: absolute;
+    top: 531.74px;
+    left: 79px;
+    background-color: #c40306;
+    width: 96px;
+    height: 87.6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.numberBoxChild {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #e8b51e;
+    width: 89.7px;
+    height: 86.8px;
+}
+.ifeSouth20Container {
+    position: absolute;
+    top: 7.72px;
+    left: 0px;
+    letter-spacing: 0.01em;
+    font-weight: 600;
+    display: inline-block;
+    width: 108.3px;
+    height: 66.6px;
+}
+.numberBox {
+    position: absolute;
+    top: 522.85px;
+    left: 294.94px;
+    width: 108.3px;
+    height: 86.8px;
+}
+.numberBoxItem {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #0d8651;
+    width: 89.7px;
+    height: 61.7px;
+}
+.iboku2 {
+    position: absolute;
+    top: 5.49px;
+    left: 0px;
+    letter-spacing: 0.01em;
+    font-weight: 600;
+    display: inline-block;
+    width: 108.3px;
+    height: 47.3px;
+}
+.numberBox1 {
+    position: absolute;
+    top: 155.31px;
+    left: 419.72px;
+    width: 108.3px;
+    height: 61.7px;
+}
+.map {
+    position: absolute;
+    top: 266px;
+    left: 48px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    width: 660px;
+    height: 710px;
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+    font-family: Poppins;
+}
+.map1 {
+    position: absolute;
+    top: 266px;
+    left: 732px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    width: 660px;
+    height: 710px;
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+    font-family: Poppins;
+}
+.currOnTreament {
+    position: relative;
+    line-height: 24px;
+}
+.b {
+    position: relative;
+    font-size: 18px;
+    line-height: 26px;
+    color: #0e8650;
+}
+.maternalNewborn {
+    width: 204px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    background-color: #fff;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 16px;
+    box-sizing: border-box;
+}
+.resultRecieved {
+    width: 110px;
+    position: relative;
+    line-height: 24px;
+    display: inline-block;
+}
+.cases {
+    position: relative;
+    font-size: 18px;
+    line-height: 26px;
+    color: #c40306;
+}
+.viralload1000 {
+    position: relative;
+    line-height: 24px;
+    white-space: pre-wrap;
+}
+.summary {
+    position: absolute;
+    top: 120px;
+    left: 48px;
+    width: 1344px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 24px;
+    font-size: 14px;
+}
+.viralloadSuppressionBy {
+    position: absolute;
+    top: 226px;
+    left: 48px;
+    line-height: 24px;
+}
+.viralloadCoverageBy {
+    position: absolute;
+    top: 226px;
+    left: 732px;
+    line-height: 24px;
+}
+.iconsParent {
+    position: absolute;
+    top: 80px;
+    left: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 0px;
+    gap: 8px;
+    text-align: center;
+    color: #000;
+}
+.summaryBoard {
+    width: 100%;
+    position: relative;
+    background-color: #ebe8e8;
+    height: 1024px;
+    overflow: hidden;
+    text-align: left;
+    font-size: 16px;
+    color: #1e1e1e;
+    font-family: Satoshi;
+}
+

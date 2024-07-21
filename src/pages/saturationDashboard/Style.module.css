@@ -1,0 +1,315 @@
+.b {
+    align-self: stretch;
+    position: relative;
+}
+.totalFacilitiesOffering {
+    margin: 0;
+}
+.totalFacilitiesOfferingContainer {
+    align-self: stretch;
+    position: relative;
+    font-size: 16px;
+    line-height: 24px;
+    color: #fcfcfc;
+}
+.parent {
+    position: absolute;
+    top: calc(50% - 101.5px);
+    left: calc(50% - 128px);
+    width: 256px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.summaryBoardInner {
+    position: absolute;
+    top: 120px;
+    left: 48px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    background-color: #e5aa46;
+    width: 432px;
+    height: 269px;
+    overflow: hidden;
+}
+.cdcSpeedWallboard {
+    position: relative;
+    line-height: 32px;
+}
+.pepfarLogo1Icon {
+    width: 43.1px;
+    position: relative;
+    height: 32px;
+    overflow: hidden;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+.pngwing2Icon {
+    width: 32.1px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.pngwing1Icon {
+    width: 48px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.icon {
+    width: 99.6px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.pepfarLogo1Parent {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.lastUpdate28 {
+    position: relative;
+    font-size: 12px;
+    line-height: 24px;
+}
+.cdcSpeedWallboardParent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.icons {
+    width: 16px;
+    position: relative;
+    height: 16px;
+}
+.iconsWrapper {
+    border-radius: 100px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+}
+.iconsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+}
+.frameParent {
+    border-radius: 100px;
+    background-color: #ebebe4;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    height: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    cursor: pointer;
+}
+.frameDiv {
+    border-radius: 100px;
+    background-color: #ebebe4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+    cursor: pointer;
+}
+.frameGroup {
+    border-radius: 100px;
+    background-color: #ebebe4;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    height: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.jd {
+    position: absolute;
+    top: calc(50% - 16px);
+    left: calc(50% - 10px);
+    line-height: 32px;
+}
+.jdWrapper {
+    width: 32px;
+    position: relative;
+    border-radius: 100px;
+    background-color: #fff;
+    height: 32px;
+}
+.iconsWrapper1 {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 100px;
+    background-color: #ebebe4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+    cursor: pointer;
+}
+.frameContainer {
+    border-radius: 100px;
+    background-color: #ebebe4;
+    border: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    height: 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 16px;
+    color: #000;
+}
+.controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    font-size: 12px;
+}
+.topBarLight {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1440px;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 48px;
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 24px;
+    color: #1e1e1e;
+}
+.icons5 {
+    width: 24px;
+    position: relative;
+    height: 24px;
+}
+.iconsWrapper2 {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    background-color: #fff;
+    border: 0.5px solid #d9d9d9;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 4px 16px;
+    cursor: pointer;
+}
+.frameParent1 {
+    position: absolute;
+    top: 984px;
+    left: 1002px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+}
+.image9Icon {
+    position: absolute;
+    top: 413px;
+    left: 48px;
+    width: 1344px;
+    height: 563px;
+    object-fit: cover;
+}
+.treatmentSaturationBy {
+    position: relative;
+    line-height: 24px;
+}
+.iconsParent {
+    position: absolute;
+    top: 80px;
+    left: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 0px;
+    gap: 8px;
+    font-size: 16px;
+    color: #000;
+}
+.b1 {
+    position: relative;
+}
+.totalPatientReceivingContainer {
+    position: relative;
+    font-size: 16px;
+    line-height: 24px;
+    color: #fcfcfc;
+}
+.group {
+    position: absolute;
+    top: calc(50% - 101.5px);
+    left: calc(50% - 149px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.summaryBoardChild {
+    position: absolute;
+    top: 120px;
+    left: 504px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    background-color: #246d38;
+    width: 432px;
+    height: 269px;
+    overflow: hidden;
+}
+.totalPatientReceivingContainer1 {
+    position: relative;
+    font-size: 16px;
+    line-height: 24px;
+}
+.summaryBoardInner1 {
+    position: absolute;
+    top: 120px;
+    left: 960px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    background-color: #fde3e1;
+    width: 432px;
+    height: 269px;
+    overflow: hidden;
+    color: #f44336;
+}
+.summaryBoard {
+    width: 100%;
+    position: relative;
+    background-color: #ebe8e8;
+    height: 1024px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 96px;
+    color: #fdf8f0;
+    font-family: Satoshi;
+}
+

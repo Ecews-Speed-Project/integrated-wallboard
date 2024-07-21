@@ -1,0 +1,54 @@
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+   font-size: 12px;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+@media (max-width: 600px) {
+
+    th,
+    td {
+        font-size: 12px;
+        padding: 6px;
+    }
+}
+
+.red {
+    background-color:#C10003 !important;
+    text-align: center;
+    color: #fff !important;
+    font-weight: bold;
+    font-family: Satoshi;
+}
+
+.yellow {
+    background-color: #cbb46f !important;
+    text-align: center;
+    color: #fff !important;
+    font-weight: bold;
+    font-family: Satoshi;
+}
+
+.green {
+    background-color: #0E8650 !important;
+    text-align: center;
+    color: #fff !important;
+    font-weight: bold;
+    font-family: Satoshi;
+}
