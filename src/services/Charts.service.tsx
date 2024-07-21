@@ -1,3 +1,12 @@
+import { color } from "highcharts";
+
+interface mapData {
+    value: number;
+    code: String;
+}
+
+
+
 export const stateMaps = (map: any, data: any, title: any, height: any = 700) => {
     return {
 
@@ -27,7 +36,7 @@ export const stateMaps = (map: any, data: any, title: any, height: any = 700) =>
 
         mapNavigation: {
             enabled: true,
-            enableDoubleClickZoomTo: true
+            //  enableDoubleClickZoomTo: true
         },
 
         colorAxis: {
@@ -72,8 +81,8 @@ export const stateMaps = (map: any, data: any, title: any, height: any = 700) =>
 export const dualColumn = (title: any) => {
     return {
         title: {
-            text: 'Sales of petroleum products March, Norway',
-            align: 'left'
+            text: title,
+            align: 'center'
         },
         xAxis: {
             categories: [
@@ -150,6 +159,27 @@ export const dualColumn = (title: any) => {
     }
 }
 
+export const getMap = async (state: any) => {
+    let response = await fetch('../../demo-data/' + state + '.json'); // Fetch the JSON file
+    return await response.json(); // Parse JSON
+}
+
+export const getMapData = async (state: any) => {
+    let data = getData(state, null)
+    const mapData: mapData[] = []
+    data.tx_curr_lga.forEach(function (p: any) {
+        mapData.push(
+            {
+                "value": p.txcurr,
+                "code": p.lgaName
+            },
+        )
+        p.code = p.code;
+    });
+    return mapData;
+}
+
+
 
 export const columnChart = (title: any, categories: any, data: any) => {
     return {
@@ -182,8 +212,8 @@ export const columnChart = (title: any, categories: any, data: any) => {
 }
 
 
-export const getData = (state: any) => {
-    if (state == "Delta") {
+export const getData = (state: any, lga: any) => {
+    if (state === "Delta") {
         return {
             "tx_cur_states": [
                 {
@@ -199,6 +229,34 @@ export const getData = (state: any) => {
                     "id": 1,
                     "stateId": 1,
                     "lgaId": 3,
+                    "lgaName": 'Oshimili North',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Oshimili South',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Bomadi',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Okpe',
                     "reportingWeek": 29,
                     "txcurr": 2110,
                     "uniqueFingerprints": 2074,
@@ -211,7 +269,7 @@ export const getData = (state: any) => {
                 "saturation": 80
             }
         }
-    } else if (state = "Osun") {
+    } else if (state === "Osun") {
         return {
             "tx_cur_states": [
                 {
@@ -227,6 +285,34 @@ export const getData = (state: any) => {
                     "id": 1,
                     "stateId": 1,
                     "lgaId": 3,
+                    "lgaName": 'Boluwaduro',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Obokun',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Osogbo',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Boripe',
                     "reportingWeek": 29,
                     "txcurr": 2110,
                     "uniqueFingerprints": 2074,
@@ -256,6 +342,34 @@ export const getData = (state: any) => {
                     "id": 1,
                     "stateId": 1,
                     "lgaId": 3,
+                    "lgaName": 'Irepodun\/Ifelodun',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Ilejemeji',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Ekiti East',
+                    "reportingWeek": 29,
+                    "txcurr": 2110,
+                    "uniqueFingerprints": 2074,
+                    "reportDate": "2024-07-20T00:00:00"
+                }, {
+                    "id": 1,
+                    "stateId": 1,
+                    "lgaId": 3,
+                    "lgaName": 'Ise\/Orun',
                     "reportingWeek": 29,
                     "txcurr": 2110,
                     "uniqueFingerprints": 2074,
@@ -268,6 +382,106 @@ export const getData = (state: any) => {
                 "saturation": 90
             }
         }
+
+    }
+}
+
+
+export const ageAndSexChart = (title:any) => {
+    const categories = [
+        '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-40', '40-45',
+        '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80-84',
+        '80+'
+    ];
+    return {
+        chart: {
+            type: 'bar',
+            height: 700
+
+        },
+        title: {
+            text: title,
+            align: 'center'
+        },
+        accessibility: {
+            point: {
+                valueDescriptionFormat: '{index}. Age {xDescription}, {value}%.'
+            }
+        },
+        xAxis: [{
+            categories: categories,
+            reversed: false,
+            labels: {
+                step: 1
+            },
+            accessibility: {
+                description: 'Age (male)'
+            }
+        }, { // mirror axis on right side
+            opposite: true,
+            reversed: false,
+            categories: categories,
+            linkedTo: 0,
+            labels: {
+                step: 1
+            },
+            accessibility: {
+                description: 'Age (female)'
+            }
+        }],
+        yAxis: {
+            title: {
+                text: null
+            },
+            labels: {
+                format: '{value}%'
+            },
+            accessibility: {
+                description: 'Percentage population',
+                // rangeDescription: 'Range: 0 to 5%'
+            }
+        },
+
+        plotOptions: {
+            series: {
+                stacking: 'normal',
+                borderRadius: '20%'
+            }
+        },
+
+        tooltip: {
+            format: '<b>{series.name}, age {point.category}</b><br/>' +
+                'Population: {(abs point.y):.2f}%'
+        },
+
+        series: [{
+            name: 'Male',
+            pointWidth: 25,
+            style: {
+                fontSize: 14,
+                textOutline: 0
+            },
+            data: [
+                -1.38, -2.09, -2.45, -2.71, -2.97,
+                -3.69, -4.04, -3.81, -4.19, -4.61,
+                -4.56, -4.21, -3.53, -2.55, -1.82,
+                -1.46, -0.78, -0.71
+            ]
+        }, {
+            name: 'Female',
+            pointWidth: 25,
+            style: {
+                fontSize: 14,
+                textOutline: 0,
+                color: '#000'
+            },
+            data: [
+                1.35, 1.98, 2.43, 2.39, 2.71,
+                3.02, 3.50, 3.52, 4.03, 4.40,
+                4.17, 3.88, 3.29, 2.42, 1.80,
+                1.39, 0.99, 1.15
+            ]
+        }]
 
     }
 }

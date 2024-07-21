@@ -1,12 +1,8 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Filter from "../../components/Filter";
-import PortalPopup from "../../components/PortalPopup";
-import DropdownLight from "../../components/DropdownLight";
-import styles from './Style.module.css';
 import Header from '../../components/Header';
 import data from '../../demo-data/us-population-density.json';
 import osunMap from '../../demo-data/Osun.json';
-import { dualColumn, stateMaps } from '../../services/Charts.service';
+import { dualColumn, getMap, getMapData, stateMaps } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
@@ -21,11 +17,10 @@ const NcdDashboard: FunctionComponent = () => {
 
 	const fetchMap = async () => {
 
-		data.forEach(function (p: any) {
-			p.code = p.code;
-		});
-		setColumnChartData(dualColumn("Treatment Saturation by LGA"))
-		setChartData(stateMaps(osunMap, data, "Percentage of Unique Clients by LGA", 400))
+		let map = await getMap("Ekiti")
+		let mapData = await getMapData("Ekiti")
+		setColumnChartData(dualColumn("Elevated BP cascade"))
+		setChartData(stateMaps(map, mapData, 'No of Clients  with elevated BP by LGA', 500))
 	}
 
 	useEffect(() => {

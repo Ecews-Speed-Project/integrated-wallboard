@@ -1,15 +1,9 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Filter from "../../components/Filter";
-import PortalPopup from "../../components/PortalPopup";
-import DropdownLight from "../../components/DropdownLight";
-import styles from './Style.module.css';
 import Header from '../../components/Header';
 import data from '../../demo-data/us-population-density.json';
-import osunMap from '../../demo-data/Osun.json';
-import { dualColumn } from '../../services/Charts.service';
+import { ageAndSexChart, dualColumn } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import highchartsMap from "highcharts/modules/map";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import BreadCrumb from '../../components/BreadCrumb';
@@ -17,13 +11,11 @@ import SmallCard from '../../components/SmallCard';
 
 const VlAgeDashboard: FunctionComponent = () => {
 	const [chartData, setChartData] = useState({});
+	const [vlCoverage, setVlCoverage] = useState({});
+	const [vlSuppression, setVlSuppression] = useState({});
 	const fetchMap = async () => {
-
-		data.forEach(function (p: any) {
-			p.code = p.code;
-		});
-
-		setChartData(dualColumn("Treatment Saturation by LGA"))
+		setVlCoverage(ageAndSexChart("Viralload Coverga by age and sex"))
+		setVlSuppression(ageAndSexChart("Viralload suppression by age and sex"))
 	}
 
 	useEffect(() => {
@@ -48,11 +40,18 @@ const VlAgeDashboard: FunctionComponent = () => {
 							<SmallCard title={"Viralload > 1000 cop / mi"} value={"900"}></SmallCard>
 						</div>
 					</div>
-					<div className="col-12 col-md-12">
+					<div className="col-12 col-md-6">
 						<HighchartsReact
 							constructorType={'mapChart'}
 							highcharts={Highcharts}
-							options={chartData}
+							options={vlCoverage}
+						/>
+					</div>
+					<div className="col-12 col-md-6">
+						<HighchartsReact
+							constructorType={'mapChart'}
+							highcharts={Highcharts}
+							options={vlSuppression}
 						/>
 					</div>
 				</div>

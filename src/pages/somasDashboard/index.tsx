@@ -1,7 +1,4 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Filter from '../../components/Filter';
-import PortalPopup from "../../components/PortalPopup";
-import DropdownLight from "../../components/Header";
 import styles from '../SummaryBoard.module.css';
 import Header from '../../components/Header';
 import Highcharts from 'highcharts'
@@ -12,12 +9,7 @@ import osunMap from '../../demo-data/Osun.json';
 highchartsMap(Highcharts);
 
 const Somas: FunctionComponent = () => {
-	const [isFilterOpen, setFilterOpen] = useState(false);
-	const [isDropdownLightOpen, setDropdownLightOpen] = useState(false);
 	const [chartData, setChartData] = useState({});
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-
 	const fetchMap = async () => {
 		
 		data.forEach(function (p: any) {
@@ -111,9 +103,6 @@ const Somas: FunctionComponent = () => {
 		}]
 	}
 
-	const onFrameContainerClick = useCallback(() => {
-		// Add your code here
-	}, []);
 
 
 	return (<>
@@ -429,47 +418,9 @@ const Somas: FunctionComponent = () => {
 					/>
 				</div>
 			</div>
-			<div className={styles.frameParent4}>
-				<div className={styles.iconsWrapper2} onClick={onFrameContainerClick}>
-					<img className={styles.icons5} alt="" src="icons/arrow-left.svg" />
-				</div>
-				<div className={styles.iconsWrapper2} onClick={onFrameContainerClick}>
-					<img className={styles.icons5} alt="" src="icons/arrow-right.svg" />
-				</div>
-			</div>
-			<div className={styles.iconsParent}>
-				<img className={styles.icons5} alt="" src="icons/home.svg" />
-				<b className={styles.penta3Drop}>Summary</b>
-			</div>
+			
 		</div>
-		{isFilterOpen && (
-			{/* <PortalPopup
-        				overlayColor="rgba(113, 113, 113, 0.3)"
-        				placement="Centered"
-        				
-        				
-        				
-        				
-        				
-        				onOutsideClick={closeFilter}
-        				>
-        				<Filter onClose={closeFilter} />
-      			</PortalPopup> */}
-		)}
-		{/* 	{isDropdownLightOpen && (
-      			<PortalPopup
-        				overlayColor="rgba(113, 113, 113, 0.3)"
-        				placement="Centered"
-        				
-        				
-        				
-        				
-        				
-        				onOutsideClick={closeDropdownLight}
-        				>
-        				<DropdownLight onClose={closeDropdownLight} />
-      			</PortalPopup>
-    		)} */}</>);
+	</>);
 };
 
 export default Somas;

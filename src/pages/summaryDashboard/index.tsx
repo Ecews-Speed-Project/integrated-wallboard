@@ -1,14 +1,10 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Filter from '../../components/Filter';
-import PortalPopup from "../../components/PortalPopup";
-import DropdownLight from "../../components/Header";
 import Header from '../../components/Header';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
 import data from '../../demo-data/us-population-density.json';
-import osunMap from '../../demo-data/Osun.json';
-import { stateMaps } from '../../services/Charts.service';
+import { getMap, getMapData, stateMaps } from '../../services/Charts.service';
 import NonHIVTable from '../../components/NonHIVTable';
 import SmallCard from '../../components/SmallCard';
 import BreadCrumb from '../../components/BreadCrumb';
@@ -26,6 +22,8 @@ interface DiseaseData {
 
 const SummaryBoard: FunctionComponent = () => {
 	const [chartData, setChartData] = useState({});
+
+
 
 	const initialData: DiseaseData[] = [
 		{
@@ -80,20 +78,32 @@ const SummaryBoard: FunctionComponent = () => {
 			breastfed: 70,
 			tb: 7,
 			malaria: 5000
+		}, {
+			lga: 'Atakumosa East',
+			anc4: 70,
+			penta: 40,
+			breastfed: 5000,
+			tb: 20,
+			malaria: 5000
+
+		},
+		{
+			lga: 'Atakumosa East',
+			anc4: 80,
+			penta: 5,
+			breastfed: 70,
+			tb: 7,
+			malaria: 5000
 
 		}
 	];
 
 	const [data2, setData2] = useState<DiseaseData[]>(initialData);
-
-
 	const fetchMap = async () => {
 
-		data.forEach(function (p: any) {
-			p.code = p.code;
-		});
-
-		setChartData(stateMaps(osunMap, data, '', 600))
+		let map = await getMap("Ekiti")
+		let mapData = await getMapData("Ekiti")
+		setChartData(stateMaps(map, mapData, '', 800))
 	}
 
 	useEffect(() => {
@@ -120,12 +130,12 @@ const SummaryBoard: FunctionComponent = () => {
 					</div>
 					<div className="col-12 col-md-6">
 						<div className="card-body table-card-bg mb-2">
-							<h1 className='small-card-title '>Top 5 LGAs  Data sheet for non HIV Disease </h1>
+							<h1 className='small-card-title '>Top 7 LGAs  Data sheet for non HIV Disease </h1>
 							<NonHIVTable data={data2} />
 						</div>
 
 						<div className="card-body table-card-bg">
-							<h1 className='small-card-title '>Top 5 LGAs  Data sheet for HIV Disease and NCDs</h1>
+							<h1 className='small-card-title '>Top 7 LGAs  Data sheet for HIV Disease and NCDs</h1>
 							<NonHIVTable data={data2} />
 						</div>
 

@@ -1,34 +1,22 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Filter from "../../components/Filter";
-import PortalPopup from "../../components/PortalPopup";
-import DropdownLight from "../../components/DropdownLight";
-import styles from './Style.module.css';
 import Header from '../../components/Header';
 import data from '../../demo-data/us-population-density.json';
 import osunMap from '../../demo-data/Osun.json';
-import { stateMaps } from '../../services/Charts.service';
+import { getMap, getMapData, stateMaps } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import highchartsMap from "highcharts/modules/map";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import BreadCrumb from '../../components/BreadCrumb';
 
 const TreamentDashboard: FunctionComponent = () => {
-	const [isFilterOpen, setFilterOpen] = useState(false);
-	const [isDropdownLightOpen, setDropdownLightOpen] = useState(false);
-
-
 	const [chartData, setChartData] = useState({});
-
 	const fetchMap = async () => {
 
-		data.forEach(function (p: any) {
-			p.code = p.code;
-		});
-
-		setChartData(stateMaps(osunMap, data, "Percentage of Unique Clients by LGA"))
+		let map = await getMap("Ekiti")
+		let mapData = await getMapData("Ekiti")
+		setChartData(stateMaps(map, mapData, 'Percentage of Unique Clients by LGA', 800))
 	}
 
 	useEffect(() => {

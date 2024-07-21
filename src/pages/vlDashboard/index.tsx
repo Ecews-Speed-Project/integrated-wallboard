@@ -1,27 +1,25 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Filter from "../../components/Filter";
-import PortalPopup from "../../components/PortalPopup";
-import DropdownLight from "../../components/DropdownLight";
-import styles from './Style.module.css';
 import Header from '../../components/Header';
 import data from '../../demo-data/us-population-density.json';
 import osunMap from '../../demo-data/Osun.json';
-import { stateMaps } from '../../services/Charts.service';
+import { getMap, getMapData, stateMaps } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import highchartsMap from "highcharts/modules/map";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import BreadCrumb from '../../components/BreadCrumb';
 import SmallCard from '../../components/SmallCard';
 
 const VlDashboard: FunctionComponent = () => {
-	const [chartData, setChartData] = useState({});
+	const [vlCoverage, setVlCoverage] = useState({});
+	const [vlSuppression, setVlSuppression] = useState({});
 	const fetchMap = async () => {
-		data.forEach(function (p: any) {
-			p.code = p.code;
-		});
-		setChartData(stateMaps(osunMap, data, "Treatment Saturation by LGA"))
+	
+		let map = await getMap("Ekiti")
+		let mapData = await getMapData("Ekiti")
+		setVlCoverage(stateMaps(map, mapData, 'Viralload Coverage by LGA', 800))
+		setVlSuppression(stateMaps(map, mapData, 'Viralload Coverage by LGA', 800))
+
 	}
 
 	useEffect(() => {
@@ -55,14 +53,14 @@ const VlDashboard: FunctionComponent = () => {
 						<HighchartsReact
 							constructorType={'mapChart'}
 							highcharts={Highcharts}
-							options={chartData}
+							options={vlCoverage}
 						/>
 					</div>
 					<div className="col-12 col-md-6">
 						<HighchartsReact
 							constructorType={'mapChart'}
 							highcharts={Highcharts}
-							options={chartData}
+							options={vlSuppression}
 						/>
 					</div>
 				</div>

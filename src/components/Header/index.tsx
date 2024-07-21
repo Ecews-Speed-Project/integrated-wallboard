@@ -5,31 +5,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS for t
 
 
 const Header: FunctionComponent = () => {
-  const [isFilterOpen, setFilterOpen] = useState(false);
-  const [isDropdownLightOpen, setDropdownLightOpen] = useState(false);
-
-
-  const openFilter = useCallback(() => {
-    setFilterOpen(true);
-  }, []);
-
-  const closeFilter = useCallback(() => {
-    setFilterOpen(false);
-  }, []);
-
-
-  const openDropdownLight = useCallback(() => {
-    setDropdownLightOpen(true);
-  }, []);
-
-  const closeDropdownLight = useCallback(() => {
-    setDropdownLightOpen(false);
-  }, []);
-
-
-  const onFrameContainerClick = useCallback(() => {
-    // Add your code here
-  }, []);
   return (<>
     <nav className="navbar navbar-expand-lg navbar-light bg-transparent">
       <div className="container-fluid">
