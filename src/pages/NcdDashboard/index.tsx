@@ -40,27 +40,27 @@ const NcdDashboard: FunctionComponent = () => {
 						<div className="border">
 							<div className="card mb-2  yellow-card">
 								<div className="card-body">
-									<h5 className="medium-card-title">22</h5>
-									<p className="medium-card-text">Total facilities offering HIV care to patents in Osun state.</p>
+									<h5 className="medium-card-title">89%</h5>
+									<p className="medium-card-text">of ART clinic attendees
+									screened for BP</p>
 								</div>
 							</div>
 							<div className="card mb-2 green-card">
 								<div className="card-body">
-									<h5 className="medium-card-title">24,314</h5>
-									<p className="medium-card-text">Total patient receiving HIV treatment
-										across all facilities in Osun state.</p>
+									<h5 className="medium-card-title">21%</h5>
+									<p className="medium-card-text">Had elevated BP</p>
 								</div>
 							</div>
 							<div className="card mb-3 light-green-card">
 								<div className="card-body">
-									<h5 className="medium-card-title card-title">70%</h5>
-									<p className="medium-card-text card-text">Treatment Saturation.</p>
+									<h5 className="medium-card-title card-title light-green">70%</h5>
+									<p className="medium-card-text card-text light-green">With Elevated BP, Diagnosed</p>
 								</div>
 							</div>
-							<div className="card mb-3 light-green-card">
+							<div className="card mb-3 dark-green-card">
 								<div className="card-body">
-									<h5 className="medium-card-title card-title">70%</h5>
-									<p className="medium-card-text card-text">Treatment Saturation.</p>
+									<h5 className="medium-card-title card-title dark-green">70%</h5>
+									<p className="medium-card-text card-text dark-green">Commenced treatment</p>
 								</div>
 							</div>
 						</div>

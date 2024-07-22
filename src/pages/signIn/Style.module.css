@@ -1,0 +1,320 @@
+.signInChild {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: linear-gradient(100.47deg, #000, rgba(0, 0, 0, 0));
+    width: 690px;
+    height: 1024px;
+}
+.signInItem {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    background: linear-gradient(56.28deg, #096d49, rgba(0, 0, 0, 0));
+    width: 690px;
+    height: 512px;
+}
+.signIn1 {
+    position: relative;
+    line-height: 32px;
+}
+.icons {
+    width: 16px;
+    position: relative;
+    height: 16px;
+}
+.inputText {
+    position: relative;
+    line-height: 24px;
+}
+.textPrimaryIcon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    z-index: 0;
+}
+.label1 {
+    position: relative;
+    line-height: 14px;
+}
+.label {
+    margin: 0 !important;
+    position: absolute;
+    top: -18px;
+    left: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    z-index: 1;
+    font-size: 10px;
+}
+.textField {
+    align-self: stretch;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+    position: relative;
+    gap: 142px;
+}
+.icons2 {
+    width: 16px;
+    position: relative;
+    height: 16px;
+    z-index: 1;
+}
+.label2 {
+    margin: 0 !important;
+    position: absolute;
+    top: -18px;
+    left: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    z-index: 2;
+    font-size: 10px;
+}
+.textField1 {
+    align-self: stretch;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    position: relative;
+}
+.button {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+}
+.buttons {
+    align-self: stretch;
+    border-radius: 4px;
+    background-color: #096d49;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+}
+.textFieldParent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 39px;
+    font-size: 14px;
+}
+.signInParent {
+    position: absolute;
+    top: calc(50% - 248px);
+    left: 910px;
+    backdrop-filter: blur(32px);
+    border-radius: 8px 8px 0px 0px;
+    background-color: rgba(0, 0, 0, 0.25);
+    width: 434px;
+    height: 760px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 48px;
+    box-sizing: border-box;
+    gap: 96px;
+    font-size: 24px;
+}
+.b {
+    align-self: stretch;
+    position: relative;
+    line-height: 88px;
+}
+.july2024 {
+    align-self: stretch;
+    position: relative;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+}
+.parent {
+    position: absolute;
+    top: 96px;
+    left: 1039px;
+    width: 171px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    font-size: 64px;
+}
+.b1 {
+    align-self: stretch;
+    position: relative;
+    line-height: 40px;
+}
+.totalCases {
+    align-self: stretch;
+    position: relative;
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+}
+.group {
+    position: absolute;
+    top: 96px;
+    left: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+    color: #f44336;
+}
+.totalReached {
+    position: relative;
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+}
+.container {
+    position: absolute;
+    top: 96px;
+    left: 237px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+    color: #096d49;
+}
+.totalStatesCovered {
+    position: relative;
+    font-size: 16px;
+    line-height: 24px;
+}
+.frameDiv {
+    position: absolute;
+    top: 96px;
+    left: 384px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+}
+.integratedDisease {
+    position: relative;
+    line-height: 88px;
+}
+.integratedDiseaseParent {
+    position: absolute;
+    top: 364px;
+    left: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+    font-size: 64px;
+}
+.pepfarLogo1Icon {
+    width: 43.1px;
+    position: relative;
+    height: 32px;
+    overflow: hidden;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+.pngwing2Icon {
+    width: 32.1px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.icon {
+    width: 99.6px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.pngwing1Icon {
+    width: 48px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+.pepfarLogo1Parent {
+    position: absolute;
+    top: 880px;
+    left: 96px;
+    border-radius: 8px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 8px;
+    gap: 24px;
+}
+.poweredBy {
+    position: absolute;
+    top: 858px;
+    left: 96px;
+    font-size: 10px;
+    line-height: 14px;
+}
+.frameChild {
+    width: 56px;
+    position: relative;
+    border-radius: 8px;
+    height: 56px;
+    overflow: hidden;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+.frameItem {
+    width: 56px;
+    position: relative;
+    border-radius: 8px;
+    height: 56px;
+    overflow: hidden;
+    flex-shrink: 0;
+    object-fit: cover;
+    cursor: pointer;
+}
+.frameParent {
+    position: absolute;
+    top: 260px;
+    left: 96px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+}
+.signIn {
+    width: 100%;
+    position: relative;
+    height: 1024px;
+    overflow: hidden;
+    background-image: url('../../../public/images/signin.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    text-align: left;
+    font-size: 32px;
+    color: #fff;
+    font-family: Satoshi;
+}
+

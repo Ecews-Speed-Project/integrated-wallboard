@@ -34,34 +34,34 @@ const MentalHealthDashboard: FunctionComponent = () => {
 		<div>
 			<Header></Header>
 			<div className="bg-container container-fluid  mt-2">
-				<BreadCrumb state={"Osun Sate"} page={"Mental Health Dasboard"}></BreadCrumb>
+				<BreadCrumb state={"Osun Sate"} page={"NDC Integration Diabetes and Mental Health"}></BreadCrumb>
 
 				<div className="row">
 					<div className="col-12 col-md-4">
 						<div className="border">
-							<div className="card mb-2  yellow-card">
+							<div className="card mb-2  yellow-card padding-22">
 								<div className="card-body">
-									<h5 className="medium-card-title">22</h5>
-									<p className="medium-card-text">Total facilities offering HIV care to patents in Osun state.</p>
+									<h5 className="medium-card-title">91%</h5>
+									<p className="medium-card-text">of Eligible clients were 
+									screen for DM</p>
 								</div>
 							</div>
-							<div className="card mb-2 green-card">
+							<div className="card mb-2 green-card padding-22">
 								<div className="card-body">
-									<h5 className="medium-card-title">24,314</h5>
-									<p className="medium-card-text">Total patient receiving HIV treatment
-										across all facilities in Osun state.</p>
+									<h5 className="medium-card-title">71%</h5>
+									<p className="medium-card-text">of Hyperglycemic Clients</p>
 								</div>
 							</div>
-							<div className="card mb-3 light-green-card">
+							<div className="card mb-3 light-green-card padding-22">
 								<div className="card-body">
-									<h5 className="medium-card-title card-title">70%</h5>
-									<p className="medium-card-text card-text">Treatment Saturation.</p>
+									<h5 className="medium-card-title card-title light-green">92%</h5>
+									<p className="medium-card-text card-text light-green">With Elevated BP, Diagnosed </p>
 								</div>
 							</div>
-							<div className="card mb-3 light-green-card">
+							<div className="card mb-3 dark-green-card padding-22">
 								<div className="card-body">
-									<h5 className="medium-card-title card-title">70%</h5>
-									<p className="medium-card-text card-text">Treatment Saturation.</p>
+									<h5 className="medium-card-title card-title dark-green">97%</h5>
+									<p className="medium-card-text card-text dark-green">Commenced treatment</p>
 								</div>
 							</div>
 						</div>

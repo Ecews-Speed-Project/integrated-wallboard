@@ -101,9 +101,9 @@ const SummaryBoard: FunctionComponent = () => {
 	const [data2, setData2] = useState<DiseaseData[]>(initialData);
 	const fetchMap = async () => {
 
-		let map = await getMap("Ekiti")
-		let mapData = await getMapData("Ekiti")
-		setChartData(stateMaps(map, mapData, '', 800))
+		let map = await getMap("Delta")
+		let mapData = await getMapData("Delta")
+		setChartData(stateMaps(map, mapData, '', 760))
 	}
 
 	useEffect(() => {

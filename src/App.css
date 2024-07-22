@@ -65,6 +65,15 @@
   font-family: Satoshi;
 }
 
+
+.dark-green-card {
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+  border-radius: 8px;
+  text-align: center;
+  background-color: #CDDEB0 !important;
+  font-family: Satoshi;
+}
+
 .light-green-card-title {
   font-size: 96px;
   font-weight: bold;
@@ -215,3 +224,20 @@
   position: relative;
   height: 24px;
 }
+
+.padding-22{
+  padding: 6px;
+}
+
+.light-green{
+  color: #19C98A !important;
+}
+
+.dark-green{
+  color: #6D7C55 !important;
+}
+
+.font68{
+  font-size: 90px !important;
+}
+

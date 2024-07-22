@@ -8,12 +8,14 @@ import Somas from "./pages/somasDashboard";
 import SaturationDashboard from "./pages/saturationDashboard";
 import VlAgeDashboard from "./pages/vlAgeDashboard";
 import MentalHealthDashboard from "./pages/mentalHealthDashboard";
+import SignIn from "./pages/signIn";
 
 
 const ProjectRoutes = () => {
     let element =  useRoutes(
         [
-            {path:"/", element:<SummaryBoard/>},
+            {path:"/", element:<SignIn/>},
+            {path:"/summary", element:<SummaryBoard/>},
             {path:"/ncd", element:<NcdsDashboard/>},
             {path:"/mental-health", element:<MentalHealthDashboard/>},
             {path:"/vl", element:<VlDashboard/>},

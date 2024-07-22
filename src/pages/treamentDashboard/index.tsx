@@ -14,8 +14,8 @@ const TreamentDashboard: FunctionComponent = () => {
 	const [chartData, setChartData] = useState({});
 	const fetchMap = async () => {
 
-		let map = await getMap("Ekiti")
-		let mapData = await getMapData("Ekiti")
+		let map = await getMap("Osun")
+		let mapData = await getMapData("Osun")
 		setChartData(stateMaps(map, mapData, 'Percentage of Unique Clients by LGA', 800))
 	}
 
@@ -37,23 +37,30 @@ const TreamentDashboard: FunctionComponent = () => {
 				<div className="row">
 					<div className="col-12 col-md-4">
 						<div className="border">
-							<div className="card mb-2  yellow-card">
+							<div className="card mb-2  yellow-card ">
 								<div className="card-body">
-									<h5 className="card-title">22</h5>
+									<h5 className="card-title font68">22</h5>
 									<p className="card-text">Total facilities offering HIV care to patents in Osun state.</p>
 								</div>
 							</div>
-							<div className="card mb-2 green-card">
+							<div className="card mb-2 green-card ">
 								<div className="card-body">
-									<h5 className="card-title">24,314</h5>
+									<h5 className="card-title font68">24,314</h5>
 									<p className="card-text">Total patient receiving HIV treatment
 										across all facilities in Osun state.</p>
 								</div>
 							</div>
-							<div className="card mb-3 light-green-card">
+							<div className="card mb-2 light-green-card ">
 								<div className="card-body">
-									<h5 className="light-green-card-title card-title">70%</h5>
-									<p className="light-green-card-text card-text">Treatment Saturation.</p>
+									<h5 className="card-title light-green font68">23,314</h5>
+									<p className="card-text light-green">Total patient with Unique Fingerprints
+										across all facilities in Osun state.</p>
+								</div>
+							</div>
+							<div className="card mb-3 dark-green-card ">
+								<div className="card-body">
+									<h5 className="card-title card-title dark-green font68">70%</h5>
+									<p className="card-text dark-green">Treatment Saturation.</p>
 								</div>
 							</div>
 						</div>
