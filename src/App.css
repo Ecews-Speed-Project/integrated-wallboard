@@ -176,7 +176,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   box-sizing: border-box;
-  width: 15.9% !important;
+  width: 16.2% !important;
   height: 90px;
 }
 
@@ -241,3 +241,12 @@
   font-size: 90px !important;
 }
 
+.px45{
+  padding-top: 43px;
+  padding-bottom: 43px;
+}
+
+.px20{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

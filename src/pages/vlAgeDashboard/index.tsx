@@ -1,6 +1,4 @@
-import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Header from '../../components/Header';
-import data from '../../demo-data/us-population-density.json';
+import { FunctionComponent, useState,  useEffect } from 'react';
 import { ageAndSexChart, dualColumn } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
@@ -8,27 +6,36 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import BreadCrumb from '../../components/BreadCrumb';
 import SmallCard from '../../components/SmallCard';
+import { auth } from '../../services/auth.services';
+
 
 const VlAgeDashboard: FunctionComponent = () => {
 	const [chartData, setChartData] = useState({});
+	const [loading, setLoading] = useState(false);
+	const [user, setUser] = useState<{ [key: string]: any }>({});
+
+
 	const [vlCoverage, setVlCoverage] = useState({});
 	const [vlSuppression, setVlSuppression] = useState({});
-	const fetchMap = async () => {
+	const fetchMap = async (user: any) => {
+		setLoading(true)
 		setVlCoverage(ageAndSexChart("Viralload Coverga by age and sex"))
 		setVlSuppression(ageAndSexChart("Viralload suppression by age and sex"))
 	}
 
 	useEffect(() => {
-		fetchMap()
-		return () => {console.log("Cleanup")}
+		setUser(auth);
+		if (user.state !== null) {
+			fetchMap(user)
+		}
+		return () => { console.log("Cleanup") }
 
-	}, [])
+	}, [loading])
 
 	return (<>
 		<div>
-			<Header></Header>
 			<div className="bg-container container-fluid  mt-2">
-			<BreadCrumb state={"Osun Sate"} page={"Viralload Report By Age and Sex Dashboard"}></BreadCrumb>
+				<BreadCrumb state={"Osun Sate"} page={"Viralload Report By Age and Sex Dashboard"}></BreadCrumb>
 				<div className="row">
 					<div className="col-12 col-md-12">
 						<div className="row">
@@ -42,14 +49,12 @@ const VlAgeDashboard: FunctionComponent = () => {
 					</div>
 					<div className="col-12 col-md-6">
 						<HighchartsReact
-							constructorType={'mapChart'}
 							highcharts={Highcharts}
 							options={vlCoverage}
 						/>
 					</div>
 					<div className="col-12 col-md-6">
 						<HighchartsReact
-							constructorType={'mapChart'}
 							highcharts={Highcharts}
 							options={vlSuppression}
 						/>

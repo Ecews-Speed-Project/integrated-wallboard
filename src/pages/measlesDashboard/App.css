@@ -1,0 +1,124 @@
+.container {
+    margin-top: 50px;
+    padding: 0px 48px;
+}
+
+.card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.box {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+
+    .card,
+    .box {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+.card-title {
+    font-size: 96px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    font-family: Satoshi;
+}
+
+.card-text {
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    padding: 0px 30px 0 30px;
+    font-family: Satoshi;
+}
+
+.yellow-card {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    background-color: #e5aa46;
+    font-family: Satoshi;
+}
+
+
+.green-card {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    text-align: center;
+    background-color: #246D38;
+    font-family: Satoshi;
+}
+
+.light-green-card {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    text-align: center;
+    background-color: #DCF7ED;
+    font-family: Satoshi;
+}
+
+.light-green-card-title {
+    font-size: 96px;
+    font-weight: bold;
+    color: #19C98A;
+    text-align: center;
+    font-family: Satoshi;
+}
+
+.light-green-card-text {
+    font-size: 18px;
+    color: #19C98A;
+    text-align: center;
+    font-family: Satoshi;
+    padding: 0px 30px 0 30px;
+}
+
+.navbar-brand {
+    line-height: 32px;
+    font-family: Satoshi;
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 38px;
+    box-sizing: border-box;
+    height: 80px;
+}
+
+.bg-container{
+    padding: 0px 10px 0px 50px;
+}
+
+.bread-cum {
+    position: absolute;
+    top: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 0px;
+    gap: 8px;
+    font-size: 16px;
+    color: #000;
+}
+
+.bread-cum-text{
+    position: relative;
+    line-height: 24px;
+}
+
+.breadcrumb-item{
+    display: flex;
+    font-family: Satoshi;
+    justify-content: center;
+    gap: 8px;
+}

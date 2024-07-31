@@ -118,7 +118,6 @@ const SummaryBoard: FunctionComponent = () => {
 
 	return (<>
 		<div className={styles.summaryBoard}>
-			<Header></Header>
 			<div className={styles.summary}>
 				<div className={styles.maternalNewborn}>
 					<b className={styles.penta3Drop}>Maternal-Newborn</b>
@@ -441,35 +440,7 @@ const SummaryBoard: FunctionComponent = () => {
 				<img className={styles.icons5} alt="" src="icons/home.svg" />
 				<b className={styles.penta3Drop}>Summary</b>
 			</div>
-		</div>
-		{isFilterOpen && (
-			{/* <PortalPopup
-        				overlayColor="rgba(113, 113, 113, 0.3)"
-        				placement="Centered"
-        				
-        				
-        				
-        				
-        				
-        				onOutsideClick={closeFilter}
-        				>
-        				<Filter onClose={closeFilter} />
-      			</PortalPopup> */}
-		)}
-		{/* 	{isDropdownLightOpen && (
-      			<PortalPopup
-        				overlayColor="rgba(113, 113, 113, 0.3)"
-        				placement="Centered"
-        				
-        				
-        				
-        				
-        				
-        				onOutsideClick={closeDropdownLight}
-        				>
-        				<DropdownLight onClose={closeDropdownLight} />
-      			</PortalPopup>
-    		)} */}</>);
+		</div></>);
 };
 
 export default SummaryBoard;

@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from 'react';
-import { getLiveMapData, getMap, hivMap } from '../../services/Charts.service';
+import { getLiveMapData, getMap, stateMaps } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
@@ -14,7 +14,7 @@ import { handleSearch } from '../../utils/helpers';
 import { GenericObject } from '../../types/dseaseData';
 highchartsMap(Highcharts);
 
-const TreamentDashboard: FunctionComponent = () => {
+const YellowFeverDashboard: FunctionComponent = () => {
 
 	const [chartData, setChartData] = useState({});
 	const [loading, setLoading] = useState(false);
@@ -34,7 +34,7 @@ const TreamentDashboard: FunctionComponent = () => {
 
 		let map = await getMap(state)
 		let mapData = await getLiveMapData(data.tx_curr_lga)
-		setChartData(hivMap(map, mapData, 'Percentage of Unique Clients by LGA', 800))
+		setChartData(stateMaps(map, mapData, 'Confirmed cases of Yellow Fever by LGA in '+ state + " state" , 800))
 	}
 
 	useEffect(() => {
@@ -50,36 +50,28 @@ const TreamentDashboard: FunctionComponent = () => {
 
 
 	return (<>
-		<div>
+	<div>
 			<div className="bg-container container-fluid  mt-2">
-				<BreadCrumb state={user.state + " State"} page={"HIV Treatment Dashboard"}></BreadCrumb>
+				<BreadCrumb state={user.state + " State"} page={"Yellow Fever dashboard"}></BreadCrumb>
 				<div className="row">
 					<div className="col-12 col-md-4">
 						<div className="border">
-							<div className="card mb-2  yellow-card ">
+							<div className="card mb-2  yellow-card px45">
 								<div className="card-body">
 									<h5 className="card-title font68">{retentionD ? retentionD.facilities : ''}</h5>
-									<p className="card-text">Total facilities offering HIV care to patents in {user.state}  state.</p>
+									<p className="card-text">Total Suspected Cases of Yellow Fever in {user.state}  state.</p>
 								</div>
 							</div>
-							<div className="card mb-2 green-card ">
+							<div className="card mb-2 green-card px45">
 								<div className="card-body">
 									<h5 className="card-title font68">{statsData?.tx_curr}</h5>
-									<p className="card-text">Total patient receiving HIV treatment
-										across all facilities in {user.state} state.</p>
+									<p className="card-text">Total patients Evaluated </p>
 								</div>
 							</div>
-							<div className="card mb-2 light-green-card ">
+							<div className="card mb-3 dark-green-card px45">
 								<div className="card-body">
-									<h5 className="card-title light-green font68">{statsData?.tx_curr}</h5>
-									<p className="card-text light-green">Total patient with Unique Fingerprints
-										across all facilities in {user.state}  state.</p>
-								</div>
-							</div>
-							<div className="card mb-3 dark-green-card ">
-								<div className="card-body">
-									<h5 className="card-title card-title dark-green font68">{retentionD ? retentionD.saturation1 : ''}%</h5>
-									<p className="card-text dark-green">Treatment Saturation.</p>
+									<h5 className="card-title card-title dark-green font68">15</h5>
+									<p className="card-text dark-green">Confirmed Cases.</p>
 								</div>
 							</div>
 						</div>
@@ -98,4 +90,4 @@ const TreamentDashboard: FunctionComponent = () => {
 	</>);
 };
 
-export default TreamentDashboard;
+export default YellowFeverDashboard;

@@ -107,7 +107,6 @@ const Somas: FunctionComponent = () => {
 
 	return (<>
 		<div className={styles.summaryBoard}>
-			<Header></Header>
 			<div className={styles.summary}>
 				<div className={styles.maternalNewborn}>
 					<b className={styles.penta3Drop}>Maternal-Newborn</b>

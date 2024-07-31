@@ -24,18 +24,20 @@ const getClassName = (value:any) => {
     }
     return '';
   };
-const NonHIVTable: React.FC<GenericObject> = ({ data }) => {
+const HIVTable: React.FC<GenericObject> = ({ data }) => {
+   // console.log(data)
+
     return (
         <div className="table-responsive">
             <table className="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>LGA</th>
-                        <th>ANC4/ ANC1</th>
-                        <th>Penta 3</th>
-                        <th>Exclusively Breastfed</th>
-                        <th>Screen for TB</th>
-                        <th>Tested for malaria</th>
+                        <th>Treatment Staturation</th>
+                        <th>Unique Patients</th>
+                        <th>Suppressed Viralload</th>
+                        <th>Patient with BP {'>'} 40</th>
+                        <th>Diabetics</th>
 
                     </tr>
                 </thead>
@@ -43,11 +45,11 @@ const NonHIVTable: React.FC<GenericObject> = ({ data }) => {
                     {data.map((item: any, index: any) => (
                         <tr key={index}>
                             <td >{item.lga}</td>
-                            <td className={getClassName(item.anc4)}>{item.anc4}</td>
-                            <td className={getClassName(item.penta)}>{item.penta}</td>
-                            <td className={getClassName(item.breastfed)}>{item.breastfed}</td>
-                            <td className={getClassName(item.breastfed)}>{item.breastfed}</td>
-                            <td  className={getClassName(item.breastfed)}>{item.breastfed}</td>
+                            <td className={getClassName(item.staturation)}>{item.staturation}</td>
+                            <td className={getClassName(item.uniquePatients)}>{item.uniquePatients}</td>
+                            <td className={getClassName(item.suppressedViralload)}>{item.suppressedViralload}</td>
+                            <td className={getClassName(item.highBp)}>{item.highBp}</td>
+                            <td  className={getClassName(item.diabetics)}>{item.diabetics}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -56,4 +58,4 @@ const NonHIVTable: React.FC<GenericObject> = ({ data }) => {
     );
 };
 
-export default NonHIVTable;
+export default HIVTable;

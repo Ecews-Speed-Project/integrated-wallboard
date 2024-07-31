@@ -1,13 +1,17 @@
-import React from 'react';
-import Routes from "./Routes"
-import {BrowserRouter as Router} from "react-router-dom"
+import React, { Suspense } from 'react';
+import { BrowserRouter, BrowserRouter as Router } from "react-router-dom"
 import './App.css';
+import { AuthProvider } from './auth/authContext ';
+import ProjectRoutes from './Routes';
 
 function App() {
   return (
-    <Router>
-      <Routes/>
-    </Router>
+    <AuthProvider>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProjectRoutes />
+      </Suspense>
+    </AuthProvider>
+
   );
 }
 

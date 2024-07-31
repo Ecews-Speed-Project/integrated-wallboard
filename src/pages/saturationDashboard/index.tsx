@@ -1,20 +1,12 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Filter from "../../components/Filter";
-import PortalPopup from "../../components/PortalPopup";
-import DropdownLight from "../../components/DropdownLight";
+
 import styles from './Style.module.css';
-import Header from '../../components/Header';
 import data from '../../demo-data/us-population-density.json';
 import osunMap from '../../demo-data/Osun.json';
 import { stateMaps } from '../../services/Charts.service';
 
 const Saturation: FunctionComponent = () => {
-	const [isFilterOpen, setFilterOpen] = useState(false);
-	const [isDropdownLightOpen, setDropdownLightOpen] = useState(false);
-
-
 	const [chartData, setChartData] = useState({});
-
 	const fetchMap = async () => {
 
 		data.forEach(function (p: any) {
@@ -33,27 +25,7 @@ const Saturation: FunctionComponent = () => {
 
 	}, [])
 
-	const openFilter = useCallback(() => {
-		setFilterOpen(true);
-	}, []);
 
-	const closeFilter = useCallback(() => {
-		setFilterOpen(false);
-	}, []);
-
-
-	const openDropdownLight = useCallback(() => {
-		setDropdownLightOpen(true);
-	}, []);
-
-	const closeDropdownLight = useCallback(() => {
-		setDropdownLightOpen(false);
-	}, []);
-
-
-	const onFrameContainerClick = useCallback(() => {
-		// Add your code here
-	}, []);
 
 	return (<>
 		<div className={styles.summaryBoard}>
@@ -66,12 +38,11 @@ const Saturation: FunctionComponent = () => {
 					</b>
 				</div>
 			</div>
-			<Header></Header>
 			<div className={styles.frameParent1}>
-				<div className={styles.iconsWrapper2} onClick={onFrameContainerClick}>
+				<div className={styles.iconsWrapper2} >
 					<img className={styles.icons5} alt="" src="Icons.svg" />
 				</div>
-				<div className={styles.iconsWrapper2} onClick={onFrameContainerClick}>
+				<div className={styles.iconsWrapper2} >
 					<img className={styles.icons5} alt="" src="Icons.svg" />
 				</div>
 			</div>
@@ -99,25 +70,7 @@ const Saturation: FunctionComponent = () => {
 				</div>
 			</div>
 		</div>
-		{isFilterOpen && (
-			<PortalPopup
-				overlayColor="rgba(113, 113, 113, 0.3)"
-				placement="Centered"
-
-				onOutsideClick={closeFilter}
-			>
-				<Filter /* onClose={closeFilter}  */ />
-			</PortalPopup>
-		)}
-		{isDropdownLightOpen && (
-			<PortalPopup
-				overlayColor="rgba(113, 113, 113, 0.3)"
-				placement="Centered"
-				onOutsideClick={closeDropdownLight}
-			>
-				<DropdownLight /* onClose={closeDropdownLight} */ />
-			</PortalPopup>
-		)}</>);
+	</>);
 };
 
 export default Saturation;

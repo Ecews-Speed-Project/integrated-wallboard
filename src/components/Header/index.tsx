@@ -1,10 +1,21 @@
-import { FunctionComponent, useCallback, useState } from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import styles from '../../pages/SummaryBoard.module.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS for the navbar toggle functionality
+import { auth } from "../../services/auth.services";
+import { useAuth } from "../../auth/authContext ";
+import { NavLink, useNavigate } from "react-router-dom";
 
 
 const Header: FunctionComponent = () => {
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login'); // Redirect to login page after logging out
+  };
   return (<>
     <nav className="navbar navbar-expand-lg navbar-light bg-transparent">
       <div className="container-fluid">
@@ -32,18 +43,116 @@ const Header: FunctionComponent = () => {
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://via.placeholder.com/40" alt="profile" className="rounded-circle me-2" />
-                Profile
+                Admin
               </a>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a className="dropdown-item" href="/">Summary Dashboard</a></li>
-                <li><a className="dropdown-item" href="/ncd">NCD Dashboard</a></li>
-                <li><a className="dropdown-item" href="/mental-health">Mental Health</a></li>
-                <li><a className="dropdown-item" href="/treatment">Treatment Dashboard</a></li>
-                <li><a className="dropdown-item" href="/vl">VL Dashboard</a></li>
-                <li><a className="dropdown-item" href="/vl-age-sex">VL By Age & sex Dashboard</a></li>
-                <li><a className="dropdown-item" href="#">Malaria Dashboard</a></li>
-                <li><a className="dropdown-item" href="#">Mpox Dashboard</a></li>
-                <li><a className="dropdown-item" href="#">Slide Show</a></li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/summary"
+                  >
+                    Summary Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/ncd"
+                  >
+                    NCD Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/mental-health"
+                  >
+                    mental-health
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/treatment"
+                  >
+                    Treatment Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/vl"
+                  >
+                    VL Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/vl-age-sex"
+                  >
+                    VL By Age & sex Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/cholera"
+                  >
+                    Cholera Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/lassa"
+                  >
+                    Lassa Fever
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/measles"
+                  >
+                    Measles Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/monkey-pox"
+                  >
+                    Monkey Pox Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/yellow-fever"
+                  >
+                    Yellow Fever Show
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item"
+                    to="/slide-show"
+                  >
+                    Slide Show
+                  </NavLink>
+                </li>
+                <li>
+                  <a
+                    className="dropdown-item"
+                    aria-label="menu"
+                    aria-expanded="false"
+                    onClick={handleLogout}>
+                    Logout
+                  </a>
+
+                </li>
+
               </ul>
             </li>
           </ul>

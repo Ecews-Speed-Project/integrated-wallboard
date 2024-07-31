@@ -1,7 +1,4 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Header from '../../components/Header';
-import data from '../../demo-data/us-population-density.json';
-import osunMap from '../../demo-data/Osun.json';
 import { dualColumn, getMap, getMapData, stateMaps } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
@@ -10,27 +7,36 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import BreadCrumb from '../../components/BreadCrumb';
+import { auth } from '../../services/auth.services';
+highchartsMap(Highcharts);
 
 const NcdDashboard: FunctionComponent = () => {
+	const [user, setUser] = useState<{ [key: string]: any }>({});
+
 	const [chartData, setChartData] = useState({});
 	const [columnChartData, setColumnChartData] = useState({});
+	const [loading, setLoading] = useState(false);
 
-	const fetchMap = async () => {
 
-		let map = await getMap("Ekiti")
-		let mapData = await getMapData("Ekiti")
+	const fetchMap = async (user:any) => {
+		setLoading(true)
+		let state = user.state
+		let map = await getMap(state)
+		let mapData = await getMapData(state)
 		setColumnChartData(dualColumn("Elevated BP cascade"))
 		setChartData(stateMaps(map, mapData, 'No of Clients  with elevated BP by LGA', 500))
 	}
 
 	useEffect(() => {
-		fetchMap()
+		setUser(auth);
+		if (user.state !== null) {
+			fetchMap(user)
+		}
 		return () => { console.log("Cleanup") }
-	}, [])
+	}, [loading])
 
 	return (<>
 		<div>
-			<Header></Header>
 			<div className="bg-container container-fluid  mt-2">
 
 				<BreadCrumb state={"Osun Sate"} page={"Noncommunicable Diseases Dasboard"}></BreadCrumb>

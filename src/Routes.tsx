@@ -1,30 +1,58 @@
-import React  from "react";
-import {useRoutes} from "react-router-dom"
-import SummaryBoard from "./pages/summaryDashboard";
-import NcdsDashboard from "./pages/NcdDashboard";
-import VlDashboard from "./pages/vlDashboard";
-import TreamentDashboard from "./pages/treamentDashboard";
-import Somas from "./pages/somasDashboard";
-import SaturationDashboard from "./pages/saturationDashboard";
-import VlAgeDashboard from "./pages/vlAgeDashboard";
-import MentalHealthDashboard from "./pages/mentalHealthDashboard";
-import SignIn from "./pages/signIn";
+import React, { lazy }  from "react";
+import {Navigate, useRoutes} from "react-router-dom"
+import Layout from "./components/Layout";
+import { useAuth } from "./auth/authContext ";
+import ColeraDashboard from "./pages/coleraDashboard";
+import YellowFeverDashboard from "./pages/yellowFeverDashboard";
+import MeaslesDashboard from "./pages/measlesDashboard";
+import MonkeyPoxDashboard from "./pages/monkeyPoxDashboard";
+import LassaDashboard from "./pages/lassaDashboard";
 
+
+const SignIn = lazy(() => import('./pages/signIn'));
+const SummaryBoard = lazy(() => import('./pages/summaryDashboard'));
+const NcdsDashboard = lazy(() => import('./pages/NcdDashboard'));
+const MentalHealthDashboard = lazy(() => import('./pages/mentalHealthDashboard'));
+const VlDashboard = lazy(() => import('././pages/vlDashboard'));
+const VlAgeDashboard = lazy(() => import('./pages/vlAgeDashboard'));
+const TreamentDashboard = lazy(() => import('./pages/treamentDashboard'));
+const SaturationDashboard = lazy(() => import('./pages/saturationDashboard'));
+const Somas = lazy(() => import('./pages/somasDashboard'));
+const Slideshow = lazy(() => import('./pages/slideShow'));
 
 const ProjectRoutes = () => {
-    let element =  useRoutes(
-        [
-            {path:"/", element:<SignIn/>},
-            {path:"/summary", element:<SummaryBoard/>},
-            {path:"/ncd", element:<NcdsDashboard/>},
-            {path:"/mental-health", element:<MentalHealthDashboard/>},
-            {path:"/vl", element:<VlDashboard/>},
-            {path:"/vl-age-sex", element:<VlAgeDashboard/>},
-            {path:"/treatment", element:<TreamentDashboard/>},
-            {path:"/saturation", element:<SaturationDashboard/>},
-            {path:"/somas", element:<Somas/>},
 
+    const { isLoggedIn } = useAuth();
+
+    let element =  useRoutes(
+
+        [
+            { path: '/login', element: <SignIn /> },
+            {
+                path: '/',
+                
+                 element: isLoggedIn ? <Layout /> : <SignIn />,
+                children: [
+                    {path:"", element:<SummaryBoard/>},
+                    {path:"/summary", element:<SummaryBoard/>},
+                    {path:"/ncd", element:<NcdsDashboard/>},
+                    {path:"/mental-health", element:<MentalHealthDashboard/>},
+                    {path:"/vl", element:<VlDashboard/>},
+                    {path:"/vl-age-sex", element:<VlAgeDashboard/>},
+                    {path:"/treatment", element:<TreamentDashboard/>},
+                    {path:"/saturation", element:<SaturationDashboard/>},
+                    {path:"/slide-show", element:<Slideshow/>},
+                    //somas
+                    {path:"/cholera", element:<ColeraDashboard/>},
+                    {path:"/yellow-fever", element:<YellowFeverDashboard/>},
+                    {path:"/measles", element:<MeaslesDashboard/>},
+                    {path:"/monkey-pox", element:<MonkeyPoxDashboard/>},
+                    {path:"/lassa", element:<LassaDashboard/>},
+                    // Add other routes here
+                ],
+            },
         ]
+      
     )
     return element
 }

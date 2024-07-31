@@ -4,11 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/authContext ';
 
 const SignIn: FunctionComponent = () => {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
+	const [email, setUsername] = useState('delta@speed.com');
+	const [password, setPassword] = useState('P@ssw0rd');
 	const navigate = useNavigate();
+	const { login } = useAuth();
 
 
 	const onFrameImageClick = useCallback(() => {
@@ -16,31 +18,33 @@ const SignIn: FunctionComponent = () => {
 	}, []);
 
 	const onSignInClick = useCallback(async () => {
+
 		try {
-			navigate('/summary')
-			/* const response = await fetch('https://api.example.com/authenticate', {
+			//navigate('/summary')
+			const response = await fetch('http://speedcdr.ecews.org/api/account/login', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ username, password }),
+				body: JSON.stringify({ email, password }),
 			});
 
 			if (response.ok) {
 				const data = await response.json();
 				// Assume the response contains a token
-				localStorage.setItem('token', data.token);
-				navigate('/dashboard'); // Redirect to the dashboard or another page
+				localStorage.setItem('user', JSON.stringify(data));
+				login()
+				navigate('/summary'); // Redirect to the dashboard or another page
 			} else {
 				alert('Authentication failed. Please check your credentials.');
-			} */
+			}
 		} catch (error) {
 			console.error('Error during authentication', error);
 			alert('An error occurred. Please try again later.');
 		}
-	}, [username, password, navigate]);
+	}, [email, password, navigate]);
 
-	
+
 
 	return (
 		<div className={styles.signIn}>
@@ -51,7 +55,8 @@ const SignIn: FunctionComponent = () => {
 				<div className={styles.textFieldParent}>
 					<div className={styles.textField}>
 						<div className='col-md-12'>
-							<input type='text' className='form-control col-md-12' />
+							<input type='text' className='form-control col-md-12' value={email}
+								onChange={(e) => setUsername(e.target.value)} />
 
 						</div>
 						<div className={styles.label}>
@@ -60,7 +65,8 @@ const SignIn: FunctionComponent = () => {
 					</div>
 					<div className={styles.textField1}>
 						<div className='col-md-12'>
-							<input type='text' className='form-control col-md-12' />
+							<input type='text' className='form-control col-md-12' value={password}
+								onChange={(e) => setPassword(e.target.value)} />
 						</div>
 						<div className={styles.label2}>
 							<b className={styles.label1}>Password</b>

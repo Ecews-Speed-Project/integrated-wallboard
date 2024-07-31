@@ -46,7 +46,7 @@ export const stateMaps = (map: any, data: any, title: any, height: any = 700) =>
             maxColor: '#000022',
             stops: [
                 [0, '#C40306'],
-                [0.67, '#E8B51E'],
+                [0.94, '#E8B51E'],
                 [1, '#0D8651']
             ]
         },
@@ -71,14 +71,86 @@ export const stateMaps = (map: any, data: any, title: any, height: any = 700) =>
             name: 'Population density',
             nullColor: '#BEB7B7',
             tooltip: {
-                pointFormat: '{point.code}: {point.value}/km²'
+                pointFormat: '{point.code}: {point.value}%'
             }
         }]
     };
 }
 
 
-export const dualColumn = (title: any, height:any=300) => {
+export const hivMap = (map: any, data: any, title: any, height: any = 700) => {
+    return {
+
+        chart: {
+            map: map,
+            height: height
+        },
+
+        title: {
+            text: title
+        },
+
+        exporting: {
+            sourceWidth: 600,
+            sourceHeight: 500
+        },
+
+        legend: {
+            layout: 'horizontal',
+            borderWidth: 0,
+            backgroundColor: 'rgba(255,255,255,0.85)',
+            floating: true,
+            verticalAlign: 'top',
+            y: 25
+        },
+
+
+        mapNavigation: {
+            enabled: true,
+            //  enableDoubleClickZoomTo: true
+        },
+
+        colorAxis: {
+            min: 1,
+            type: 'logarithmic',
+            minColor: '#EEEEFF',
+            maxColor: '#000022',
+            stops: [
+                [0, '#C40306'],
+                [0.94, '#E8B51E'],
+                [1, '#0D8651']
+            ]
+        },
+
+        series: [{
+            accessibility: {
+                point: {
+                    valueDescriptionFormat: '{xDescription}, {point.value} ' +
+                        'people per square kilometer.'
+                }
+            },
+            animation: {
+                duration: 1000
+            },
+            data: data,
+            joinBy: ['admin2Name', 'code'],
+            dataLabels: {
+                enabled: true,
+                color: '#FFFFFF',
+                format: '{point.code} <br> {point.value}'
+            },
+            name: '%Population of clients',
+            nullColor: '#BEB7B7',
+            tooltip: {
+                pointFormat: '{point.code}: {point.value}%'
+            }
+        }]
+    };
+}
+
+
+
+export const dualColumn = (title: any, height: any = 300) => {
     return {
         chart: {
             height: height
@@ -87,11 +159,11 @@ export const dualColumn = (title: any, height:any=300) => {
             text: title,
             align: 'center'
         },
-        
+
         xAxis: {
             categories: [
                 'Art Attendance', 'Screen for HTN', 'Elevated PB', 'Previously Known HNT on Rx', 'Elevated BP_New',
-                'Diagnose HTN','Started Treatment'
+                'Diagnose HTN', 'Started Treatment'
             ]
         },
         yAxis: {
@@ -110,7 +182,7 @@ export const dualColumn = (title: any, height:any=300) => {
         series: [{
             type: 'column',
             name: '2020',
-            data: [59, 83, 65, 228, 184,228, 184]
+            data: [59, 83, 65, 228, 184, 228, 184]
         }]
     }
 }
@@ -127,6 +199,52 @@ export const getMapData = async (state: any) => {
         mapData.push(
             {
                 "value": p.txcurr,
+                "code": p.lgaName
+            },
+        )
+        p.code = p.code;
+    });
+    return mapData;
+}
+
+export const getLiveMapData = async (mapdata: any) => {
+    console.log(mapdata)
+    const mapData: mapData[] = []
+    mapdata.forEach(function (p: any) {
+        mapData.push(
+            {
+                "value": Math.round((p.uniqueFingerprints / p.txcurr) * 100),
+                "code": p.lgaName
+            },
+        )
+        p.code = p.code;
+    });
+    return mapData;
+}
+
+
+export const getSuppressionData = async (mapdata: any) => {
+    console.log(mapdata)
+    const mapData: mapData[] = []
+    mapdata.forEach(function (p: any) {
+        mapData.push(
+            {
+                "value": Math.round((p.vlSuppressed / p.vLenteredEMR) * 100),
+                "code": p.lgaName
+            },
+        )
+        p.code = p.code;
+    });
+    return mapData;
+}
+
+export const getCoverageData = async (mapdata: any) => {
+    console.log(mapdata)
+    const mapData: mapData[] = []
+    mapdata.forEach(function (p: any) {
+        mapData.push(
+            {
+                "value": Math.round((p.vLenteredEMR / p.vlEligible) * 100),
                 "code": p.lgaName
             },
         )
@@ -343,7 +461,7 @@ export const getData = (state: any, lga: any) => {
 }
 
 
-export const ageAndSexChart = (title:any) => {
+export const ageAndSexChart = (title: any) => {
     const categories = [
         '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-40', '40-45',
         '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80-84',

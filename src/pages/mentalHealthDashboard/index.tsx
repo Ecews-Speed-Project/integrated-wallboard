@@ -4,35 +4,42 @@ import data from '../../demo-data/us-population-density.json';
 import osunMap from '../../demo-data/Osun.json';
 import { columnChart, stateMaps } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
+import highchartsMap from "highcharts/modules/map";
 import HighchartsReact from 'highcharts-react-official'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import BreadCrumb from '../../components/BreadCrumb';
-
+import { auth } from '../../services/auth.services';
+highchartsMap(Highcharts);
 const MentalHealthDashboard: FunctionComponent = () => {
+	
 	const [chartData, setChartData] = useState({});
+	const [loading, setLoading] = useState(false);
+	const [user, setUser] = useState<{ [key: string]: any }>({});
 	const [columnChartData, setColumnChartData] = useState({});
 
-	const fetchMap = async () => {
-
+	const fetchMap = async (user:any) => {
+		setLoading(true)
+		let state = user.state
 		const data =  [59, 83, 65, 228, 184, 80];
 		const categories = [
 			'Eligible', 'Screened', 'Elevated', 'Previously Known', 'Newly Diagnosed', 'Refrred for DM MG', 'Commenced DM RX'
 		]
-
 		setColumnChartData(columnChart("Mental Health Cascade", categories, data))
-		setChartData(stateMaps(osunMap, data, "Percentage of Unique Clients by LGA", 400))
+		setChartData(stateMaps(state, data, "Percentage of Unique Clients by LGA", 400))
 	}
 
 	useEffect(() => {
-		fetchMap()
+		setUser(auth);
+		if (user.state !== null) {
+			fetchMap(user)
+		}
 		return () => { console.log("Cleanup") }
-	}, [])
+	}, [loading])
 
 	return (<>
 		<div>
-			<Header></Header>
 			<div className="bg-container container-fluid  mt-2">
 				<BreadCrumb state={"Osun Sate"} page={"NDC Integration Diabetes and Mental Health"}></BreadCrumb>
 
