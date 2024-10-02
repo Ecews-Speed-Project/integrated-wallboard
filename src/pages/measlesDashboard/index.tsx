@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from 'react';
-import { getLiveMapData, getMap, stateMaps } from '../../services/Charts.service';
+import { getLiveMapData, getMap, getSomaLiveMapData, stateMaps } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
@@ -9,12 +9,14 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import BreadCrumb from '../../components/BreadCrumb';
 import { auth } from '../../services/auth.services';
-import { retentionData } from '../../services/main.service';
+import { retentionData, summaryApiData } from '../../services/main.service';
 import { handleSearch } from '../../utils/helpers';
 import { GenericObject } from '../../types/dseaseData';
+import { ConfirmedCasesByLGA, DiseaseData, LGAData, Totals } from '../../types/interfaces';
 highchartsMap(Highcharts);
 
 const MeaslesDashboard: FunctionComponent = () => {
+	const userData = JSON.parse(localStorage.getItem('user') || '');
 
 	const [chartData, setChartData] = useState({});
 	const [loading, setLoading] = useState(false);
@@ -22,55 +24,113 @@ const MeaslesDashboard: FunctionComponent = () => {
 	const [retentionD, setRetentionD] = useState<GenericObject>({});
 	const [user, setUser] = useState<{ [key: string]: any }>({});
 
+	const [measlesCases, setMeaslesCases] = useState<DiseaseData>({
+		suspectedCases: 0,
+		confirmedCases: 0,
+		evaluatedCases: 0,
+		rdtRapidDiagnostictestPositive: 0,
+		cultured: 0,
+	  });
+
+	const [confirmedCasesByLGA, setConfirmedCasesByLGA] = useState<ConfirmedCasesByLGA>({});
+
+
 	const fetchMap = async (user: any) => {
 		setLoading(true)
 		let state = user.state
 
-		let data = await retentionData(user.stateId)
-		setStatsData(data?.stats)
+	
+		const data: { diseaseCascade: LGAData[] }  = await summaryApiData(user.stateId);
 
-		let stats = handleSearch(data?.stats?.saturation, user.stateId)
-		setRetentionD(stats)
+        // Summing up cases for each disease type
+        const totals: Totals = {
+          cholera: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          lassa: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          measles: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          yellowFever: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          monkeyPox: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          covid19: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          diphtheria: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        };
+
+        data.diseaseCascade.forEach((current:any) => {
+			totals.measles.suspectedCases += current.measles.suspectedCases;
+			totals.measles.confirmedCases += current.measles.confirmedCases;
+			totals.measles.evaluatedCases += current.measles.evaluatedCases; // Sum evaluated cases
+			totals.measles.rdtRapidDiagnostictestPositive += current.measles.rdtRapidDiagnostictestPositive; // Sum RDT positives
+			totals.measles.cultured += current.measles.cultured; // Sum cultured
+        });
+
+        // Setting the summed data to the state
+		setMeaslesCases(totals.measles);
+
+
+		const mapRw: [{}] = [{}];
+		const confirmedCases: ConfirmedCasesByLGA = {};
+
+		data.diseaseCascade.forEach((current) => {
+			const lga = current.lga;
+
+			// Sum all confirmed cases for each disease in the LGA
+			const totalConfirmedCases =
+				current.choleraCascade.confirmedCases
+
+			if (confirmedCases[lga]) {
+				confirmedCases[lga] += totalConfirmedCases; // Add to existing total for LGA
+			} else {
+				confirmedCases[lga] = totalConfirmedCases; // Initialize confirmed cases for LGA
+				confirmedCases['code'] = totalConfirmedCases;
+
+				mapRw.push(
+					{
+						"lgaName": lga,
+						"value": totalConfirmedCases,
+						"code": ""
+					},
+				)
+
+			}
+		});
+
+		// Set the confirmed cases grouped by LGA in state
+		setConfirmedCasesByLGA(confirmedCases);
 
 		let map = await getMap(state)
-		let mapData = await getLiveMapData(data.tx_curr_lga)
+		let mapData = await getSomaLiveMapData(mapRw)
+		console.log(mapData)
 		setChartData(stateMaps(map, mapData, 'Condrimed cases of Measles by LGA in '+ state + " state" , 800))
 	}
 
+	
 	useEffect(() => {
-		setUser(auth);
-		if (user.state !== null) {
-			fetchMap(user)
-		}
-		return () => { // cleanup function of type : () => void
-			console.log("Cleanup")
-		}
-
+		fetchMap(userData)
 	}, [loading])
+
 
 
 	return (<>
 		<div>
 			<div className="bg-container container-fluid  mt-2">
-				<BreadCrumb state={user.state + " State"} page={"Measles Dashboard"}></BreadCrumb>
+				<BreadCrumb state={user.state + " State"} page={"Cholera Dashboard"}></BreadCrumb>
 				<div className="row">
 					<div className="col-12 col-md-4">
 						<div className="border">
-							<div className="card mb-2  yellow-card px45">
+							<div className="card mb-2  yellow-card px20">
 								<div className="card-body">
-									<h5 className="card-title font68">{retentionD ? retentionD.facilities : ''}</h5>
-									<p className="card-text">Total Suspected Cases of Measles in {user.state}  state.</p>
+									<h5 className="card-title font68">{measlesCases.suspectedCases}</h5>
+									<p className="card-text">Total Suspected Cases of Measles		
+									in {user.state}  state.</p>
 								</div>
 							</div>
-							<div className="card mb-2 green-card px45">
+							<div className="card mb-2 green-card px20">
 								<div className="card-body">
-									<h5 className="card-title font68">{statsData?.tx_curr}</h5>
-									<p className="card-text">Total patients Evaluated </p>
+									<h5 className="card-title font68">{measlesCases.evaluatedCases}</h5>
+									<p className="card-text">Total patients with Rapid Diagnosis Test </p>
 								</div>
 							</div>
-							<div className="card mb-3 dark-green-card px45">
+							<div className="card mb-3 dark-green-card px20">
 								<div className="card-body">
-									<h5 className="card-title card-title dark-green font68">15</h5>
+									<h5 className="card-title card-title dark-green font68">{measlesCases.confirmedCases}</h5>
 									<p className="card-text dark-green">Confirmed Cases.</p>
 								</div>
 							</div>

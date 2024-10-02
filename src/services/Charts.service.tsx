@@ -223,6 +223,23 @@ export const getLiveMapData = async (mapdata: any) => {
 }
 
 
+export const getSomaLiveMapData = async (mapdata: any) => {
+   // console.log(mapdata)
+    const mapData: mapData[] = []
+    mapdata.forEach(function (p: any) {
+        console.log(p.value)
+        mapData.push(
+            {
+                "value": (p.value == undefined || 0)  ? 1 :1,
+                "code":  (p.lgaName == undefined) ? null :  p.lgaName
+            },
+        )
+        p.code = (p.lgaName == undefined) ? null : p.code;
+    });
+    return mapData;
+}
+
+
 export const getSuppressionData = async (mapdata: any) => {
     console.log(mapdata)
     const mapData: mapData[] = []

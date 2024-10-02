@@ -250,3 +250,67 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+
+/* Wrapper for the select box */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Styling for the select box */
+.styled-select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  appearance: none; /* Removes default arrow */
+  background-color: #f9f9f9;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom arrow */
+.styled-select::after {
+  content: '\25BC'; /* Down arrow symbol */
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Hover effect */
+.styled-select:hover {
+  border-color: #4caf50;
+}
+
+/* Focused state */
+.styled-select:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Active option */
+.styled-select option {
+  color: #333;
+  background-color: #fff;
+}
+
+
+.dropzone {
+  border-radius: 6px;
+  border: none !important;
+  background: beige !important;
+  padding-top: 35px !important;
+  min-height: 400px !important;
+}
+
+.MuiDataGrid-container--top [role=row]{
+  background-color: #333333 !important;
+}

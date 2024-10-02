@@ -15,6 +15,7 @@ import { GenericObject } from '../../types/dseaseData';
 highchartsMap(Highcharts);
 
 const MonkeyPoxDashboard: FunctionComponent = () => {
+	const userData = JSON.parse(localStorage.getItem('user') || '');
 
 	const [chartData, setChartData] = useState({});
 	const [loading, setLoading] = useState(false);
@@ -39,15 +40,9 @@ const MonkeyPoxDashboard: FunctionComponent = () => {
 	}
 
 	useEffect(() => {
-		setUser(auth);
-		if (user.state !== null) {
-			fetchMap(user)
-		}
-		return () => { // cleanup function of type : () => void
-			console.log("Cleanup")
-		}
-
+		fetchMap(userData)
 	}, [loading])
+
 
 
 	return (<>

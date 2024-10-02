@@ -7,6 +7,10 @@ import YellowFeverDashboard from "./pages/yellowFeverDashboard";
 import MeaslesDashboard from "./pages/measlesDashboard";
 import MonkeyPoxDashboard from "./pages/monkeyPoxDashboard";
 import LassaDashboard from "./pages/lassaDashboard";
+import DropZone from "./pages/uploadData";
+import MainGrid from "./pages/previousUpload";
+import UploadTracker from "./pages/lineListUpload/uploadTracker";
+import GenerateLineList from "./pages/lineListUpload/generateLineList";
 
 
 const SignIn = lazy(() => import('./pages/signIn'));
@@ -35,6 +39,13 @@ const ProjectRoutes = () => {
                 children: [
                     {path:"", element:<SummaryBoard/>},
                     {path:"/summary", element:<SummaryBoard/>},
+                    {path:"/upload-data", element:<DropZone/>},
+                    {path:"/previous-upload", element:<MainGrid/>},
+                    {path:"/upload-tracker", element:<UploadTracker/>},
+                    {path:"/generate-linelist", element:<GenerateLineList/>},
+
+                    {path:"/soma", element:<Somas/>},
+
                     {path:"/ncd", element:<NcdsDashboard/>},
                     {path:"/mental-health", element:<MentalHealthDashboard/>},
                     {path:"/vl", element:<VlDashboard/>},

@@ -7,29 +7,34 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import BreadCrumb from '../../components/BreadCrumb';
 import SmallCard from '../../components/SmallCard';
 import { auth } from '../../services/auth.services';
+import { viralloadAgeData } from '../../services/main.service';
 
 
 const VlAgeDashboard: FunctionComponent = () => {
+	const userData = JSON.parse(localStorage.getItem('user') || '');
+
 	const [chartData, setChartData] = useState({});
 	const [loading, setLoading] = useState(false);
 	const [user, setUser] = useState<{ [key: string]: any }>({});
+	const [statsData, setStatsData] = useState<{ [key: string]: any }>({});
 
 
 	const [vlCoverage, setVlCoverage] = useState({});
 	const [vlSuppression, setVlSuppression] = useState({});
 	const fetchMap = async (user: any) => {
 		setLoading(true)
+		
+		let data = await viralloadAgeData(user.stateId)
+		setStatsData(data.vl_stats[0])
+
+		console.log(statsData);
+		
 		setVlCoverage(ageAndSexChart("Viralload Coverga by age and sex"))
 		setVlSuppression(ageAndSexChart("Viralload suppression by age and sex"))
 	}
 
 	useEffect(() => {
-		setUser(auth);
-		if (user.state !== null) {
-			fetchMap(user)
-		}
-		return () => { console.log("Cleanup") }
-
+			fetchMap(userData)
 	}, [loading])
 
 	return (<>
@@ -39,12 +44,12 @@ const VlAgeDashboard: FunctionComponent = () => {
 				<div className="row">
 					<div className="col-12 col-md-12">
 						<div className="row">
-							<SmallCard title={"HIV Clients on Treatment"} value={"24,900"}></SmallCard>
-							<SmallCard title={"Eligible for VL"} value={"2,900"}></SmallCard>
-							<SmallCard title={"Sample Collected"} value={"900"}></SmallCard>
-							<SmallCard title={"Result Recieved"} value={"1,900"}></SmallCard>
-							<SmallCard title={"Viral load < 1000 cop /mil"} value={"4,900"}></SmallCard>
-							<SmallCard title={"Viralload > 1000 cop / mi"} value={"900"}></SmallCard>
+							<SmallCard title={"HIV Clients on Treatment"} value={statsData?.txCurr}></SmallCard>
+							<SmallCard title={"Eligible for VL"} value={statsData?.eligible}></SmallCard>
+							<SmallCard title={"Sample Collected"} value={statsData?.sampleCollect}></SmallCard>
+							<SmallCard title={"Result Recieved"} value={statsData?.result}></SmallCard>
+							<SmallCard title={"Viral load < 1000 cop /mil"} value={statsData?.suppression}></SmallCard>
+							<SmallCard title={"Viralload > 1000 cop / mi"} value={'4000'}></SmallCard>
 						</div>
 					</div>
 					<div className="col-12 col-md-6">

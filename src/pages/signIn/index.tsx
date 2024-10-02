@@ -21,7 +21,7 @@ const SignIn: FunctionComponent = () => {
 
 		try {
 			//navigate('/summary')
-			const response = await fetch('http://speedcdr.ecews.org/api/account/login', {
+			const response = await fetch('http://eboard.ecews.org/api/account/login', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

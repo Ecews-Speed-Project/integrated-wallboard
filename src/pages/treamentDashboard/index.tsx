@@ -15,7 +15,9 @@ import { GenericObject } from '../../types/dseaseData';
 highchartsMap(Highcharts);
 
 const TreamentDashboard: FunctionComponent = () => {
+	const userData = JSON.parse(localStorage.getItem('user') || '');
 
+	const [userId, setUserId] = useState(0);
 	const [chartData, setChartData] = useState({});
 	const [loading, setLoading] = useState(false);
 	const [statsData, setStatsData] = useState<{ [key: string]: any }>({});
@@ -24,6 +26,7 @@ const TreamentDashboard: FunctionComponent = () => {
 
 	const fetchMap = async (user: any) => {
 		setLoading(true)
+
 		let state = user.state
 
 		let data = await retentionData(user.stateId)
@@ -38,14 +41,7 @@ const TreamentDashboard: FunctionComponent = () => {
 	}
 
 	useEffect(() => {
-		setUser(auth);
-		if (user.state !== null) {
-			fetchMap(user)
-		}
-		return () => { // cleanup function of type : () => void
-			console.log("Cleanup")
-		}
-
+			fetchMap(userData)
 	}, [loading])
 
 
@@ -71,7 +67,7 @@ const TreamentDashboard: FunctionComponent = () => {
 							</div>
 							<div className="card mb-2 light-green-card ">
 								<div className="card-body">
-									<h5 className="card-title light-green font68">{statsData?.tx_curr}</h5>
+									<h5 className="card-title light-green font68">{statsData?.uniqueFingerprints}</h5>
 									<p className="card-text light-green">Total patient with Unique Fingerprints
 										across all facilities in {user.state}  state.</p>
 								</div>

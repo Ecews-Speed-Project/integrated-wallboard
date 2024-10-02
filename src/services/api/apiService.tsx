@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 
 // Create an axios instance
 const api = axios.create({
-  baseURL: 'http://speedcdr.ecews.org/api', // Replace with your API base URL
+  baseURL: 'http://eboard.ecews.org/api', // Replace with your API base URL
   headers: {
     'Content-Type': 'application/json',
   },
@@ -58,5 +58,26 @@ export const postViralloadData = async (data: any): Promise<AxiosResponse> => {
     throw error;
   }
 };
+
+export const postViralloadAgeData = async (data: any): Promise<AxiosResponse> => {
+  try {
+    const response = await api.post('/data/vl_age_sex_data', data);
+    return response;
+  } catch (error) {
+    console.error('Error posting retention data:', error);
+    throw error;
+  }
+};
+
+export const postSummaryData = async (data: any): Promise<AxiosResponse> => {
+  try {
+    const response = await api.post('/data/sormas', data);
+    return response;
+  } catch (error) {
+    console.error('Error posting retention data:', error);
+    throw error;
+  }
+};
+
 
 
