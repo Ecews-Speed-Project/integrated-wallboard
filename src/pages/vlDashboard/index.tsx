@@ -12,6 +12,9 @@ import { viralloadData } from '../../services/main.service';
 highchartsMap(Highcharts);
 
 const VlDashboard: FunctionComponent = () => {
+
+	const userData = JSON.parse(localStorage.getItem('user') || '');
+
 	const [loading, setLoading] = useState(false);
 	const [vlCoverage, setVlCoverage] = useState({});
 
@@ -37,16 +40,10 @@ const VlDashboard: FunctionComponent = () => {
 
 	}
 
+	
 	useEffect(() => {
-		setUser(auth);
-		if (user.state !== null) {
-			fetchMap(user)
-		}
-		return () => { // cleanup function of type : () => void
-			console.log("Cleanup")
-		}
-
-	}, [loading])
+		fetchMap(userData)
+}, [loading])
 
 
 	return (<>

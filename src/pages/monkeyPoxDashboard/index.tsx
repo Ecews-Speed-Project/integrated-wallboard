@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from 'react';
-import { getLiveMapData, getMap, stateMaps } from '../../services/Charts.service';
+import { getLiveMapData, getMap, getSomaLiveMapData, stateMaps } from '../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
@@ -9,9 +9,10 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import BreadCrumb from '../../components/BreadCrumb';
 import { auth } from '../../services/auth.services';
-import { retentionData } from '../../services/main.service';
+import { retentionData, summaryApiData } from '../../services/main.service';
 import { handleSearch } from '../../utils/helpers';
 import { GenericObject } from '../../types/dseaseData';
+import { ConfirmedCasesByLGA, DiseaseData, LGAData, Totals } from '../../types/interfaces';
 highchartsMap(Highcharts);
 
 const MonkeyPoxDashboard: FunctionComponent = () => {
@@ -23,18 +24,77 @@ const MonkeyPoxDashboard: FunctionComponent = () => {
 	const [retentionD, setRetentionD] = useState<GenericObject>({});
 	const [user, setUser] = useState<{ [key: string]: any }>({});
 
+	const [monkeyPoxCases, setMonkeyPoxCases] = useState<DiseaseData>({
+		suspectedCases: 0,
+		confirmedCases: 0,
+		evaluatedCases: 0,
+		rdtRapidDiagnostictestPositive: 0,
+		cultured: 0,
+	  });
+
 	const fetchMap = async (user: any) => {
 		setLoading(true)
 		let state = user.state
 
-		let data = await retentionData(user.stateId)
-		setStatsData(data?.stats)
+		
+		const data: { diseaseCascade: LGAData[] }  = await summaryApiData(user.stateId);
 
-		let stats = handleSearch(data?.stats?.saturation, user.stateId)
-		setRetentionD(stats)
+        // Summing up cases for each disease type
+        const totals: Totals = {
+          cholera: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          lassa: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          measles: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          yellowFever: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          monkeyPox: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          covid19: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+          diphtheria: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        };
+
+        data.diseaseCascade.forEach((current:any) => {
+          totals.monkeyPox.suspectedCases += current.monkeyPox.suspectedCases;
+          totals.monkeyPox.confirmedCases += current.monkeyPox.confirmedCases;
+          totals.monkeyPox.evaluatedCases += current.monkeyPox.evaluatedCases; // Sum evaluated cases
+          totals.monkeyPox.rdtRapidDiagnostictestPositive += current.monkeyPox.rdtRapidDiagnostictestPositive; // Sum RDT positives
+          totals.monkeyPox.cultured += current.monkeyPox.cultured; // Sum cultured
+
+         
+        });
+
+        // Setting the summed data to the state
+       
+        setMonkeyPoxCases(totals.monkeyPox);
+		const mapRw: [{}] = [{}];
+		const confirmedCases: ConfirmedCasesByLGA = {};
+
+		data.diseaseCascade.forEach((current) => {
+			const lga = current.lga;
+
+			// Sum all confirmed cases for each disease in the LGA
+			const totalConfirmedCases =
+				current.choleraCascade.confirmedCases
+
+			if (confirmedCases[lga]) {
+				confirmedCases[lga] += totalConfirmedCases; // Add to existing total for LGA
+			} else {
+				confirmedCases[lga] = totalConfirmedCases; // Initialize confirmed cases for LGA
+				confirmedCases['code'] = totalConfirmedCases;
+
+				mapRw.push(
+					{
+						"lgaName": lga,
+						"value": totalConfirmedCases,
+						"code": ""
+					},
+				)
+
+			}
+		});
+
+		// Set the confirmed cases grouped by LGA in state
 
 		let map = await getMap(state)
-		let mapData = await getLiveMapData(data.tx_curr_lga)
+		let mapData = await getSomaLiveMapData(mapRw)
+		console.log(mapData)
 		setChartData(stateMaps(map, mapData, 'Confirmed cases of Monkey Pox by LGA in '+ state + " state" , 800))
 
 	}
@@ -54,19 +114,19 @@ const MonkeyPoxDashboard: FunctionComponent = () => {
 						<div className="border">
 							<div className="card mb-2  yellow-card px45">
 								<div className="card-body">
-									<h5 className="card-title font68">{retentionD ? retentionD.facilities : ''}</h5>
+									<h5 className="card-title font68">{monkeyPoxCases.suspectedCases}</h5>
 									<p className="card-text">Total Suspected Cases of Monkey Pox in {user.state}  state.</p>
 								</div>
 							</div>
 							<div className="card mb-2 green-card px45">
 								<div className="card-body">
-									<h5 className="card-title font68">{statsData?.tx_curr}</h5>
+									<h5 className="card-title font68">0</h5>
 									<p className="card-text">Total patients Evaluated </p>
 								</div>
 							</div>
 							<div className="card mb-3 dark-green-card px45">
 								<div className="card-body">
-									<h5 className="card-title card-title dark-green font68">15</h5>
+									<h5 className="card-title card-title dark-green font68">{monkeyPoxCases.confirmedCases}</h5>
 									<p className="card-text dark-green">Confirmed Cases.</p>
 								</div>
 							</div>

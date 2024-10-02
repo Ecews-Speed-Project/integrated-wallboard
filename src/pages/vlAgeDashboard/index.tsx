@@ -27,7 +27,7 @@ const VlAgeDashboard: FunctionComponent = () => {
 		let data = await viralloadAgeData(user.stateId)
 		setStatsData(data.vl_stats[0])
 
-		console.log(statsData);
+	//	console.log(statsData);
 		
 		setVlCoverage(ageAndSexChart("Viralload Coverga by age and sex"))
 		setVlSuppression(ageAndSexChart("Viralload suppression by age and sex"))
