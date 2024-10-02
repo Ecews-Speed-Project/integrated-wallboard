@@ -183,7 +183,7 @@ const Header: FunctionComponent = () => {
                     Monkey Pox Dashboard
                   </NavLink>
                 </li>
-                <li>
+              {/*   <li>
                   <NavLink
                     className="dropdown-item"
                     to="/yellow-fever"
@@ -198,7 +198,7 @@ const Header: FunctionComponent = () => {
                   >
                     Slide Show
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <a
                     className="dropdown-item"
