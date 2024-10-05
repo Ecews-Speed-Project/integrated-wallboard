@@ -12,7 +12,6 @@ import { RootState } from '../../../store';
 
 const VlAgeDashboard: FunctionComponent = () => {
   const userData = useSelector((state: RootState) => state.auth);
-  //Add TODO Please impliment Unsupressed as part of the cards
   const [state, setState] = useState({
     chartData: {},
     loading: false,
@@ -32,7 +31,7 @@ const VlAgeDashboard: FunctionComponent = () => {
 	
       setState((prevState) => ({
         ...prevState,
-        statsData: data.vl_stats[0],
+        statsData: data.vl_stats,
         vlCoverage: ageAndSexChart('Viralload Coverage by age and sex'),
         vlSuppression: ageAndSexChart('Viralload suppression by age and sex'),
         loading: false,

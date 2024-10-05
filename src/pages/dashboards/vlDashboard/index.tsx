@@ -27,6 +27,10 @@ const VlDashboard: FunctionComponent = () => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
       const data = await viralloadData(userData.stateId);
+	  if (!data.vl_lga) {
+        throw new Error('Data is undefined');
+      }
+	
       const map = await getMap(userData.state ?? undefined);
       const suppressionData = await getSuppressionData(data.vl_lga);
       const coverageData = await getCoverageData(data.vl_lga);
@@ -39,6 +43,7 @@ const VlDashboard: FunctionComponent = () => {
       });
     } catch (error) {
       console.error('Error fetching map data:', error);
+	  window.location.href = '/login'; // Redirect to login page
       setState((prevState) => ({ ...prevState, loading: false }));
     }
   }, [userData.state, userData.stateId]);

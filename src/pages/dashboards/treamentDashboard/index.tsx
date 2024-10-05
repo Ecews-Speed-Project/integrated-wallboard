@@ -29,6 +29,9 @@ const TreamentDashboard: FunctionComponent = () => {
 		setState((prevState) => ({ ...prevState, loading: true }));
 		try {
 			const data = await retentionData(userData.stateId);
+			if (!data?.stats?.saturation) {
+				throw new Error('Data is undefined');
+			  }
 			const stats = handleSearch(data?.stats?.saturation, userData.stateId);
 			const map = await getMap(userData.state ?? undefined);
 			const mapData = await getLiveMapData(data.tx_curr_lga);
@@ -42,6 +45,8 @@ const TreamentDashboard: FunctionComponent = () => {
 		} catch (error) {
 			console.error('Error fetching map data:', error);
 			setState((prevState) => ({ ...prevState, loading: false }));
+			window.location.href = '/login'; // Redirect to login page
+
 		}
 	}, [userData.state, userData.stateId]);
 
