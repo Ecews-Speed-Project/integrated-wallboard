@@ -5,9 +5,12 @@ import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select } from '@m
 
 
 import '../../../App.css';
-import BreadCrumb from '../../../components/BreadCrumb';
-import PaginationComponent from '../../../components/Pagination';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import BreadCrumb from '../../../components/BreadCrumb';
+import { RootState } from '../../../store';
+import { DOWNLOAD_LINE_LIST, GENERATE_LINE_LIST, GET_LINE_LIST } from '../../../utils/constants';
+import PaginationComponent from '../../../components/Pagination';
 
 const GenerateLineList: React.FC = () => {
   const [data, setData] = useState<GridRowsProp>([]);
@@ -16,6 +19,7 @@ const GenerateLineList: React.FC = () => {
   const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedUploadType, setSelectedUploadType] = useState('ALL');
+  const userData = useSelector((state: RootState) => state.auth);
 
 
   const columns: GridColDef[] = [
@@ -32,7 +36,7 @@ const GenerateLineList: React.FC = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => window.open(`http://eboard.ecews.org/api/data/web-download/${params.row.linkCode}`, '_blank')}
+          onClick={() => window.open(`${DOWNLOAD_LINE_LIST}${params.row.linkCode}`, '_blank')}
         >
           Dowload Line list
         </Button>
@@ -46,13 +50,12 @@ const GenerateLineList: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     // Simulate API 
-    const user = JSON.parse(localStorage.getItem('user') as string);
 
-    const response = await fetch('http://eboard.ecews.org/api/data/get-line-list?page=1&pageSize=10', {
+    const response = await fetch(`${GET_LINE_LIST}?page=1&pageSize=10`, {
       method: 'GET', // Change method to POST
       headers: {
           'Content-Type': 'application/json', // Specify the content type as JSON
-          Authorization: `Bearer  ${user!.token}`
+          Authorization: `Bearer  ${userData!.token}`
       },
      });
     const jsonResponse = await response.json();
@@ -63,17 +66,16 @@ const GenerateLineList: React.FC = () => {
 
   const generateList = async () => {
     try {
-      const user = JSON.parse(localStorage.getItem('user') as string);
       // Simulate a file upload
       const formData = new FormData();
       formData.append('file', new Blob(['sample data'], { type: 'text/plain' }), 'example.txt');
 
       // Post the file to the upload API
-      await  fetch('http://eboard.ecews.org/api/data/generate-line-list', {
+      await  fetch(`${GENERATE_LINE_LIST}`, {
         method: 'POST', // Change method to POST
         headers: {
             'Content-Type': 'application/json', // Specify the content type as JSON
-            Authorization: `Bearer  ${user!.token}`
+            Authorization: `Bearer  ${userData!.token}`
         },
         body: JSON.stringify({
           state:0,   

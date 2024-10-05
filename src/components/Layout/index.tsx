@@ -3,21 +3,21 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Header from '../Header';
-import { auth } from '../../services/auth.services';
 
-const Layout: FunctionComponent = () => {
-  
+
+
+
+const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
-        <div>
-            <Header></Header>
-            <main>
-                <Outlet />
-            </main>
-            <footer>
-                {/* Add your footer content here */}
-            </footer>
+ 
+      <div className="main-layout">
+             <div className="container-fluid">
+        <Header />
         </div>
+        <div className="content-container px-6">{children}</div>
+  
+      </div>
     );
-};
-
-export default Layout;
+  };
+  
+  export default MainLayout;

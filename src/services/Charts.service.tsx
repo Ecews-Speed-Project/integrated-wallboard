@@ -1,4 +1,3 @@
-import { color } from "highcharts";
 
 interface mapData {
     value: number;
@@ -230,8 +229,8 @@ export const getSomaLiveMapData = async (mapdata: any) => {
         console.log(p.value)
         mapData.push(
             {
-                "value": (p.value == undefined || 0)  ? 1 :1,
-                "code":  (p.lgaName == undefined) ? null :  p.lgaName
+                "value": (p.value === undefined || 0)  ? 1 :1,
+                "code":  (p.lgaName === undefined) ? null :  p.lgaName
             },
         )
         p.code = (p.lgaName == undefined) ? null : p.code;

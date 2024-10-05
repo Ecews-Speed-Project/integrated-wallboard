@@ -34,6 +34,7 @@ export const viralloadAgeData = async (stateId: any) => {
 }
 
 export const summaryApiData = async (stateId: any) => {
+  console.log(stateId)
   const data: any = { state: stateId };
   try {
     const res = await postSummaryData(data);

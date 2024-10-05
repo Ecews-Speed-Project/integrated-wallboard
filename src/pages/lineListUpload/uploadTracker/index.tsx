@@ -5,6 +5,9 @@ import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
 
 
 import '../../../App.css';
+import { useSelector } from 'react-redux';
+import { LINE_LIST_REPORT } from '../../../utils/constants';
+import { RootState } from '../../../store';
 import BreadCrumb from '../../../components/BreadCrumb';
 import PaginationComponent from '../../../components/Pagination';
 
@@ -14,6 +17,7 @@ const UploadTracker : React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [rowCount, setRowCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const userData = useSelector((state: RootState) => state.auth);
 
   const columns: GridColDef[] = [
     { field: 'state', headerName: 'State', width: 500 },
@@ -22,22 +26,18 @@ const UploadTracker : React.FC = () => {
     { field: 'txCurrent', headerName: 'TX_CURR', width: 200,  type: 'number'  },
     { field: 'dateGenerate', headerName: 'Date Generate', width: 200, type: 'string' },
     { field: 'lastEMRDate', headerName: 'Last  EMR Date', width: 200, type: 'string' },
-
-    
-
   ];
 
   // Fetch data function that simulates API calls
   const fetchData = async () => {
     setLoading(true);
     // Simulate API 
-    const user = JSON.parse(localStorage.getItem('user') as string);
 
-    const response = await fetch('http://eboard.ecews.org/api/data/line-list-report', {
+    const response = await fetch(`${LINE_LIST_REPORT}`, {
       method: 'POST', // Change method to POST
       headers: {
           'Content-Type': 'application/json', // Specify the content type as JSON
-          Authorization: `Bearer  ${user!.token}`
+          Authorization: `Bearer  ${userData!.token}`
       },
       body: JSON.stringify({
           page: page, 

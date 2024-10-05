@@ -1,16 +1,17 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, BrowserRouter as Router } from "react-router-dom"
 import './App.css';
-import { AuthProvider } from './auth/authContext ';
+import './index.css';
+import {  store } from './store';
 import ProjectRoutes from './Routes';
+import { Provider } from 'react-redux';
 
 function App() {
   return (
-    <AuthProvider>
+  
       <Suspense fallback={<div>Loading...</div>}>
         <ProjectRoutes />
       </Suspense>
-    </AuthProvider>
 
   );
 }

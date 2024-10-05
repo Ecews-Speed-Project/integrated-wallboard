@@ -1,117 +1,199 @@
-import { FunctionComponent, useCallback, useState } from 'react';
-import styles from './Style.module.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import './App.css';
+import React, { useState, useEffect, FormEvent } from 'react';
+import { Plane, Stethoscope, Users, Coffee, AlertCircle } from 'lucide-react';
+import '../../index.css';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../auth/authContext ';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../features/auth/authThunks';
+import { AppDispatch, RootState } from '../../store';
+// Define the slide interface
+interface Slide {
+  icon: React.ElementType;
+  label: string;
+  image: string;
+}
 
-const SignIn: FunctionComponent = () => {
-	const [email, setUsername] = useState('delta@speed.com');
-	const [password, setPassword] = useState('P@ssw0rd');
-	const navigate = useNavigate();
-	const { login } = useAuth();
+// Define the Stat component props
+interface StatProps {
+  label: string;
+  value: string;
+  color: string;
+}
 
+// Define the IconBox component props
+interface IconBoxProps {
+  icon: React.ReactNode;
+  active: boolean;
+}
 
-	const onFrameImageClick = useCallback(() => {
-		// Add your code here
-	}, []);
-
-	const onSignInClick = useCallback(async () => {
-
-		try {
-			//navigate('/summary')
-			const response = await fetch('http://eboard.ecews.org/api/account/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ email, password }),
-			});
-
-			if (response.ok) {
-				const data = await response.json();
-				// Assume the response contains a token
-				localStorage.setItem('user', JSON.stringify(data));
-				login()
-				navigate('/summary'); // Redirect to the dashboard or another page
-			} else {
-				alert('Authentication failed. Please check your credentials.');
-			}
-		} catch (error) {
-			console.error('Error during authentication', error);
-			alert('An error occurred. Please try again later.');
-		}
-	}, [email, password, navigate]);
+const SignIn: React.FC = () => {
+  const [email, setUsername] = useState<string>('osun@speed.com');
+  const [password, setPassword] = useState<string>('P@ssw0rd');
+  const [currentBgIndex, setCurrentBgIndex] = useState<number>(0);
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { isLoading, error } = useSelector((state: RootState) => state.auth);
 
 
 
-	return (
-		<div className={styles.signIn}>
-			<div className={styles.signInChild} />
-			<div className={styles.signInItem} />
-			<div className={styles.signInParent}>
-				<b className={styles.signIn1}>Sign In</b>
-				<div className={styles.textFieldParent}>
-					<div className={styles.textField}>
-						<div className='col-md-12'>
-							<input type='text' className='form-control col-md-12' value={email}
-								onChange={(e) => setUsername(e.target.value)} />
+  const slides: Slide[] = [
+    { icon: Plane, label: 'Travel', image: '/images/slider/large/slide1.jpg' },
+    { icon: Stethoscope, label: 'Medical', image: '/images/slider/large/slide2.jpg' },
+    { icon: Users, label: 'Community', image: '/images/slider/large/slide3.jpg' },
+    { icon: Coffee, label: 'Lifestyle', image: '/images/slider/large/slide4.jpg' },
+    { icon: AlertCircle, label: 'Alert', image: '/images/slider/large/slide5.jpg' },
+  ];
 
-						</div>
-						<div className={styles.label}>
-							<b className={styles.label1}>Username</b>
-						</div>
-					</div>
-					<div className={styles.textField1}>
-						<div className='col-md-12'>
-							<input type='text' className='form-control col-md-12' value={password}
-								onChange={(e) => setPassword(e.target.value)} />
-						</div>
-						<div className={styles.label2}>
-							<b className={styles.label1}>Password</b>
-						</div>
-					</div>
-					<div className='col-md-12'>
-						<button className='col-md-12 buttons' onClick={onSignInClick}>Sign In</button>
-					</div>
-				</div>
-			</div>
-			<div className={styles.parent}>
-				<b className={styles.b}>10:46</b>
-				<b className={styles.july2024}>16 July, 2024</b>
-			</div>
-			<div className={styles.group}>
-				<b className={styles.b1}>1000</b>
-				<b className={styles.totalCases}>Total Cases</b>
-			</div>
-			<div className={styles.container}>
-				<b className={styles.b1}>1000</b>
-				<b className={styles.totalReached}>Total Reached</b>
-			</div>
-			<div className={styles.frameDiv}>
-				<b className={styles.b1}>27</b>
-				<b className={styles.totalStatesCovered}>Total States covered</b>
-			</div>
-			<div className={styles.integratedDiseaseParent}>
-				<b className={styles.integratedDisease}>Integrated Disease</b>
-				<b className={styles.b}>WALLBOARD</b>
-			</div>
-			<div className={styles.pepfarLogo1Parent}>
-				<img className={styles.pepfarLogo1Icon} alt="" src="/images/cdc.svg" />
-				<img className={styles.pngwing2Icon} alt="" src="/images/pepfar-logo.svg" />
-				<img className={styles.icon} alt="" src="/images/nigeria.svg" />
-				<img className={styles.pngwing1Icon} alt="" src="/images/ecews.svg" />
-			</div>
-			<b className={styles.poweredBy}>Powered by</b>
-			<div className={styles.frameParent}>
-				<img className={styles.frameChild} alt="" src="/images/slider/thumbnail/1.png" onClick={onFrameImageClick} />
-				<img className={styles.frameChild} alt="" src="/images/slider/thumbnail/2.png" onClick={onFrameImageClick} />
-				<img className={styles.frameInner} alt="" src="/images/slider/thumbnail/3.png" />
-				<img className={styles.frameChild} alt="" src="/images/slider/thumbnail/4.png" onClick={onFrameImageClick} />
-				<img className={styles.frameChild} alt="" src="/images/slider/thumbnail/5.png" onClick={onFrameImageClick} />
-			</div>
-		</div>);
+  useEffect(() => {
+    const bgInterval = setInterval(() => {
+      setCurrentBgIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    }, 5000);
+
+    const timeInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(bgInterval);
+      clearInterval(timeInterval);
+    };
+  }, []);
+
+  const formatTime = (date: Date): string => {
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  };
+
+  const formatDate = (date: Date): string => {
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+  };
+
+  const handleSignIn = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    /* setIsLoading(true);
+    setError('');
+ */
+    try {
+
+      await dispatch(login({ email, password })).unwrap();
+
+
+      navigate('/dashboard');
+    } catch {
+      // Error is handled by the thunk and stored in Redux state
+    }
+
+    // Implement sign-in logic here
+  /*   try {
+      await dispatch(login({ username, password })).unwrap();
+      navigate('/user-info'); // Simulate a network request
+    } catch (error) {
+      setError('Sign-in failed. Please try again.');
+    } finally {
+      setLoading(false);
+    } */
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-900 text-white overflow-hidden">
+      <div className="relative flex-1">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+            style={{
+              backgroundImage: `url(${slide.image})`,
+              opacity: index === currentBgIndex ? 1 : 0,
+            }}
+          />
+        ))}
+        <div className="absolute inset-0 bg-black bg-opacity-50">
+          <div className="p-8">
+            <div className="flex justify-between mb-8">
+              <div>
+                <h2 className="text-4xl font-bold mb-2">Integrated Disease</h2>
+                <h1 className="text-6xl font-bold">WALLBOARD</h1>
+              </div>
+              <div className="text-right">
+                <p className="text-3xl font-bold">{formatTime(currentTime)}</p>
+                <p>{formatDate(currentTime)}</p>
+              </div>
+            </div>
+            <div className="flex space-x-8 mb-8">
+              <Stat label="Total Cases" value="1000" color="text-red-500" />
+              <Stat label="Total Reached" value="1000" color="text-green-500" />
+              <Stat label="Total States Covered" value="27" color="text-white" />
+            </div>
+            <div className="flex space-x-4 mb-8">
+              {slides.map((slide, index) => (
+                <img key={index} src={`/images/slider/thumbnail/${index + 1}.png`} alt={`Thumbnail ${index}`} style={{
+                  border: index === currentBgIndex ? '2px solid #ffffff' : 'none',
+                  outline: index === currentBgIndex ? '1px solid #ffffff' : 'none',
+                  boxShadow: index === currentBgIndex ? '0 0 10px rgba(0, 255, 0, 0.5)' : 'none',
+                  borderRadius: 10,
+                  margin: '5px',
+                  transition: 'all 0.3s ease'
+                }} />
+                //  <IconBox key={index} icon={<slide.icon size={24} />} active={index === currentBgIndex} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-96 bg-gray-800 p-8 flex flex-col justify-center">
+        <h2 className="text-2xl font-bold mb-4">Sign In</h2>
+        {error && <p className="text-red-500 mb-2">{error}</p>}
+        <form onSubmit={handleSignIn}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2">Email</label>
+            <input
+              type="text"
+              id="email"
+              className="w-full p-2 bg-gray-700 rounded"
+              value={email}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block mb-2">Password</label>
+            <input
+              type="password"
+              id="password"
+              className="w-full p-2 bg-gray-700 rounded"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" disabled={isLoading} className="p-2 bg-blue-500 text-white rounded">
+            {isLoading ? 'Logging in...' : 'Log In'}
+          </button>
+         
+        </form>
+      </div>
+
+      <div className="absolute bottom-4 left-4 flex space-x-4">
+        <img src="/images/pepfar-logo.svg" alt="PEPFAR logo" className="h-8" />
+        <img src="/images/cdc.svg" alt="CDC logo" className="h-8" />
+        <img src="/images/ecews.svg" alt="ECEWS logo" className="h-8" />
+        <img src="/images/nigeria.svg" alt="Nigeria coat of arms" className="h-8" />
+      </div>
+    </div>
+  );
 };
+
+const Stat: React.FC<StatProps> = ({ label, value, color }) => (
+  <div>
+    <p className={`text-4xl font-bold ${color}`}>{value}</p>
+    <p className="text-sm">{label}</p>
+  </div>
+);
+
+const IconBox: React.FC<IconBoxProps> = ({ icon, active }) => (
+  <div className={`bg-white bg-opacity-20 p-2 rounded transition-all duration-300 ${active ? 'scale-110 bg-opacity-40' : ''}`}>
+    {icon}
+  </div>
+);
 
 export default SignIn;

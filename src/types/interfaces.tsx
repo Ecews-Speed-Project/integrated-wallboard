@@ -32,3 +32,4 @@ export interface DiseaseData {
   export interface ConfirmedCasesByLGA {
 	[lga: string]: number; // Store confirmed cases by LGA
   }
+

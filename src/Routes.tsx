@@ -1,71 +1,60 @@
-import React, { lazy }  from "react";
-import {Navigate, useRoutes} from "react-router-dom"
-import Layout from "./components/Layout";
-import { useAuth } from "./auth/authContext ";
-import ColeraDashboard from "./pages/coleraDashboard";
-import YellowFeverDashboard from "./pages/yellowFeverDashboard";
-import MeaslesDashboard from "./pages/measlesDashboard";
-import MonkeyPoxDashboard from "./pages/monkeyPoxDashboard";
-import LassaDashboard from "./pages/lassaDashboard";
-import DropZone from "./pages/uploadData";
-import MainGrid from "./pages/previousUpload";
-import UploadTracker from "./pages/lineListUpload/uploadTracker";
-import GenerateLineList from "./pages/lineListUpload/generateLineList";
+import React, { lazy } from "react";
+import { Navigate, useRoutes } from "react-router-dom";
+import MainLayout from "./components/Layout";
 
-
+// Lazy load components
 const SignIn = lazy(() => import('./pages/signIn'));
-const SummaryBoard = lazy(() => import('./pages/summaryDashboard'));
-const NcdsDashboard = lazy(() => import('./pages/NcdDashboard'));
-const MentalHealthDashboard = lazy(() => import('./pages/mentalHealthDashboard'));
-const VlDashboard = lazy(() => import('././pages/vlDashboard'));
-const VlAgeDashboard = lazy(() => import('./pages/vlAgeDashboard'));
-const TreamentDashboard = lazy(() => import('./pages/treamentDashboard'));
-const SaturationDashboard = lazy(() => import('./pages/saturationDashboard'));
-const Somas = lazy(() => import('./pages/somasDashboard'));
-const Slideshow = lazy(() => import('./pages/slideShow'));
+const SummaryBoard = lazy(() => import('./pages/dashboards/summaryDashboard'));
+const NcdsDashboard = lazy(() => import('./pages/dashboards/NcdDashboard'));
+const MentalHealthDashboard = lazy(() => import('./pages/dashboards/mentalHealthDashboard'));
+const VlDashboard = lazy(() => import('./pages/dashboards/vlDashboard'));
+const VlAgeDashboard = lazy(() => import('./pages/dashboards/vlAgeDashboard'));
+const TreamentDashboard = lazy(() => import('./pages/dashboards/treamentDashboard'));
+const SaturationDashboard = lazy(() => import('./pages/dashboards/saturationDashboard'));
+const Somas = lazy(() => import('./pages/dashboards/somasDashboard'));
+const Slideshow = lazy(() => import('./pages/dashboards/slideShow'));
+const ColeraDashboard = lazy(() => import('./pages/dashboards/coleraDashboard'));
+const YellowFeverDashboard = lazy(() => import('./pages/dashboards/yellowFeverDashboard'));
+const MeaslesDashboard = lazy(() => import('./pages/dashboards/measlesDashboard'));
+const MonkeyPoxDashboard = lazy(() => import('./pages/dashboards/monkeyPoxDashboard'));
+const LassaDashboard = lazy(() => import('./pages/dashboards/lassaDashboard'));
+const DropZone = lazy(() => import('./pages/reports/uploadData'));
+const MainGrid = lazy(() => import('./pages/reports/previousUpload'));
+const UploadTracker = lazy(() => import('./pages/reports/lineList/uploadTracker'));
+const GenerateLineList = lazy(() => import('./pages/reports/lineList/generateLineList'));
+
+const routes = [
+  { path: '/', element: <SignIn /> },
+  { path: '/dashboard', element: <SummaryBoard />, layout: MainLayout },
+  { path: '/upload-data', element: <DropZone />, layout: MainLayout },
+  { path: '/previous-upload', element: <MainGrid />, layout: MainLayout },
+  { path: '/upload-tracker', element: <UploadTracker />, layout: MainLayout },
+  { path: '/generate-linelist', element: <GenerateLineList />, layout: MainLayout },
+  { path: '/ncd', element: <NcdsDashboard />, layout: MainLayout },
+  { path: '/mental-health', element: <MentalHealthDashboard />, layout: MainLayout },
+  { path: '/vl', element: <VlDashboard />, layout: MainLayout },
+  { path: '/vl-age-sex', element: <VlAgeDashboard />, layout: MainLayout },
+  { path: '/treatment', element: <TreamentDashboard />, layout: MainLayout },
+  { path: '/saturation', element: <SaturationDashboard />, layout: MainLayout },
+  { path: '/slide-show', element: <Slideshow />, layout: MainLayout },
+  { path: '/cholera', element: <ColeraDashboard />, layout: MainLayout },
+  { path: '/yellow-fever', element: <YellowFeverDashboard />, layout: MainLayout },
+  { path: '/measles', element: <MeaslesDashboard />, layout: MainLayout },
+  { path: '/monkey-pox', element: <MonkeyPoxDashboard />, layout: MainLayout },
+  { path: '/lassa', element: <LassaDashboard />, layout: MainLayout },
+];
 
 const ProjectRoutes = () => {
+  const isLoggedIn = false;
 
-    const { isLoggedIn } = useAuth();
+  const element = useRoutes(
+    routes.map(({ path, element, layout: LayoutComponent }) => ({
+      path,
+      element: LayoutComponent ? <LayoutComponent>{element}</LayoutComponent> : element,
+    }))
+  );
 
-    let element =  useRoutes(
+  return element;
+};
 
-        [
-            { path: '/login', element: <SignIn /> },
-            {
-                path: '/',
-                
-                 element: isLoggedIn ? <Layout /> : <SignIn />,
-                children: [
-                    {path:"", element:<SummaryBoard/>},
-                    {path:"/summary", element:<SummaryBoard/>},
-                    {path:"/upload-data", element:<DropZone/>},
-                    {path:"/previous-upload", element:<MainGrid/>},
-                    {path:"/upload-tracker", element:<UploadTracker/>},
-                    {path:"/generate-linelist", element:<GenerateLineList/>},
-
-                    {path:"/soma", element:<Somas/>},
-
-                    {path:"/ncd", element:<NcdsDashboard/>},
-                    {path:"/mental-health", element:<MentalHealthDashboard/>},
-                    {path:"/vl", element:<VlDashboard/>},
-                    {path:"/vl-age-sex", element:<VlAgeDashboard/>},
-                    {path:"/treatment", element:<TreamentDashboard/>},
-                    {path:"/saturation", element:<SaturationDashboard/>},
-                    {path:"/slide-show", element:<Slideshow/>},
-                    //somas
-                    {path:"/cholera", element:<ColeraDashboard/>},
-                    {path:"/yellow-fever", element:<YellowFeverDashboard/>},
-                    {path:"/measles", element:<MeaslesDashboard/>},
-                    {path:"/monkey-pox", element:<MonkeyPoxDashboard/>},
-                    {path:"/lassa", element:<LassaDashboard/>},
-                    // Add other routes here
-                ],
-            },
-        ]
-      
-    )
-    return element
-}
-
-export default ProjectRoutes
+export default ProjectRoutes;
