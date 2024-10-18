@@ -1,3 +1,4 @@
+import { color } from "highcharts";
 
 interface mapData {
     value: number;
@@ -77,6 +78,102 @@ export const stateMaps = (map: any, data: any, title: any, height: any = 700) =>
 }
 
 
+export const mapChat = (map: any, data: any, title: any, height: any = 700) => {
+    return {
+    chart: {
+        zooming: {
+            type: 'xy'
+        }
+    },
+    title: {
+        text: `Trend analysis of ${title} for he past 6 months`,
+        align: 'left'
+    },
+    subtitle: {
+        text: '',
+        align: 'left'
+    },
+    xAxis: [{
+        categories: [
+            'May', 'June', 'July', 'August', 'September', 'October'
+        ],
+        crosshair: true
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            format: '{value}',
+            style: {
+             //   color: Highcharts.getOptions().colors[1]
+            }
+        },
+        title: {
+            text: 'Patients',
+            style: {
+              //  color: Highcharts.getOptions().colors[1]
+            }
+        }
+    }, { // Secondary yAxis
+        title: {
+            text: 'Confirmed cases',
+            style: {
+               // color: Highcharts.getOptions().colors[0]
+            }
+        },
+        labels: {
+            format: '{value}',
+            style: {
+              //  color: Highcharts.getOptions().colors[0]
+            }
+        },
+        opposite: true
+    }],
+    tooltip: {
+        shared: true
+    },
+    legend: {
+        align: 'left',
+        x: 80,
+        verticalAlign: 'top',
+        y: 60,
+        floating: true,
+      //  backgroundColor:
+           // Highcharts.defaultOptions.legend.backgroundColor || // theme
+          //  'rgba(255,255,255,0.25)'
+    },
+    series: [{
+        name: 'Total Suspected Cases',
+        type: 'column',
+        color:'#888f68',
+        yAxis: 1,
+        data: [
+            27.6, 28.8, 21.7, 34.1, 29.0, 28.4
+        ],
+        tooltip: {
+            valueSuffix: ' mm'
+        }
+
+    }, {
+        name: 'Total Confrimed Cases',
+        color : '#454e12',
+        lineWidth:3,
+        marker: {
+            radius: 10, // Adjust the size of the data points here
+            lineColor: 'red', // Set the outline color here
+            lineWidth: 2 //
+        },
+        type: 'spline',
+        data: [
+             13.0, 14.5, 10.8, 5.8, 5.8, 5.8,
+        ],
+        tooltip: {
+            valueSuffix: '°C'
+        }
+    }]
+};
+}
+
+
+
 export const hivMap = (map: any, data: any, title: any, height: any = 700) => {
     return {
 
@@ -117,6 +214,76 @@ export const hivMap = (map: any, data: any, title: any, height: any = 700) => {
             stops: [
                 [0, '#C40306'],
                 [0.94, '#E8B51E'],
+                [1, '#0D8651']
+            ]
+        },
+
+        series: [{
+            accessibility: {
+                point: {
+                    valueDescriptionFormat: '{xDescription}, {point.value} ' +
+                        'people per square kilometer.'
+                }
+            },
+            animation: {
+                duration: 1000
+            },
+            data: data,
+            joinBy: ['admin2Name', 'code'],
+            dataLabels: {
+                enabled: true,
+                color: '#FFFFFF',
+                format: '{point.code} <br> {point.value}'
+            },
+            name: '%Population of clients',
+            nullColor: '#BEB7B7',
+            tooltip: {
+                pointFormat: '{point.code}: {point.value}%'
+            }
+        }]
+    };
+}
+
+export const somasMap = (map: any, data: any, title: any, height: any = 700) => {
+    return {
+
+        chart: {
+            map: map,
+            height: height
+        },
+
+        title: {
+            text: title
+        },
+
+        exporting: {
+            sourceWidth: 600,
+            sourceHeight: 500
+        },
+
+        legend: {
+            layout: 'horizontal',
+            borderWidth: 0,
+            backgroundColor: 'rgba(255,255,255,0.85)',
+            floating: true,
+            verticalAlign: 'top',
+            y: 25
+        },
+
+
+        mapNavigation: {
+            enabled: true,
+            //  enableDoubleClickZoomTo: true
+        },
+
+        colorAxis: {
+            min: 1,
+            type: 'logarithmic',
+            minColor: '#EEEEFF',
+            maxColor: '#000022',
+            stops: [
+                [0, '#cfae4a'],
+                [0.94, '#C40306'],
                 [1, '#0D8651']
             ]
         },
@@ -223,20 +390,36 @@ export const getLiveMapData = async (mapdata: any) => {
 
 
 export const getSomaLiveMapData = async (mapdata: any) => {
-   // console.log(mapdata)
     const mapData: mapData[] = []
     mapdata.forEach(function (p: any) {
-        console.log(p.value)
-        mapData.push(
-            {
-                "value": (p.value === undefined || 0)  ? 1 :1,
-                "code":  (p.lgaName === undefined) ? null :  p.lgaName
-            },
-        )
-        p.code = (p.lgaName == undefined) ? null : p.code;
+        if(p.value !== 0){
+            mapData.push(
+                {
+                    "value": p.value,
+                    "code":   p.lgaName
+                },
+            )
+            p.code =  p.code;
+        }
     });
     return mapData;
 }
+
+
+export const getSomaLiveMapForSummaryPageData = async (mapdata: any) => {
+    console.log(mapdata)
+     const mapData: mapData[] = []
+     mapdata.forEach(function (p: any) {
+         mapData.push(
+             {
+                 "value": (p.value === undefined || 0)  ? 1 :1,
+                 "code":  (p.lgaName === undefined) ? null :  p.lgaName
+             },
+         )
+         p.code = (p.lgaName == undefined) ? null : p.code;
+     });
+     return mapData;
+ }
 
 
 export const getSuppressionData = async (mapdata: any) => {

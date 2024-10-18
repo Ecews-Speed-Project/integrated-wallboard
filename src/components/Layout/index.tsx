@@ -1,5 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Header from '../Header';

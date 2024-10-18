@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import MainLayout from "./components/Layout";
+import TreamentTrendDashboard from "./pages/dashboards/treamentTrendDashboard";
 
 // Lazy load components
 const SignIn = lazy(() => import('./pages/signIn'));
@@ -35,6 +36,7 @@ const routes = [
   { path: '/vl', element: <VlDashboard />, layout: MainLayout },
   { path: '/vl-age-sex', element: <VlAgeDashboard />, layout: MainLayout },
   { path: '/treatment', element: <TreamentDashboard />, layout: MainLayout },
+  { path: '/treatment-trend', element: <TreamentTrendDashboard />, layout: MainLayout },
   { path: '/saturation', element: <SaturationDashboard />, layout: MainLayout },
   { path: '/slide-show', element: <Slideshow />, layout: MainLayout },
   { path: '/cholera', element: <ColeraDashboard />, layout: MainLayout },

@@ -9,6 +9,7 @@ import SmallCard from '../../../components/SmallCard';
 import { viralloadAgeData } from '../../../services/main.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { dualAxisChart } from '../../../utils/chatUtils/dualAxisChart';
 
 const VlAgeDashboard: FunctionComponent = () => {
   const userData = useSelector((state: RootState) => state.auth);
@@ -16,8 +17,7 @@ const VlAgeDashboard: FunctionComponent = () => {
     chartData: {},
     loading: false,
     statsData: {} as { [key: string]: any },
-    vlCoverage: {},
-    vlSuppression: {},
+    vlChart: {},
     showPopup: false,
   });
 
@@ -28,12 +28,11 @@ const VlAgeDashboard: FunctionComponent = () => {
       if (!data.vl_stats) {
         throw new Error('Data is undefined');
       }
-	
+
       setState((prevState) => ({
         ...prevState,
         statsData: data.vl_stats,
-        vlCoverage: ageAndSexChart('Viralload Coverage by age and sex'),
-        vlSuppression: ageAndSexChart('Viralload suppression by age and sex'),
+        vlChart: dualAxisChart('Viralload suppression by age and sex', '', ''),
         loading: false,
       }));
     } catch (error) {
@@ -66,20 +65,36 @@ const VlAgeDashboard: FunctionComponent = () => {
       <div className="row">
         <div className="col-12 col-md-12">
           <div className="row">
-            <SmallCard title="HIV Clients on Treatment" value={state.statsData?.txCurr} />
-            <SmallCard title="Eligible for VL" value={state.statsData?.eligible} />
-            <SmallCard title="Sample Collected" value={state.statsData?.sampleCollect} />
-            <SmallCard title="Result Received" value={state.statsData?.result} />
-            <SmallCard title="Viral load < 1000 cop /mil" value={state.statsData?.suppression} />
-            <SmallCard title="Viralload > 1000 cop / mi" value="4000" />
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="HIV Clients on Treatment" value={state.statsData?.txCurr} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Eligible for VL" value={state.statsData?.eligible} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Sample Collected" value={state.statsData?.sampleCollect} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Result Received" value={state.statsData?.result} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Viral load < 1000 cop /mil" value={state.statsData?.suppression} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Viralload > 1000 cop / mi" value="4000" />
+            </div>
           </div>
         </div>
-        <div className="col-12 col-md-6">
-          <HighchartsReact highcharts={Highcharts} options={state.vlCoverage} />
+        <div className="col-12 col-md-12">
+          <HighchartsReact highcharts={Highcharts} options={state.vlChart} />
         </div>
-        <div className="col-12 col-md-6">
-          <HighchartsReact highcharts={Highcharts} options={state.vlSuppression} />
-        </div>
+      
       </div>
       {state.showPopup && (
         <div className="popup">

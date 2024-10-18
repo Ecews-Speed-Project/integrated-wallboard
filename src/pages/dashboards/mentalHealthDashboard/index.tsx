@@ -8,7 +8,6 @@ import highchartsMap from "highcharts/modules/map";
 import HighchartsReact from 'highcharts-react-official'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import './App.css';
 import BreadCrumb from '../../../components/BreadCrumb';
 import { auth } from '../../../services/auth.services';
 import { RootState } from '../../../store';

@@ -47,7 +47,7 @@ const UploadTracker : React.FC = () => {
   });
     const jsonResponse = await response.json();
     setData(jsonResponse.uploads); // Replace this with real API data
-    setRowCount(jsonResponse.totalPages); // Set total rows for pagination
+    setRowCount(jsonResponse.totalCount); // Set total rows for pagination
     setLoading(false);
   };
 
@@ -56,7 +56,7 @@ const UploadTracker : React.FC = () => {
   }, [page, pageSize]);
   // Calculate the statistics
   // Calculate the statistics
-  const totalUploads = data.length;
+  const totalUploads = rowCount;
   const processedUploads = data.length;
   const pendingUploads = data.length;
 
@@ -75,7 +75,7 @@ const UploadTracker : React.FC = () => {
                   <Typography variant="h5" component="div" gutterBottom>
                     Total States
                   </Typography>
-                  <Typography variant="h4">{totalUploads}</Typography>
+                  <Typography variant="h4">{3}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -85,7 +85,7 @@ const UploadTracker : React.FC = () => {
                   <Typography variant="h5" component="div" gutterBottom>
                   Total Recent uploads
                   </Typography>
-                  <Typography variant="h4">{processedUploads}</Typography>
+                  <Typography variant="h4">{rowCount}</Typography>
                 </CardContent>
               </Card>
             </Grid>

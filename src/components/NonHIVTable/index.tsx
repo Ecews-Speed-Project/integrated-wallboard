@@ -15,11 +15,11 @@ interface DiseaseTableProps {
 }
 
 const getClassName = (value:any) => {
-    if (value > 100) {
+    if (value === 0) {
       return 'green';
-    } else if (value > 50 && value <= 80) {
+    } else if (value >= 1 && value <= 2) {
       return 'yellow';
-    } else if (value <= 50) {
+    } else if (value > 2 && value <= 1000) {
       return 'red';
     }
     return '';
@@ -31,11 +31,12 @@ const NonHIVTable: React.FC<GenericObject> = ({ data }) => {
                 <thead>
                     <tr>
                         <th>LGA</th>
-                        <th>ANC4/ ANC1</th>
-                        <th>Penta 3</th>
-                        <th>Exclusively Breastfed</th>
-                        <th>Screen for TB</th>
-                        <th>Tested for malaria</th>
+                        <th>Measles Suspected Cases</th>
+                        <th>CellowFever Suspected Cases</th>
+                        <th>Cholera Suspected Cases</th>
+                        <th>Monkey Pox Suspected Cases</th>
+                        <th>lassa Fever suspected Cases</th>
+
 
                     </tr>
                 </thead>
@@ -43,11 +44,12 @@ const NonHIVTable: React.FC<GenericObject> = ({ data }) => {
                     {data.map((item: any, index: any) => (
                         <tr key={index}>
                             <td >{item.lga}</td>
-                            <td className={getClassName(item.anc4)}>{item.anc4}</td>
-                            <td className={getClassName(item.penta)}>{item.penta}</td>
-                            <td className={getClassName(item.breastfed)}>{item.breastfed}</td>
-                            <td className={getClassName(item.breastfed)}>{item.breastfed}</td>
-                            <td  className={getClassName(item.breastfed)}>{item.breastfed}</td>
+                            <td className={getClassName(item.measles.confirmedCases)}>{item.measles.suspectedCases}/ (C:{item.measles.confirmedCases})</td>
+                            <td className={getClassName(item.yellowFever.confirmedCases)}>{item.yellowFever.suspectedCases} (C:{item.yellowFever.confirmedCases})</td>
+                            <td className={getClassName(item.choleraCascade.confirmedCases)}>{item.choleraCascade.suspectedCases} (C:{item.choleraCascade.confirmedCases})</td>
+                            <td  className={getClassName(item.monkeyPox.confirmedCases)}>{item.monkeyPox.suspectedCases} (C:{item.monkeyPox.confirmedCases})</td>
+                            <td className={getClassName(item.lassa.confirmedCases)}>{item.lassa.suspectedCases} (C:{item.lassa.confirmedCases})</td>
+
                         </tr>
                     ))}
                 </tbody>

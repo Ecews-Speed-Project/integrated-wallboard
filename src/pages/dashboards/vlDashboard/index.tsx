@@ -27,10 +27,10 @@ const VlDashboard: FunctionComponent = () => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
       const data = await viralloadData(userData.stateId);
-	  if (!data.vl_lga) {
+      if (!data.vl_lga) {
         throw new Error('Data is undefined');
       }
-	
+
       const map = await getMap(userData.state ?? undefined);
       const suppressionData = await getSuppressionData(data.vl_lga);
       const coverageData = await getCoverageData(data.vl_lga);
@@ -43,7 +43,7 @@ const VlDashboard: FunctionComponent = () => {
       });
     } catch (error) {
       console.error('Error fetching map data:', error);
-	  window.location.href = '/login'; // Redirect to login page
+      window.location.href = '/login'; // Redirect to login page
       setState((prevState) => ({ ...prevState, loading: false }));
     }
   }, [userData.state, userData.stateId]);
@@ -58,12 +58,30 @@ const VlDashboard: FunctionComponent = () => {
       <div className="row">
         <div className="col-12 col-md-12">
           <div className="row">
-            <SmallCard title="HIV Clients on Treatment" value={state.statsData.txCurrent} />
-            <SmallCard title="Eligible for VL" value={state.statsData.vlEligible} />
-            <SmallCard title="Sample Collected" value={state.statsData.vLtoPCRLab} />
-            <SmallCard title="Result Received" value={state.statsData.vLenteredEMR} />
-            <SmallCard title="Coverage" value={`${Math.round((state.statsData.vLenteredEMR / state.statsData.vlEligible) * 100)}%`} />
-            <SmallCard title="Viral load < 1000 cop /mil" value={state.statsData.vlSuppressed} />
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="HIV Clients on Treatment" value={state.statsData.txCurrent} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Eligible for VL" value={state.statsData.vlEligible} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Sample Collected" value={state.statsData.vLtoPCRLab} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Result Received" value={state.statsData.vLenteredEMR} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Coverage" value={`${Math.round((state.statsData.vLenteredEMR / state.statsData.vlEligible) * 100)}%`} />
+            </div>
+            <div className="col-2 col-md-2">
+
+              <SmallCard title="Viral load < 1000 cop /mil" value={state.statsData.vlSuppressed} />
+            </div>
           </div>
         </div>
         <div className="col-12 col-md-6">

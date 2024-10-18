@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2'; // Import SweetAlert
+import { RootState } from '../../store';
 
 interface DropZoneProps {
   uploadUrl: string;
@@ -9,11 +11,12 @@ interface DropZoneProps {
 const DropZone: React.FC<DropZoneProps> = ({ uploadUrl }) => {
   const [progress, setProgress] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
+  const userData = useSelector((state: RootState) => state.auth);
+
 
   // Function to handle file upload with progress tracking
   const uploadFile = (file: File) => {
 
-    const user = JSON.parse(localStorage.getItem('user') as string);
 
     return new Promise<void>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -44,7 +47,7 @@ const DropZone: React.FC<DropZoneProps> = ({ uploadUrl }) => {
       };
 
       xhr.open('POST', uploadUrl);
-      xhr.setRequestHeader('Authorization', `Bearer ${user!.token}`);
+      xhr.setRequestHeader('Authorization', `Bearer ${userData!.token}`);
 
       const formData = new FormData();
       formData.append('file', file);
@@ -127,7 +130,7 @@ const DropZone: React.FC<DropZoneProps> = ({ uploadUrl }) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          fontSize:'16px'
+          fontSize: '16px'
         }}
       >
         <input {...getInputProps()} />

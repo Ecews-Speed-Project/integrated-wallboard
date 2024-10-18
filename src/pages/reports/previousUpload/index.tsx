@@ -15,6 +15,7 @@ const MainGrid: React.FC = () => {
     page: 0,
     pageSize: 10,
     rowCount: 0,
+    totalFile:0,
     loading: false,
   });
 
@@ -41,6 +42,7 @@ const MainGrid: React.FC = () => {
         ...prevState,
         data: jsonResponse.uploads,
         rowCount: jsonResponse.totalPages,
+        totalFile : jsonResponse.totalCount,
         loading: false,
       }));
     } catch (error) {
@@ -53,7 +55,7 @@ const MainGrid: React.FC = () => {
     fetchData();
   }, [fetchData]);
 
-  const totalUploads = state.data.length;
+  const totalUploads = state.totalFile;
   const processedUploads = state.data.filter((upload) => upload.processingStatus === 'PROCESSED').length;
   const pendingUploads = state.data.filter((upload) => upload.processingStatus === 'PENDING').length;
 

@@ -5,13 +5,14 @@ import HighchartsReact from 'highcharts-react-official';
 import highchartsMap from 'highcharts/modules/map';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import './App.css';
 import { retentionData } from '../../../services/main.service';
 import { handleSearch } from '../../../utils/helpers';
 import { GenericObject } from '../../../types/dseaseData';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
+import { StatCard } from '../../../components/StatCard';
+import { Check, Bookmark, Lightbulb, MoreHorizontal } from 'lucide-react';
 
 highchartsMap(Highcharts);
 
@@ -31,17 +32,19 @@ const TreamentDashboard: FunctionComponent = () => {
 			const data = await retentionData(userData.stateId);
 			if (!data?.stats?.saturation) {
 				throw new Error('Data is undefined');
-			  }
+			}
 			const stats = handleSearch(data?.stats?.saturation, userData.stateId);
 			const map = await getMap(userData.state ?? undefined);
 			const mapData = await getLiveMapData(data.tx_curr_lga);
 
 			setState({
-				chartData: hivMap(map, mapData, 'Percentage of Unique Clients by LGA', 800),
+				chartData: hivMap(map, mapData, 'Percentage of Unique Clients by LGA', 820),
 				loading: false,
 				statsData: data?.stats,
 				retentionD: stats,
 			});
+
+			console.log(state.chartData)
 		} catch (error) {
 			console.error('Error fetching map data:', error);
 			setState((prevState) => ({ ...prevState, loading: false }));
@@ -60,37 +63,35 @@ const TreamentDashboard: FunctionComponent = () => {
 
 			<div className="row">
 				<div className="col-12 col-md-4">
-					<div className="border">
-						<div className="card mb-2 yellow-card">
-							<div className="card-body">
-								<h5 className="card-title font68">{state.retentionD?.facilities ?? ''}</h5>
-								<p className="card-text">
-									Total facilities offering HIV care to patients in {userData.state ?? 'Unknown'} state.
-								</p>
-							</div>
-						</div>
-						<div className="card mb-2 green-card">
-							<div className="card-body">
-								<h5 className="card-title font68">{state.statsData?.tx_curr}</h5>
-								<p className="card-text">
-									Total patients receiving HIV treatment across all facilities in {userData.state ?? 'Unknown'} state.
-								</p>
-							</div>
-						</div>
-						<div className="card mb-2 light-green-card">
-							<div className="card-body">
-								<h5 className="card-title light-green font68">{state.statsData?.uniqueFingerprints}</h5>
-								<p className="card-text light-green">
-									Total patients with Unique Fingerprints across all facilities in {userData.state ?? 'Unknown'} state.
-								</p>
-							</div>
-						</div>
-						<div className="card mb-3 dark-green-card">
-							<div className="card-body">
-								<h5 className="card-title dark-green font68">{state.retentionD?.saturation1 ?? ''}%</h5>
-								<p className="card-text dark-green">Treatment Saturation.</p>
-							</div>
-						</div>
+					<div className="grid grid-row-3 gap-2">
+						<StatCard
+							icon={Check}
+							count={1500}
+							label="Active HIV patients"
+							bgColor="main-card1"
+							highlightColor="bg-emerald-500/20"
+						/>
+						<StatCard
+							icon={Lightbulb}
+							count={903}
+							label="New Patients Enrolled into care"
+							bgColor="main-card2"
+							highlightColor="bg-amber-500/20"
+						/>
+						<StatCard
+							icon={Bookmark}
+							count={1112}
+							label="Total Unique Patients"
+							bgColor="main-card1"
+							highlightColor="bg-slate-700/50"
+						/>
+							<StatCard
+							icon={Bookmark}
+							count={1112}
+							label="Total Unique Patients"
+							bgColor="main-card4"
+							highlightColor="bg-slate-700/50"
+						/>
 					</div>
 				</div>
 				<div className="col-12 col-md-8">

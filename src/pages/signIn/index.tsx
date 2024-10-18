@@ -1,6 +1,7 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { Plane, Stethoscope, Users, Coffee, AlertCircle } from 'lucide-react';
 import '../../index.css';
+import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../features/auth/authThunks';

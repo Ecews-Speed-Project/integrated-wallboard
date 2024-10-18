@@ -48,7 +48,7 @@ const UploadTracker: React.FC = () => {
       setState((prevState) => ({
         ...prevState,
         data: jsonResponse.uploads,
-        rowCount: jsonResponse.totalPages,
+        rowCount: jsonResponse.totalCount,
         loading: false,
       }));
     } catch (error) {
@@ -77,7 +77,7 @@ const UploadTracker: React.FC = () => {
                   <Typography variant="h5" component="div" gutterBottom>
                     Total States
                   </Typography>
-                  <Typography variant="h4">{totalUploads}</Typography>
+                  <Typography variant="h4">{3}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -87,7 +87,7 @@ const UploadTracker: React.FC = () => {
                   <Typography variant="h5" component="div" gutterBottom>
                     Total Recent uploads
                   </Typography>
-                  <Typography variant="h4">{processedUploads}</Typography>
+                  <Typography variant="h4">{state.rowCount}</Typography>
                 </CardContent>
               </Card>
             </Grid>

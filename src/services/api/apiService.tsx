@@ -11,13 +11,20 @@ const api = axios.create({
 // Request interceptor to add the token to the headers
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+    try {
+      const token = localStorage.getItem('token');
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    } catch {
+
+      return Promise.reject("");
     }
-    return config;
   },
   (error) => {
+
+    //window.location.href = '/login';
     return Promise.reject(error);
   }
 );
@@ -28,10 +35,15 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.code === "ERR_NETWORK" || error.code === "ERR_BAD_REQUEST") {
+      alert("Please check your internet")
+      window.location.href = '/login';
+    }
     // Handle token expiration or other errors here
-    if (error.response?.status === 401) {
+    if (error.response?.status === 200) {
+    
       // Optionally, redirect to login page
-     // window.location.href = '/sign-in';
+     // window.location.href = '/login';
     }
     return Promise.reject(error);
   }
@@ -42,6 +54,16 @@ export default api;
 export const postRetentionData = async (data: any): Promise<AxiosResponse> => {
   try {
     const response = await api.post('/data/retention_data', data);
+    return response;
+  } catch (error) {
+    console.error('Error posting retention data:', error);
+    throw error;
+  }
+};
+
+export const postTrementTrendData = async (data: any): Promise<AxiosResponse> => {
+  try {
+    const response = await api.post('/data/dhis', data);
     return response;
   } catch (error) {
     console.error('Error posting retention data:', error);
