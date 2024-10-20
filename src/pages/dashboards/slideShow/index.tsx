@@ -1,6 +1,5 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
 import Header from '../../../components/Header';
-import data from '../../../demo-data/us-population-density.json';
 import osunMap from '../../../demo-data/Osun.json';
 import { columnChart, stateMaps } from '../../../services/Charts.service';
 import Highcharts from 'highcharts'

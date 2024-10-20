@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
-import { getMap, getSomaLiveMapData, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
+import { getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import highchartsMap from "highcharts/modules/map";
@@ -71,8 +71,55 @@ const MeaslesDashboard: FunctionComponent = () => {
     }
   }, [userData.state, userData.stateId]);
 
+
+  const fetchMapBysate = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data: { diseaseCascade: LGAData[] } = await summaryApiData(userData.stateId);
+      const confirmedCases: ConfirmedCasesByLGA = {};
+
+      const totals: Totals = {
+        cholera: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        lassa: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        measles: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        yellowFever: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        monkeyPox: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        covid19: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        diphtheria: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+      };
+
+      data.diseaseCascade.forEach((current) => {
+        const { measles, state } = current;
+        totals.measles.suspectedCases += measles.suspectedCases;
+        totals.measles.confirmedCases += measles.confirmedCases;
+        totals.measles.evaluatedCases += measles.evaluatedCases;
+        totals.measles.rdtRapidDiagnostictestPositive += measles.rdtRapidDiagnostictestPositive;
+        totals.measles.cultured += measles.cultured;
+        confirmedCases[state] = (confirmedCases[state] || 0) + measles.confirmedCases;
+      });
+
+
+      setMeaslesCases(totals.measles);
+      const map = await getMap(userData.state);
+      const mapData = await getNigeriaMapForSomasData(confirmedCases);
+
+      setChartData(hivStateMap(map, mapData, `Confirmed cases of Measles by states`, 800));
+      setChart1Data(mapChat(map, mapData, `Measles cases in by state`, 800));
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [userData.state, userData.stateId]);
+
+
   useEffect(() => {
-    fetchMap();
+    if (userData.state !== '') {
+      fetchMap();
+    } else {
+      fetchMapBysate()
+    }
   }, [fetchMap]);
 
   return (
@@ -83,14 +130,14 @@ const MeaslesDashboard: FunctionComponent = () => {
         <div className="col-6 col-md-6">
           <div className="col-12 col-md-12 row">
             <div className="col-6 col-md-6">
-              <SmallCard20x title="Total Suspected Cases of Cholera"  color={"green1"} value={measlesCases.suspectedCases.toString()} />
+              <SmallCard20x title="Total Suspected Cases of Cholera" color={"green1"} value={measlesCases.suspectedCases.toString()} />
             </div>
             <div className="col-6 col-md-6">
-              <SmallCard20x title="Total Patients with Rapid Diagnosis Test"  color={"green2"} value={measlesCases.evaluatedCases.toString()} />
+              <SmallCard20x title="Total Patients with Rapid Diagnosis Test" color={"green2"} value={measlesCases.evaluatedCases.toString()} />
             </div>
 
             <div className="col-12 col-md-12">
-              <SmallCard20x title="Total Patients Cultured"  fontColourNumber={"white-color-number"}  fontColour={"white-color"} color={"green3"} value={measlesCases.confirmedCases.toString()} />
+              <SmallCard20x title="Total Patients Cultured" fontColourNumber={"white-color-number"} fontColour={"white-color"} color={"green3"} value={measlesCases.confirmedCases.toString()} />
             </div>
           </div>
 

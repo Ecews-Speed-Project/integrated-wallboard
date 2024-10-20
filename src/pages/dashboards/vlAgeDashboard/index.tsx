@@ -6,64 +6,75 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
 import SmallCard from '../../../components/SmallCard';
-import { viralloadAgeData } from '../../../services/main.service';
+import { viralloadAgeData, getReportDatesData} from '../../../services/main.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { dualAxisChart } from '../../../utils/chatUtils/dualAxisChart';
+import patternFill from 'highcharts/modules/pattern-fill';
+import { getLastElemnts, removeElemnts, removeLastElemnts } from '../../../utils/helpers';
 
+// Initialize the pattern-fill module
+patternFill(Highcharts);
 const VlAgeDashboard: FunctionComponent = () => {
   const userData = useSelector((state: RootState) => state.auth);
   const [state, setState] = useState({
-    chartData: {},
-    loading: false,
-    statsData: {} as { [key: string]: any },
+  //  chartData: {},
+   statsData: {} as { [key: string]: any },
     vlChart: {},
-    showPopup: false,
   });
 
+ 
+
   const fetchMap = useCallback(async () => {
-    setState((prevState) => ({ ...prevState, loading: true }));
     try {
+   
+      
       const data = await viralloadAgeData(userData.stateId);
-      if (!data.vl_stats) {
-        throw new Error('Data is undefined');
+      let ageGroups = removeElemnts(data.ageGroups)
+
+      let eligible:[] = data.eligible;
+      let sampleCollection:[] = data.sampleCollection;
+      let resultRecieved:[] = data.resultRecieved;
+      let suppression:[] = data.suppression;
+    
+      let series = {
+        eligible:removeLastElemnts(eligible),
+        sampleCollection:removeLastElemnts(sampleCollection),
+        resultRecieved:removeLastElemnts(resultRecieved),
+        suppression:removeLastElemnts(suppression)
       }
 
+      let vl_stats = {
+        txCurr:getLastElemnts(data.txCurr),
+        eligible:getLastElemnts(eligible),
+        sampleCollection:getLastElemnts(sampleCollection),
+        resultRecieved:getLastElemnts(resultRecieved),
+        suppression:getLastElemnts(suppression),
+        unSuppression:getLastElemnts(resultRecieved) - getLastElemnts(suppression)
+      }
+   
+      console.log(series)
       setState((prevState) => ({
-        ...prevState,
-        statsData: data.vl_stats,
-        vlChart: dualAxisChart('Viralload suppression by age and sex', '', ''),
-        loading: false,
+       statsData: vl_stats,
+        vlChart: dualAxisChart('Viralload suppression by age and sex', '', '',ageGroups, series),
       }));
     } catch (error) {
       console.error('Error fetching data:', error);
-      window.location.href = '/login'; // Redirect to login page
+     // window.location.href = '/login'; // Redirect to login page
     }
   }, [userData.stateId]);
 
-  console.log(state.statsData)
-
-  const checkInternetConnection = useCallback(() => {
-    if (!navigator.onLine) {
-      setState((prevState) => ({ ...prevState, showPopup: true }));
-    }
-  }, []);
 
   useEffect(() => {
     fetchMap();
-    const interval = setInterval(checkInternetConnection, 5000);
-    return () => clearInterval(interval);
-  }, [fetchMap, checkInternetConnection]);
+  }, [userData.stateId]);
 
-  const handleLogin = () => {
-    window.location.reload();
-  };
 
   return (
     <div className="bg-container container-fluid mt-2">
       <DynamicBreadCrumb page="Viralload Report By Age and Sex Dashboard" />
       <div className="row">
-        <div className="col-12 col-md-12">
+       <div className="col-12 col-md-12">
           <div className="row">
             <div className="col-2 col-md-2">
 
@@ -75,11 +86,11 @@ const VlAgeDashboard: FunctionComponent = () => {
             </div>
             <div className="col-2 col-md-2">
 
-              <SmallCard title="Sample Collected" value={state.statsData?.sampleCollect} />
+              <SmallCard title="Sample Collected" value={state.statsData?.sampleCollection} />
             </div>
             <div className="col-2 col-md-2">
 
-              <SmallCard title="Result Received" value={state.statsData?.result} />
+              <SmallCard title="Result Received" value={state.statsData?.resultRecieved} />
             </div>
             <div className="col-2 col-md-2">
 
@@ -87,7 +98,7 @@ const VlAgeDashboard: FunctionComponent = () => {
             </div>
             <div className="col-2 col-md-2">
 
-              <SmallCard title="Viralload > 1000 cop / mi" value="4000" />
+              <SmallCard title="Viralload > 1000 cop / mi" value={state.statsData?.unSuppression} />
             </div>
           </div>
         </div>
@@ -96,14 +107,7 @@ const VlAgeDashboard: FunctionComponent = () => {
         </div>
       
       </div>
-      {state.showPopup && (
-        <div className="popup">
-          <div className="popup-content">
-            <p>Internet connection lost. Please log in again.</p>
-            <button onClick={handleLogin}>Log In</button>
-          </div>
-        </div>
-      )}
+    
     </div>
   );
 };

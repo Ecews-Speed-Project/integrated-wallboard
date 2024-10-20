@@ -3,7 +3,6 @@ import styles from '../SummaryBoard.module.css';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
-import data from '../../../demo-data/us-population-density.json';
 import osunMap from '../../../demo-data/Osun.json';
 highchartsMap(Highcharts);
 
@@ -11,75 +10,6 @@ const Somas: FunctionComponent = () => {
 	const [chartData, setChartData] = useState({});
 	const fetchMap = async () => {
 
-		data.forEach(function (p: any) {
-			p.code = p.code;
-		});
-
-
-		setChartData({
-
-			chart: {
-				map: osunMap,
-				height: 700
-			},
-
-			title: {
-				text: 'US population density (/km²)'
-			},
-
-			exporting: {
-				sourceWidth: 600,
-				sourceHeight: 500
-			},
-
-			legend: {
-				layout: 'horizontal',
-				borderWidth: 0,
-				backgroundColor: 'rgba(255,255,255,0.85)',
-				floating: true,
-				verticalAlign: 'top',
-				y: 25
-			},
-
-			mapNavigation: {
-				enabled: true
-			},
-
-			colorAxis: {
-				min: 1,
-				type: 'logarithmic',
-				minColor: '#EEEEFF',
-				maxColor: '#000022',
-				stops: [
-					[0, '#EFEFFF'],
-					[0.67, '#4444FF'],
-					[1, '#000022']
-				]
-			},
-
-			series: [{
-				accessibility: {
-					point: {
-						valueDescriptionFormat: '{xDescription}, {point.value} ' +
-							'people per square kilometer.'
-					}
-				},
-				animation: {
-					duration: 1000
-				},
-				data: data,
-				joinBy: ['admin2Name', 'code'],
-				dataLabels: {
-					enabled: true,
-					color: '#FFFFFF',
-					format: '{point.code}'
-				},
-				name: 'Population density',
-				tooltip: {
-					pointFormat: '{point.code}: {point.value}/km²'
-				}
-			}]
-		})
 	}
 
 	useEffect(() => {

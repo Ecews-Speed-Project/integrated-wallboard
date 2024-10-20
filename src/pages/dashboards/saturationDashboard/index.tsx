@@ -1,7 +1,6 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
 
 import styles from './Style.module.css';
-import data from '../../../demo-data/us-population-density.json';
 import osunMap from '../../../demo-data/Osun.json';
 import { stateMaps } from '../../../services/Charts.service';
 
@@ -9,11 +8,6 @@ const Saturation: FunctionComponent = () => {
 	const [chartData, setChartData] = useState({});
 	const fetchMap = async () => {
 
-		data.forEach(function (p: any) {
-			p.code = p.code;
-		});
-
-		setChartData(stateMaps(osunMap, data,''))
 	}
 
 	useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
-import { getMap, getSomaLiveMapData, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
+import { getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import highchartsMap from "highcharts/modules/map";
@@ -73,8 +73,53 @@ const MonkeyPoxDashboard: FunctionComponent = () => {
     }
   }, [userData.state, userData.stateId]);
 
+
+  const fetchMapBysate = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data: { diseaseCascade: LGAData[] } = await summaryApiData(userData.stateId);
+      const confirmedCases: ConfirmedCasesByLGA = {};
+
+      const totals: Totals = {
+        cholera: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        lassa: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        measles: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        yellowFever: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        monkeyPox: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        covid19: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+        diphtheria: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+      };
+
+      data.diseaseCascade.forEach((current) => {
+        const { monkeyPox, state } = current;
+        totals.monkeyPox.suspectedCases += monkeyPox.suspectedCases;
+        totals.monkeyPox.confirmedCases += monkeyPox.confirmedCases;
+        totals.monkeyPox.evaluatedCases += monkeyPox.evaluatedCases;
+        totals.monkeyPox.rdtRapidDiagnostictestPositive += monkeyPox.rdtRapidDiagnostictestPositive;
+        totals.monkeyPox.cultured += monkeyPox.cultured;
+
+        confirmedCases[state] = (confirmedCases[state] || 0) + monkeyPox.confirmedCases;
+      });
+
+      setMonkeyPoxCases(totals.monkeyPox);
+      const map = await getMap(userData.state);
+      const mapData = await getNigeriaMapForSomasData(confirmedCases);
+
+      setChartData(hivStateMap(map, mapData, `Confirmed cases of Monkey Pox by states`, 800));
+      setChart1Data(mapChat(map, mapData, `Monkey Pox trend cases by state`, 800))
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [userData.state, userData.stateId]);
+
   useEffect(() => {
-    fetchMap();
+    if (userData.state !== '') {
+      fetchMap();
+    } else {
+      fetchMapBysate()
+    }
   }, [fetchMap]);
 
   return (
@@ -84,14 +129,14 @@ const MonkeyPoxDashboard: FunctionComponent = () => {
         <div className="col-6 col-md-6">
           <div className="col-12 col-md-12 row">
             <div className="col-6 col-md-6">
-              <SmallCard20x title="Total Suspected Cases of Cholera" color={"green1"}  value={monkeyPoxCases.suspectedCases.toString()} />
+              <SmallCard20x title="Total Suspected Cases of Cholera" color={"green1"} value={monkeyPoxCases.suspectedCases.toString()} />
             </div>
             <div className="col-6 col-md-6">
-              <SmallCard20x title="Total Patients with Rapid Diagnosis Test" color={"green2"}   value={monkeyPoxCases.evaluatedCases.toString()} />
+              <SmallCard20x title="Total Patients with Rapid Diagnosis Test" color={"green2"} value={monkeyPoxCases.evaluatedCases.toString()} />
             </div>
 
             <div className="col-12 col-md-12">
-              <SmallCard20x title="Total Patients Cultured" color={"green3"}  fontColourNumber={"white-color-number"}  fontColour={"white-color"} value={monkeyPoxCases.confirmedCases.toString()} />
+              <SmallCard20x title="Total Patients Cultured" color={"green3"} fontColourNumber={"white-color-number"} fontColour={"white-color"} value={monkeyPoxCases.confirmedCases.toString()} />
             </div>
           </div>
 

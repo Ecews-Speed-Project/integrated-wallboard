@@ -13,8 +13,11 @@ const UploadTracker: React.FC = () => {
   const [state, setState] = useState({
     data: [] as GridRowsProp,
     page: 0,
-    pageSize: 10,
+    pageSize: 20,
     rowCount: 0,
+    totalState: 0,
+    totalFacilities: 0,
+    totalTxCurr: 0,
     loading: false,
   });
 
@@ -25,23 +28,39 @@ const UploadTracker: React.FC = () => {
     { field: 'datimCode', headerName: 'Datim code', width: 200, type: 'string' },
     { field: 'facilityName', headerName: 'Facility Name', width: 200 },
     { field: 'txCurrent', headerName: 'TX_CURR', width: 200, type: 'number' },
-    { field: 'dateGenerate', headerName: 'Date Generate', width: 200, type: 'string' },
-    { field: 'lastEMRDate', headerName: 'Last EMR Date', width: 200, type: 'string' },
+    { 
+      field: 'dateGenerate', 
+      headerName: 'Date Generate', 
+      width: 200, 
+      type: 'string',
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        return date.toLocaleDateString('en-GB'); // or use other locales e.g., 'en-US' for US format
+      }
+    },
+    { 
+      field: 'lastEMRDate', 
+      headerName: 'Last EMR Date', 
+      width: 200, 
+      type: 'string',
+      renderCell: (params) => {
+        const date = new Date(params.value);
+        return date.toLocaleDateString('en-GB');
+      }
+    },
   ];
 
   const fetchData = useCallback(async () => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
-      const response = await fetch(LINE_LIST_REPORT, {
+      const response = await fetch(`${LINE_LIST_REPORT}?page=${state.page+1}&pageSize=${state.pageSize}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userData.token}`,
         },
         body: JSON.stringify({
-          page: state.page,
-          state: 0,
-          pageSize: state.pageSize,
+          state:userData.stateId,
         }),
       });
       const jsonResponse = await response.json();
@@ -49,6 +68,10 @@ const UploadTracker: React.FC = () => {
         ...prevState,
         data: jsonResponse.uploads,
         rowCount: jsonResponse.totalCount,
+        totalState: jsonResponse.stats.totalState,
+        totalFacilities: jsonResponse.stats.totalFacility,
+        totalTxCurr: jsonResponse.stats.totalTxCurr,
+
         loading: false,
       }));
     } catch (error) {
@@ -60,10 +83,6 @@ const UploadTracker: React.FC = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  const totalUploads = state.data.length;
-  const processedUploads = state.data.length;
-  const pendingUploads = state.data.length;
 
   return (
     <div className="bg-container container-fluid mt-2">
@@ -77,7 +96,7 @@ const UploadTracker: React.FC = () => {
                   <Typography variant="h5" component="div" gutterBottom>
                     Total States
                   </Typography>
-                  <Typography variant="h4">{3}</Typography>
+                  <Typography variant="h4">{state.totalState}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -85,9 +104,9 @@ const UploadTracker: React.FC = () => {
               <Card sx={{ backgroundColor: '#4caf50', color: '#ffffff' }}>
                 <CardContent>
                   <Typography variant="h5" component="div" gutterBottom>
-                    Total Recent uploads
+                    Total Facilities Uploaded
                   </Typography>
-                  <Typography variant="h4">{state.rowCount}</Typography>
+                  <Typography variant="h4">{state.totalFacilities}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -97,7 +116,7 @@ const UploadTracker: React.FC = () => {
                   <Typography variant="h5" component="div" gutterBottom>
                     Total TX_CURR
                   </Typography>
-                  <Typography variant="h4">{pendingUploads}</Typography>
+                  <Typography variant="h4">{state.totalTxCurr}</Typography>
                 </CardContent>
               </Card>
             </Grid>

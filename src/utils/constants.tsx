@@ -13,3 +13,17 @@ export const DOWNLOAD_LINE_LIST = `${BASE_URL}data/web-download/`
 
 
 
+
+//Label and Titles
+export const ERROR_FETCHING_DATA = 'Error fetching map data:';
+export const TREATMENT_MAP_TITLE = 'Percentage of Unique Clients by State';
+export const TEATMENT_LGA_MAP_TITLE = 'Percentage of Unique Clients by LGA';
+
+export const VLC_BY_LGA_MAP_TITLE = 'Viralload Coverage by LGA';
+export const VLS_BY_LGA_MAP_TITEL = 'Viralload Suppression by LGA';
+
+export const VLC_BY_STATE_MAP_TITLE = 'Viralload Coverage by State';
+export const VLS_BY_STATE_MAP_TITLE = 'Viralload Suppression by State';
+
+
+

@@ -1,13 +1,31 @@
+import { color } from "highcharts";
+
+function calculateRatio(array1:any, array2:any) {
+    let ratioArray = [];
+
+    for (let i = 0; i < array1.length; i++) {
+        // Avoid division by zero
+        if (array1[i] === 0) {
+            ratioArray.push(2);
+        } else {
+            let ratio = Math.round((array2[i] / array1[i]) *100);
+            ratio = Math.min(ratio, 100);
+            ratioArray.push(ratio);
+        }
+    }
+
+    return ratioArray;
+}
+
+
 export const dualAxisChart = (
     title: any,
     state: any,
-    seriesData: any
+    seriesData: any,
+    categories:any,
+    series:any
 ) => {
-    const categories = [
-        '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-40', '40-45',
-        '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80+'
-    ];
-    
+ 
     return {
     chart: {
         zooming: {
@@ -20,9 +38,7 @@ export const dualAxisChart = (
         align: 'left'
     },
     subtitle: {
-        text: 'Source: ' +
-            '<a href="https://www.yr.no/nb/historikk/graf/5-97251/Norge/Troms%20og%20Finnmark/Karasjok/Karasjok?q=2021"' +
-            'target="_blank">YR</a>',
+        text: '' ,
         align: 'left'
     },
     xAxis: [{
@@ -31,30 +47,33 @@ export const dualAxisChart = (
     }],
     yAxis: [{ // Primary yAxis
         labels: {
-            format: '{value}°C',
+            format: '{value}',
             style: {
               //  color: Highcharts.getOptions().colors[1]
             }
         },
         title: {
-            text: 'Temperature',
+            text: ' Patients',
             style: {
               //  color: Highcharts.getOptions().colors[1]
             }
         }
+        
     }, { // Secondary yAxis
         title: {
-            text: 'Precipitation',
+            text: 'Percentage',
             style: {
               //  color: Highcharts.getOptions().colors[0]
             }
         },
         labels: {
-            format: '{value} mm',
+            format: '{value}%',
             style: {
                // color: Highcharts.getOptions().colors[0]
             }
         },
+        max: 100, 
+        tickInterval: 10, // Set tick interval to 10%
         opposite: true
     }],
     tooltip: {
@@ -70,49 +89,79 @@ export const dualAxisChart = (
           //  Highcharts.defaultOptions.legend.backgroundColor || // theme
             'rgba(255,255,255,0.25)'
     },
+    plotOptions: {
+        column: {
+            pointWidth: 60, // Set fixed column width
+            pointPadding: 0.1 // Adjust spacing between columns
+        },
+        spline: {
+            marker: {
+                enabled: true, // Ensure markers (dots) are shown
+                radius: 8, // Increase dot size (default is usually 4)
+                lineColor: null // Remove marker line around dots
+
+            },dataLabels: {
+                enabled: true, // Enable labels on the markers
+                formatter: function (this: Highcharts.Point): string {
+                    return `${this.y}%`; // Use `this.y` to access the y-value of the point
+                  },
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    color: '#000' // Customize the label color
+                },
+                align: 'right', // Align the label relative to the marker
+                verticalAlign: 'bottom', // Position the label below the marker
+                inside: false // Make sure the label is outside the marker
+            }
+        }
+    },
     series: [{
         name: 'Eligible',
         type: 'column',
-        yAxis: 1,
-        data: [
-            27.6, 28.8, 21.7, 34.1, 29.0, 28.4, 45.6, 51.7, 39.0,
-            60.0, 28.6, 32.1 ,    60.0, 28.6, 32.1
-        ],
+        yAxis: 0,
+        data: series.eligible,
+        color: {
+            pattern: {
+                path: 'M 0 0 L 10 10 M 9 - 1 L 11 1 M - 1 9 L 1 11',
+                width: 10,
+                height: 10
+            }
+        },
+        keys: ['y', 'color.pattern.color'],
         tooltip: {
-            valueSuffix: ' mm'
+            valueSuffix: 'patients'
         }
 
     },{
         name: 'Result recieved',
         type: 'column',
-        yAxis: 1,
-        data: [
-            27.6, 28.8, 21.7, 34.1, 29.0, 28.4, 45.6, 51.7, 39.0,
-            60.0, 28.6, 32.1,    60.0, 28.6, 32.1
-        ],
+        yAxis: 0,
+        color: '#159B65',
+        data: series.resultRecieved,
         tooltip: {
-            valueSuffix: ' mm'
+            valueSuffix: ' Patients'
         }
 
     }, {
         name: 'Coverage',
         type: 'spline',
-        data: [
-            88, 89, 91, 95, 70,97, 91, 92, 94,
-            93, 96, 95, 80, 91, 89
-        ],
+        data: calculateRatio(series.eligible, series.resultRecieved) ,
+        color: '#FFC30B', // Set color of the spline to red
+        lineWidth:0,
+        yAxis: 1,
         tooltip: {
-            valueSuffix: '°C'
+            valueSuffix: '%'
         }
     }, {
-        name: 'Supression',
+        name: 'Suppression',
         type: 'spline',
-        data: [
-            90, 95, 91, 92, 99,97, 91, 92, 94,
-            93, 96, 95, 80, 92, 90
-        ],
+        data: calculateRatio(series.resultRecieved, series.suppression),
+        color: '#C00000', // Set color of the spline to red
+        lineWidth:0,
+        yAxis: 1,
         tooltip: {
-            valueSuffix: '°C'
+            valueSuffix: '%'
         }
     }]
 }

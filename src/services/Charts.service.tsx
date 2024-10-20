@@ -5,7 +5,20 @@ interface mapData {
     code: String;
 }
 
+interface StateData {
+    stateId: number;
+    stateName: string;
+    txcurr: number;
+    uniqueFingerprints: number;
+}
 
+interface StatVleData {
+    stateId: number;
+    stateName: string;
+    vlEligible: number;
+    vLenteredEMR: number;
+    vlSuppressed: number
+}
 
 export const stateMaps = (map: any, data: any, title: any, height: any = 700) => {
     return {
@@ -80,100 +93,152 @@ export const stateMaps = (map: any, data: any, title: any, height: any = 700) =>
 
 export const mapChat = (map: any, data: any, title: any, height: any = 700) => {
     return {
-    chart: {
-        zooming: {
-            type: 'xy'
-        }
-    },
-    title: {
-        text: `Trend analysis of ${title} for he past 6 months`,
-        align: 'left'
-    },
-    subtitle: {
-        text: '',
-        align: 'left'
-    },
-    xAxis: [{
-        categories: [
-            'May', 'June', 'July', 'August', 'September', 'October'
-        ],
-        crosshair: true
-    }],
-    yAxis: [{ // Primary yAxis
-        labels: {
-            format: '{value}',
-            style: {
-             //   color: Highcharts.getOptions().colors[1]
+        chart: {
+            zooming: {
+                type: 'xy'
             }
         },
         title: {
-            text: 'Patients',
-            style: {
-              //  color: Highcharts.getOptions().colors[1]
-            }
-        }
-    }, { // Secondary yAxis
-        title: {
-            text: 'Confirmed cases',
-            style: {
-               // color: Highcharts.getOptions().colors[0]
-            }
+            text: `Trend analysis of ${title} for he past 6 months`,
+            align: 'left'
         },
-        labels: {
-            format: '{value}',
-            style: {
-              //  color: Highcharts.getOptions().colors[0]
-            }
+        subtitle: {
+            text: '',
+            align: 'left'
         },
-        opposite: true
-    }],
-    tooltip: {
-        shared: true
-    },
-    legend: {
-        align: 'left',
-        x: 80,
-        verticalAlign: 'top',
-        y: 60,
-        floating: true,
-      //  backgroundColor:
-           // Highcharts.defaultOptions.legend.backgroundColor || // theme
-          //  'rgba(255,255,255,0.25)'
-    },
-    series: [{
-        name: 'Total Suspected Cases',
-        type: 'column',
-        color:'#888f68',
-        yAxis: 1,
-        data: [
-            27.6, 28.8, 21.7, 34.1, 29.0, 28.4
-        ],
+        xAxis: [{
+            categories: [
+                'May', 'June', 'July', 'August', 'September', 'October'
+            ],
+            crosshair: true
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '{value}',
+                style: {
+                    //   color: Highcharts.getOptions().colors[1]
+                }
+            },
+            title: {
+                text: 'Patients',
+                style: {
+                    //  color: Highcharts.getOptions().colors[1]
+                }
+            }
+        }, { // Secondary yAxis
+            title: {
+                text: 'Confirmed cases',
+                style: {
+                    // color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value}',
+                style: {
+                    //  color: Highcharts.getOptions().colors[0]
+                }
+            },
+            opposite: true
+        }],
         tooltip: {
-            valueSuffix: ' mm'
-        }
+            shared: true
+        },
+        legend: {
+            align: 'left',
+            x: 80,
+            verticalAlign: 'top',
+            y: 60,
+            floating: true,
+            //  backgroundColor:
+            // Highcharts.defaultOptions.legend.backgroundColor || // theme
+            //  'rgba(255,255,255,0.25)'
+        },
+        series: [{
+            name: 'Total Suspected Cases',
+            type: 'column',
+            color: '#888f68',
+            yAxis: 1,
+            data: [
+                27.6, 28.8, 21.7, 34.1, 29.0, 28.4
+            ],
+            tooltip: {
+                valueSuffix: ' mm'
+            }
 
-    }, {
-        name: 'Total Confrimed Cases',
-        color : '#454e12',
-        lineWidth:3,
-        marker: {
-            radius: 10, // Adjust the size of the data points here
-            lineColor: 'red', // Set the outline color here
-            lineWidth: 2 //
-        },
-        type: 'spline',
-        data: [
-             13.0, 14.5, 10.8, 5.8, 5.8, 5.8,
-        ],
-        tooltip: {
-            valueSuffix: '°C'
-        }
-    }]
-};
+        }, {
+            name: 'Total Confrimed Cases',
+            color: '#454e12',
+            lineWidth: 3,
+            marker: {
+                radius: 10, // Adjust the size of the data points here
+                lineColor: 'red', // Set the outline color here
+                lineWidth: 2 //
+            },
+            type: 'spline',
+            data: [
+                13.0, 14.5, 10.8, 5.8, 5.8, 5.8,
+            ],
+            tooltip: {
+                valueSuffix: '°C'
+            }
+        }]
+    };
 }
 
+// Get Nigeria Map
+//https://jsfiddle.net/gh/get/library/pure/highslide-software/highcharts.com/tree/master/samples/mapdata/countries/ng/ng-all
 
 
+export const hivStateMap = (map: any, data: any, title: any, height: any = 700) => {
+    return {
+        chart: {
+            map: map,
+            height: height
+        },
+
+        title: {
+            text: title
+        },
+
+        subtitle: {
+            text: ''
+        },
+
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        colorAxis: {
+            min: 1,
+            type: 'logarithmic',
+            minColor: '#EEEEFF',
+            maxColor: '#000022',
+            stops: [
+                [0, '#C40306'],
+                [0.94, '#E8B51E'],
+                [1, '#0D8651']
+            ]
+        },
+
+        series: [{
+            data: data,
+            name: 'Patients',
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                color: '#FFFFFF',
+                format: '{point.name} <br> {point.value} %'
+            }
+        }]
+    };
+}
 export const hivMap = (map: any, data: any, title: any, height: any = 700) => {
     return {
 
@@ -354,7 +419,8 @@ export const dualColumn = (title: any, height: any = 300) => {
 }
 
 export const getMap = async (state: any) => {
-    let response = await fetch('../../demo-data/' + state + '.json'); // Fetch the JSON file
+    const file = (state) ? '../../demo-data/' + state + '.json' : '../../demo-data/ng-all.topo.json'
+    let response = await fetch(file); // Fetch the JSON file
     return await response.json(); // Parse JSON
 }
 
@@ -373,8 +439,112 @@ export const getMapData = async (state: any) => {
     return mapData;
 }
 
+export const getNigeriaMapData = async (mapdata: any) => {
+    const stateCodes: { [key: string]: string } = {
+        "Delta": "ng-de",
+        "Osun": "ng-os",
+        "Ekiti": "ng-ek",
+        // Add more mappings if needed
+    };
+    const data = mapdata.map((state: StateData) => {
+        const stateCode = stateCodes[state.stateName];  // Map stateName to its code
+        return [stateCode, Math.round((state.uniqueFingerprints / state.txcurr) * 100)];
+    });
+    /*    const data = [
+           ['ng-ri', 10], ['ng-kt', 11], ['ng-so', 12], ['ng-za', 13],
+           ['ng-yo', 14], ['ng-ke', 15], ['ng-ad', 16], ['ng-bo', 17],
+           ['ng-ak', 18], ['ng-ab', 19], ['ng-im', 20], ['ng-by', 21],
+           ['ng-be', 22], ['ng-cr', 23], ['ng-ta', 24], ['ng-kw', 25],
+           ['ng-la', 26], ['ng-ni', 27], ['ng-fc', 28], ['ng-og', 29],
+           ['ng-on', 30], ['ng-ek', 31], ['ng-os', 32], ['ng-oy', 33],
+           ['ng-an', 34], ['ng-ba', 35], ['ng-go', 36], ['ng-de', 37],
+           ['ng-ed', 38], ['ng-en', 39], ['ng-eb', 40], ['ng-kd', 41],
+           ['ng-ko', 42], ['ng-pl', 43], ['ng-na', 44], ['ng-ji', 45],
+           ['ng-kn', 46]
+       ]; */
+    return data
+}
+export const getNigeriaMapForCoverageData = async (mapdata: any) => {
+    const stateCodes: { [key: string]: string } = {
+        "Delta": "ng-de",
+        "Osun": "ng-os",
+        "Ekiti": "ng-ek",
+        // Add more mappings if needed
+    };
+    const data = mapdata.map((state: StatVleData) => {
+        const stateCode = stateCodes[state.stateName];  // Map stateName to its code
+        return [stateCode, Math.round((state.vLenteredEMR / state.vlEligible) * 100)];
+    });
+    /*    const data = [
+           ['ng-ri', 10], ['ng-kt', 11], ['ng-so', 12], ['ng-za', 13],
+           ['ng-yo', 14], ['ng-ke', 15], ['ng-ad', 16], ['ng-bo', 17],
+           ['ng-ak', 18], ['ng-ab', 19], ['ng-im', 20], ['ng-by', 21],
+           ['ng-be', 22], ['ng-cr', 23], ['ng-ta', 24], ['ng-kw', 25],
+           ['ng-la', 26], ['ng-ni', 27], ['ng-fc', 28], ['ng-og', 29],
+           ['ng-on', 30], ['ng-ek', 31], ['ng-os', 32], ['ng-oy', 33],
+           ['ng-an', 34], ['ng-ba', 35], ['ng-go', 36], ['ng-de', 37],
+           ['ng-ed', 38], ['ng-en', 39], ['ng-eb', 40], ['ng-kd', 41],
+           ['ng-ko', 42], ['ng-pl', 43], ['ng-na', 44], ['ng-ji', 45],
+           ['ng-kn', 46]
+       ]; */
+    return data
+}
+
+export const getNigeriaMapForSupressionData = async (mapdata: any) => {
+    const stateCodes: { [key: string]: string } = {
+        "Delta": "ng-de",
+        "Osun": "ng-os",
+        "Ekiti": "ng-ek",
+        // Add more mappings if needed
+    };
+    const data = mapdata.map((state: StatVleData) => {
+        const stateCode = stateCodes[state.stateName];  // Map stateName to its code
+        return [stateCode, Math.round((state.vlSuppressed / state.vLenteredEMR) * 100)];
+    });
+    /*    const data = [
+           ['ng-ri', 10], ['ng-kt', 11], ['ng-so', 12], ['ng-za', 13],
+           ['ng-yo', 14], ['ng-ke', 15], ['ng-ad', 16], ['ng-bo', 17],
+           ['ng-ak', 18], ['ng-ab', 19], ['ng-im', 20], ['ng-by', 21],
+           ['ng-be', 22], ['ng-cr', 23], ['ng-ta', 24], ['ng-kw', 25],
+           ['ng-la', 26], ['ng-ni', 27], ['ng-fc', 28], ['ng-og', 29],
+           ['ng-on', 30], ['ng-ek', 31], ['ng-os', 32], ['ng-oy', 33],
+           ['ng-an', 34], ['ng-ba', 35], ['ng-go', 36], ['ng-de', 37],
+           ['ng-ed', 38], ['ng-en', 39], ['ng-eb', 40], ['ng-kd', 41],
+           ['ng-ko', 42], ['ng-pl', 43], ['ng-na', 44], ['ng-ji', 45],
+           ['ng-kn', 46]
+       ]; */
+    return data
+}
+
+
+export const getNigeriaMapForSomasData = async (stateData: any) => {
+    // Mapping of Nigerian states to their respective codes
+    const stateMapping: { [key: string]: string } = {
+        Osun: 'ng-os',
+        Delta: 'ng-de',
+        Ekiti: 'ng-ek',
+    };
+
+    // Existing array
+    const data = [
+        ['ng-ek', null], ['ng-os', null], ['ng-de', null]
+    ];
+
+    // Update the array with values from stateData
+    data.forEach(item => {
+        const stateCode = item[0];
+        for (let state in stateData) {
+            if (stateMapping[state] === stateCode) {
+                if(stateData[state] !== 0){
+                    item[1] = stateData[state]; // Update the value
+                }
+            }
+        }
+    });
+    return data
+}
+
 export const getLiveMapData = async (mapdata: any) => {
-    console.log(mapdata)
     const mapData: mapData[] = []
     mapdata.forEach(function (p: any) {
         mapData.push(
@@ -392,14 +562,14 @@ export const getLiveMapData = async (mapdata: any) => {
 export const getSomaLiveMapData = async (mapdata: any) => {
     const mapData: mapData[] = []
     mapdata.forEach(function (p: any) {
-        if(p.value !== 0){
+        if (p.value !== 0) {
             mapData.push(
                 {
                     "value": p.value,
-                    "code":   p.lgaName
+                    "code": p.lgaName
                 },
             )
-            p.code =  p.code;
+            p.code = p.code;
         }
     });
     return mapData;
@@ -408,18 +578,18 @@ export const getSomaLiveMapData = async (mapdata: any) => {
 
 export const getSomaLiveMapForSummaryPageData = async (mapdata: any) => {
     console.log(mapdata)
-     const mapData: mapData[] = []
-     mapdata.forEach(function (p: any) {
-         mapData.push(
-             {
-                 "value": (p.value === undefined || 0)  ? 1 :1,
-                 "code":  (p.lgaName === undefined) ? null :  p.lgaName
-             },
-         )
-         p.code = (p.lgaName == undefined) ? null : p.code;
-     });
-     return mapData;
- }
+    const mapData: mapData[] = []
+    mapdata.forEach(function (p: any) {
+        mapData.push(
+            {
+                "value": (p.value === undefined || 0) ? 1 : 1,
+                "code": (p.lgaName === undefined) ? null : p.lgaName
+            },
+        )
+        p.code = (p.lgaName == undefined) ? null : p.code;
+    });
+    return mapData;
+}
 
 
 export const getSuppressionData = async (mapdata: any) => {

@@ -22,7 +22,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 		</div>
 		<div className="relative z-10">
 		  <h3 className="text-4xl font-bold text-white mb-2 tracking-tight">
-			{count.toLocaleString()}
+			{count}
 		  </h3>
 		  <p className="text-white/90 font-medium">{label}</p>
 		</div>

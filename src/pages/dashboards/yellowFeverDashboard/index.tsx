@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from 'react';
-import { getLiveMapData, getMap, getSomaLiveMapData, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
+import { getLiveMapData, getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
@@ -81,8 +81,56 @@ const YellowFeverDashboard: FunctionComponent = () => {
 		setChart1Data(mapChat(map, mapData, `Yellow Fever in ${userData.state} state`, 800));
 	}
 
+	const fetchMapBysate = async () => {
+		setLoading(true)
+		let state = userData.state
+		const confirmedCases: ConfirmedCasesByLGA = {};
+		const data: { diseaseCascade: LGAData[] } = await summaryApiData(userData.stateId);
+
+		// Summing up cases for each disease type
+		const totals: Totals = {
+			cholera: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+			lassa: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+			measles: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+			yellowFever: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+			monkeyPox: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+			covid19: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+			diphtheria: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+		};
+		data.diseaseCascade.forEach((current: any) => {
+			totals.yellowFever.suspectedCases += current.yellowFever.suspectedCases;
+			totals.yellowFever.confirmedCases += current.yellowFever.confirmedCases;
+			totals.yellowFever.evaluatedCases += current.yellowFever.evaluatedCases; // Sum evaluated cases
+			totals.yellowFever.rdtRapidDiagnostictestPositive += current.yellowFever.rdtRapidDiagnostictestPositive; // Sum RDT positives
+			totals.yellowFever.cultured += current.yellowFever.cultured; // Sum cultured
+
+		});
+
+		data.diseaseCascade.forEach((current) => {
+			const { yellowFever, state } = current;
+			totals.yellowFever.suspectedCases += yellowFever.suspectedCases;
+			totals.yellowFever.confirmedCases += yellowFever.confirmedCases;
+			totals.yellowFever.evaluatedCases += yellowFever.evaluatedCases;
+			totals.yellowFever.rdtRapidDiagnostictestPositive += yellowFever.rdtRapidDiagnostictestPositive;
+			totals.yellowFever.cultured += yellowFever.cultured;
+			confirmedCases[state] = (confirmedCases[state] || 0) + yellowFever.confirmedCases;
+		});
+
+		setYellowFeverCases(totals.yellowFever);
+		const map = await getMap(userData.state);
+		const mapData = await getNigeriaMapForSomasData(confirmedCases);
+		console.log(mapData)
+
+		setChartData(hivStateMap(map, mapData, `Confirmed cases of Yellow Fever by states`, 800));
+		setChart1Data(mapChat(map, mapData, `Yellow Fever cases trend  by state`, 800))
+	}
+
 	useEffect(() => {
-		fetchMap()
+		if (userData.state !== '') {
+			fetchMap();
+		} else {
+			fetchMapBysate()
+		}
 	}, [loading])
 
 
@@ -94,14 +142,14 @@ const YellowFeverDashboard: FunctionComponent = () => {
 					<div className="col-6 col-md-6">
 						<div className="col-12 col-md-12 row">
 							<div className="col-6 col-md-6">
-								<SmallCard20x title="Total Suspected Cases of Cholera" color={"green1"}  value={yellowFeverCases.suspectedCases.toString()} />
+								<SmallCard20x title="Total Suspected Cases of Cholera" color={"green1"} value={yellowFeverCases.suspectedCases.toString()} />
 							</div>
 							<div className="col-6 col-md-6">
-								<SmallCard20x title="Total Patients with Rapid Diagnosis Test"  color={"green1"}  value={yellowFeverCases.evaluatedCases.toString()} />
+								<SmallCard20x title="Total Patients with Rapid Diagnosis Test" color={"green1"} value={yellowFeverCases.evaluatedCases.toString()} />
 							</div>
 
 							<div className="col-12 col-md-12">
-								<SmallCard20x title="Total Patients Cultured" color={"green3"}  fontColourNumber={"white-color-number"}  fontColour={"white-color"} value={yellowFeverCases.confirmedCases.toString()} />
+								<SmallCard20x title="Total Patients Cultured" color={"green3"} fontColourNumber={"white-color-number"} fontColour={"white-color"} value={yellowFeverCases.confirmedCases.toString()} />
 							</div>
 						</div>
 

@@ -13,7 +13,7 @@ const BreadCrumb: FunctionComponent<SmallCardProps> = ({
     return (
         <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
-                <li className="breadcrumb-item"><img className='icons5' alt="" src="icons/home.svg" /><b>({state})</b></li>
+                <li className="breadcrumb-item"><img className='icons5' alt="" src="icons/home.svg" /><b>({(state !== "") ?  state : 'All States'})</b></li>
                 <li className="breadcrumb-item">{page}</li>
             </ol>
         </nav>

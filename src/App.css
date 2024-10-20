@@ -427,6 +427,99 @@
 .bg-gold-green-400{
   background: #139b43;
 }
+
+.pagination {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination a {
+  display: block;
+  padding: 10px 15px;
+  border: 1px solid #bbbb98;
+  border-radius: 5px;
+  color: #0000;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a:hover {
+  background-color: #d7d7cf;
+   color: white;
+}
+
+.pagination .active a {
+  background-color: #ffffff;
+  color: #000;
+  border-color: #b1b193;
+  cursor: default;
+}
+
+.pagination .disabled a {
+  color: #000;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination .disabled a:hover {
+  background-color: inherit;
+  color: #ccc;
+}
+
+
+/* Pagination container */
+.pagination-container {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 0;
+}
+
+/* Pagination items */
+.pagination-page,
+.pagination-previous,
+.pagination-next,
+.pagination-break {
+  margin: 0 5px;
+}
+
+.pagination-link {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Active page */
+.active .pagination-link {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Disabled state */
+.disabled .pagination-link {
+  color: #6c757d;
+  cursor: not-allowed;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+/* Hover effect */
+.pagination-link:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

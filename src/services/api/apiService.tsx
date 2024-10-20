@@ -37,7 +37,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.code === "ERR_NETWORK" || error.code === "ERR_BAD_REQUEST") {
       alert("Please check your internet")
-      window.location.href = '/login';
+     // window.location.href = '/login';
     }
     // Handle token expiration or other errors here
     if (error.response?.status === 200) {
@@ -81,9 +81,19 @@ export const postViralloadData = async (data: any): Promise<AxiosResponse> => {
   }
 };
 
+export const getReportDates = async (data: any): Promise<AxiosResponse> => {
+  try {
+    const response = await api.get('/data/get-vl-report-date');
+    return response;
+  } catch (error) {
+    console.error('Error posting retention data:', error);
+    throw error;
+  }
+};
+
 export const postViralloadAgeData = async (data: any): Promise<AxiosResponse> => {
   try {
-    const response = await api.post('/data/vl_age_sex_data', data);
+    const response = await api.post('/data/get-pvls-age-band',data);
     return response;
   } catch (error) {
     console.error('Error posting retention data:', error);
