@@ -64,7 +64,7 @@ const GenerateLineList: React.FC = () => {
       console.error('Error fetching data:', error);
       setState((prevState) => ({ ...prevState, loading: false }));
     }
-  }, [state.page, state.pageSize, userData.token]);
+  }, [state.page, state.pageSize, userData.token, userData]);
 
   const generateList = async () => {
     try {

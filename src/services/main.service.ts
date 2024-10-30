@@ -1,7 +1,8 @@
 import { getReportDates, postRetentionData, postSummaryData, postTrementTrendData, postViralloadAgeData, postViralloadData } from "./api/apiService";
 
-export const retentionData = async (stateId: any) => {
-  const data: any = { state: stateId };
+export const retentionData = async (stateId: any, reportDate:any) => {
+  const data: any = { state: stateId , reportDate :reportDate};
+  console.log(data)
   try {
     const res = await postRetentionData(data);
     return res.data

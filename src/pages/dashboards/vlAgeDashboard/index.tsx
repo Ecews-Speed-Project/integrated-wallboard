@@ -1,80 +1,101 @@
-import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
-import { ageAndSexChart } from '../../../services/Charts.service';
+import { FunctionComponent, useState, useEffect, useCallback } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
 import SmallCard from '../../../components/SmallCard';
-import { viralloadAgeData, getReportDatesData} from '../../../services/main.service';
+import { viralloadAgeData } from '../../../services/main.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { dualAxisChart } from '../../../utils/chatUtils/dualAxisChart';
 import patternFill from 'highcharts/modules/pattern-fill';
-import { getLastElemnts, removeElemnts, removeLastElemnts } from '../../../utils/helpers';
+import { getLastElemnts, getStateById, removeElemnts, removeLastElemnts, Shimmer, State } from '../../../utils/helpers';
 
 // Initialize the pattern-fill module
 patternFill(Highcharts);
 const VlAgeDashboard: FunctionComponent = () => {
   const userData = useSelector((state: RootState) => state.auth);
+  const filteredState = useSelector((state: RootState) => state.menu.value);
+
   const [state, setState] = useState({
-  //  chartData: {},
-   statsData: {} as { [key: string]: any },
+    statsData: {} as { [key: string]: any },
     vlChart: {},
+    loading: false
   });
 
- 
 
-  const fetchMap = useCallback(async () => {
+
+  const fetchMap = useCallback(async (userObject?: any) => {
+    setState((prevState) => ({ ...prevState, loading: true }));
+
     try {
-   
-      
-      const data = await viralloadAgeData(userData.stateId);
+
+      let stateObj: State;
+      if (userObject !== undefined) {
+        stateObj = getStateById(userObject) as State;
+      }
+      let stateId = userObject !== undefined ? stateObj!.stateId : userData.stateId;
+
+      const data = await viralloadAgeData(stateId);
       let ageGroups = removeElemnts(data.ageGroups)
 
-      let eligible:[] = data.eligible;
-      let sampleCollection:[] = data.sampleCollection;
-      let resultRecieved:[] = data.resultRecieved;
-      let suppression:[] = data.suppression;
-    
+      let eligible: [] = data.eligible;
+      let sampleCollection: [] = data.sampleCollection;
+      let resultRecieved: [] = data.resultRecieved;
+      let suppression: [] = data.suppression;
+
       let series = {
-        eligible:removeLastElemnts(eligible),
-        sampleCollection:removeLastElemnts(sampleCollection),
-        resultRecieved:removeLastElemnts(resultRecieved),
-        suppression:removeLastElemnts(suppression)
+        eligible: removeLastElemnts(eligible),
+        sampleCollection: removeLastElemnts(sampleCollection),
+        resultRecieved: removeLastElemnts(resultRecieved),
+        suppression: removeLastElemnts(suppression)
       }
 
       let vl_stats = {
-        txCurr:getLastElemnts(data.txCurr),
-        eligible:getLastElemnts(eligible),
-        sampleCollection:getLastElemnts(sampleCollection),
-        resultRecieved:getLastElemnts(resultRecieved),
-        suppression:getLastElemnts(suppression),
-        unSuppression:getLastElemnts(resultRecieved) - getLastElemnts(suppression)
+        txCurr: getLastElemnts(data.txCurr),
+        eligible: getLastElemnts(eligible),
+        sampleCollection: getLastElemnts(sampleCollection),
+        resultRecieved: getLastElemnts(resultRecieved),
+        suppression: getLastElemnts(suppression),
+        unSuppression: getLastElemnts(resultRecieved) - getLastElemnts(suppression)
       }
-   
-      console.log(series)
+
       setState((prevState) => ({
-       statsData: vl_stats,
-        vlChart: dualAxisChart('Viralload suppression by age and sex', '', '',ageGroups, series),
+        statsData: vl_stats,
+        loading: false,
+        vlChart: dualAxisChart('Viralload suppression by age and sex', '', '', ageGroups, series),
       }));
     } catch (error) {
       console.error('Error fetching data:', error);
-     // window.location.href = '/login'; // Redirect to login page
+      setState((prevState) => ({ ...prevState, loading: true }));
     }
   }, [userData.stateId]);
 
+  const handleValueChange = (newValue: string) => {
+    fetchMap(newValue);
+  };
+
+
 
   useEffect(() => {
-    fetchMap();
-  }, [userData.stateId]);
+
+    if (filteredState) {
+      handleValueChange(filteredState);
+    } else {
+      fetchMap();
+    }
+
+  }, [userData.stateId, filteredState]);
 
 
   return (
     <div className="bg-container container-fluid mt-2">
       <DynamicBreadCrumb page="Viralload Report By Age and Sex Dashboard" />
       <div className="row">
-       <div className="col-12 col-md-12">
+        {state.loading ? (
+          <Shimmer />
+        ) : (<div className="col-12 col-md-12">
           <div className="row">
             <div className="col-2 col-md-2">
 
@@ -101,13 +122,15 @@ const VlAgeDashboard: FunctionComponent = () => {
               <SmallCard title="Viralload > 1000 cop / mi" value={state.statsData?.unSuppression} />
             </div>
           </div>
-        </div>
-        <div className="col-12 col-md-12">
+        </div>)}
+        {state.loading ? (
+          <Shimmer />
+        ) : (<div className="col-12 col-md-12">
           <HighchartsReact highcharts={Highcharts} options={state.vlChart} />
-        </div>
-      
+        </div>)}
+
       </div>
-    
+
     </div>
   );
 };

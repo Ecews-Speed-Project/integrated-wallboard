@@ -1,4 +1,3 @@
-import { color } from "highcharts";
 
 function calculateRatio(array1:any, array2:any) {
     let ratioArray = [];
@@ -34,8 +33,8 @@ export const dualAxisChart = (
         height : 600
     },
     title: {
-        text: 'Karasjok weather, 2021',
-        align: 'left'
+        text: title,
+        align: 'center'
     },
     subtitle: {
         text: '' ,

@@ -3,7 +3,6 @@ import styles from '../SummaryBoard.module.css';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
-import osunMap from '../../../demo-data/Osun.json';
 highchartsMap(Highcharts);
 
 const Somas: FunctionComponent = () => {
@@ -20,18 +19,6 @@ const Somas: FunctionComponent = () => {
 		}
 
 	}, [])
-
-
-
-	const options = {
-		title: {
-			text: 'My chart'
-		},
-		series: [{
-			data: [1, 2, 3]
-		}]
-	}
-
 
 
 	return (<>

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../features/auth/authThunks';
 import { AppDispatch, RootState } from '../../store';
+import { formatDate, formatTime } from '../../utils/helpers';
 // Define the slide interface
 interface Slide {
   icon: React.ElementType;
@@ -60,19 +61,10 @@ const SignIn: React.FC = () => {
     };
   }, []);
 
-  const formatTime = (date: Date): string => {
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-  };
-
-  const formatDate = (date: Date): string => {
-    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
-  };
 
   const handleSignIn = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    /* setIsLoading(true);
-    setError('');
- */
+   
     try {
 
       await dispatch(login({ email, password })).unwrap();
@@ -82,16 +74,6 @@ const SignIn: React.FC = () => {
     } catch {
       // Error is handled by the thunk and stored in Redux state
     }
-
-    // Implement sign-in logic here
-  /*   try {
-      await dispatch(login({ username, password })).unwrap();
-      navigate('/user-info'); // Simulate a network request
-    } catch (error) {
-      setError('Sign-in failed. Please try again.');
-    } finally {
-      setLoading(false);
-    } */
   };
 
   return (
@@ -148,6 +130,10 @@ const SignIn: React.FC = () => {
           <div className="mb-4">
             <label htmlFor="email" className="block mb-2">Email</label>
             <input
+              style={{
+                padding: '1.2rem !important',
+                minWidth: '100%'
+              }}
               type="text"
               id="email"
               className="w-full p-2 bg-gray-700 rounded"
@@ -159,6 +145,10 @@ const SignIn: React.FC = () => {
           <div className="mb-4">
             <label htmlFor="password" className="block mb-2">Password</label>
             <input
+               style={{
+                padding: '1.2rem !important;',
+                minWidth: '100%'
+              }}
               type="password"
               id="password"
               className="w-full p-2 bg-gray-700 rounded"
@@ -167,14 +157,21 @@ const SignIn: React.FC = () => {
               required
             />
           </div>
-          <button type="submit" disabled={isLoading} className="p-2 bg-blue-500 text-white rounded">
+          <button type="submit" disabled={isLoading} className="p-2 bg-blue-500 text-white rounded" style={{
+            paddingTop: '20px !important',
+            minWidth: '100%'
+          }}>
             {isLoading ? 'Logging in...' : 'Log In'}
           </button>
-         
+
         </form>
       </div>
 
-      <div className="absolute bottom-4 left-4 flex space-x-4">
+      <div className="absolute bottom-4 left-4 flex space-x-4" style={{
+        background: '#fff',
+        padding: '10px',
+        borderRadius: '5px'
+      }}>
         <img src="/images/pepfar-logo.svg" alt="PEPFAR logo" className="h-8" />
         <img src="/images/cdc.svg" alt="CDC logo" className="h-8" />
         <img src="/images/ecews.svg" alt="ECEWS logo" className="h-8" />
@@ -190,11 +187,11 @@ const Stat: React.FC<StatProps> = ({ label, value, color }) => (
     <p className="text-sm">{label}</p>
   </div>
 );
-
+/* 
 const IconBox: React.FC<IconBoxProps> = ({ icon, active }) => (
   <div className={`bg-white bg-opacity-20 p-2 rounded transition-all duration-300 ${active ? 'scale-110 bg-opacity-40' : ''}`}>
     {icon}
   </div>
-);
+); */
 
 export default SignIn;

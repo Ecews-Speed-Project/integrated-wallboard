@@ -10,12 +10,13 @@ import SmallCard from '../../../components/SmallCard';
 import { getReportDatesData, viralloadAgeData, viralloadData } from '../../../services/main.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { getLastElemnts } from '../../../utils/helpers';
+import { getLastElemnts, getStateById, Shimmer, State } from '../../../utils/helpers';
 import { ERROR_FETCHING_DATA, VLC_BY_LGA_MAP_TITLE, VLC_BY_STATE_MAP_TITLE, VLS_BY_LGA_MAP_TITEL, VLS_BY_STATE_MAP_TITLE } from '../../../utils/constants'
 highchartsMap(Highcharts);
 
 const VlDashboard: FunctionComponent = () => {
   const userData = useSelector((state: RootState) => state.auth);
+  const filteredState = useSelector((state: RootState) => state.menu.value);
 
   const [state, setState] = useState({
     loading: false,
@@ -24,12 +25,19 @@ const VlDashboard: FunctionComponent = () => {
     statsData: {} as { [key: string]: any },
   });
 
-  const fetchMap = useCallback(async () => {
+  const fetchMap = useCallback(async (userObject?: any) => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
-      const statsData = await viralloadAgeData(userData.stateId);
-      const reportDates: [] = await getReportDatesData(userData.stateId);
 
+      let stateObj: State;
+      if (userObject !== undefined) {
+        stateObj = getStateById(userObject) as State;
+      }
+      let stateId = userObject !== undefined ? stateObj!.stateId : userData.stateId;
+      let stateName = userObject !== undefined ? stateObj!.StateName : userData.state!;
+
+      const statsData = await viralloadAgeData(stateId);
+      const reportDates: any = await getReportDatesData(stateId);
 
       let vl_stats = {
         txCurr: getLastElemnts(statsData.txCurr),
@@ -42,39 +50,49 @@ const VlDashboard: FunctionComponent = () => {
       if (reportDates == null) {
         return;
       }
-      const data = await viralloadData(userData.stateId, getLastElemnts(reportDates));
+      const data = await viralloadData(stateId, getLastElemnts(reportDates.retentionReportDates));
       if (!data.vl_lga) {
         throw new Error('Data is undefined');
       }
 
-      const map = await getMap(userData.state ?? undefined);
-      const suppressionData = (userData.state !== '') ? await getSuppressionData(data.vl_lga) : await getNigeriaMapForSupressionData(data.vl_states);
-      const coverageData = (userData.state !== '') ? await getCoverageData(data.vl_lga) : await getNigeriaMapForCoverageData(data.vl_states);
+      const map = await getMap(stateName?? undefined);
+      const suppressionData = (stateName !== '') ? await getSuppressionData(data.vl_lga) : await getNigeriaMapForSupressionData(data.vl_states);
+      const coverageData = (stateName !== '') ? await getCoverageData(data.vl_lga) : await getNigeriaMapForCoverageData(data.vl_states);
 
       setState({
         loading: false,
         statsData: vl_stats,
-        vlCoverage: (userData.state !== '') ? hivMap(map, coverageData, VLC_BY_LGA_MAP_TITLE, 800) :
+        vlCoverage: (stateName !== '') ? hivMap(map, coverageData, VLC_BY_LGA_MAP_TITLE, 800) :
           hivStateMap(map, coverageData, VLC_BY_STATE_MAP_TITLE, 820),
-        vlSuppression: (userData.state !== '') ? hivMap(map, suppressionData, VLS_BY_LGA_MAP_TITEL, 800) :
+        vlSuppression: (stateName !== '') ? hivMap(map, suppressionData, VLS_BY_LGA_MAP_TITEL, 800) :
           hivStateMap(map, suppressionData, VLS_BY_STATE_MAP_TITLE, 820),
       });
     } catch (error) {
       console.error(ERROR_FETCHING_DATA, error);
-      //  window.location.href = '/login'; // Redirect to login page
       setState((prevState) => ({ ...prevState, loading: false }));
     }
   }, [userData.state, userData.stateId]);
 
+  const handleValueChange = (newValue: string) => {
+    fetchMap(newValue);
+  };
+
   useEffect(() => {
-    fetchMap();
-  }, [fetchMap]);
+
+    if (filteredState) {
+      handleValueChange(filteredState);
+    } else {
+      fetchMap();
+    }
+  }, [fetchMap, filteredState]);
 
   return (
     <div className="bg-container container-fluid mt-2">
       <DynamicBreadCrumb page="Viralload Report Dashboard" />
       <div className="row">
-        <div className="col-12 col-md-12">
+        {state.loading ? (
+          <Shimmer />
+        ) : (<div className="col-12 col-md-12">
           <div className="row">
             <div className="col-2 col-md-2">
 
@@ -94,28 +112,39 @@ const VlDashboard: FunctionComponent = () => {
             </div>
             <div className="col-2 col-md-2">
 
-              <SmallCard title="Coverage" value={`${Math.round((state.statsData.resultRecieved / state.statsData.eligible) * 100)}%`} />
-            </div>
-            <div className="col-2 col-md-2">
-
               <SmallCard title="Viral load < 1000 cop /mil" value={state.statsData.suppression} />
             </div>
+            <div className="col-1 col-md-1">
+
+              <SmallCard title="Coverage" value={`${Math.round((state.statsData.resultRecieved / state.statsData.eligible) * 100)}%`} />
+            </div>
+            <div className="col-1 col-md-1">
+
+              <SmallCard title="Supression" value={`${Math.round((state.statsData.suppression / state.statsData.resultRecieved) * 100)}%`} />
+            </div>
+
           </div>
-        </div>
-        <div className="col-12 col-md-6">
-          <HighchartsReact
-            constructorType="mapChart"
-            highcharts={Highcharts}
-            options={state.vlCoverage}
-          />
-        </div>
-        <div className="col-12 col-md-6">
-          <HighchartsReact
-            constructorType="mapChart"
-            highcharts={Highcharts}
-            options={state.vlSuppression}
-          />
-        </div>
+        </div>)}
+        {state.loading ? (
+          <Shimmer />
+        ) : (
+          <div className="col-12 col-md-6">
+            <HighchartsReact
+              constructorType="mapChart"
+              highcharts={Highcharts}
+              options={state.vlCoverage}
+            />
+          </div>)}
+        {state.loading ? (
+          <Shimmer />
+        ) : (
+          <div className="col-12 col-md-6">
+            <HighchartsReact
+              constructorType="mapChart"
+              highcharts={Highcharts}
+              options={state.vlSuppression}
+            />
+          </div>)}
       </div>
     </div>
   );

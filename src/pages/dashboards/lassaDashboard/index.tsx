@@ -6,7 +6,6 @@ import highchartsMap from "highcharts/modules/map";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
-import SmallCard from '../../../components/SmallCard';
 import { summaryApiData } from '../../../services/main.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';

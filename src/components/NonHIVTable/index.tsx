@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './style.css'; // Optional, for styling
 import ReactPaginate from 'react-paginate';
-import { GenericObject } from '../../types/dseaseData';
 
 interface DiseaseData {
     lga: string;

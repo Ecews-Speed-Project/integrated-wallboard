@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from 'react';
-import { getLiveMapData, getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
+import { getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, mapChat, somasMap } from '../../../services/Charts.service';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import highchartsMap from "highcharts/modules/map";
@@ -7,16 +7,11 @@ import highchartsMap from "highcharts/modules/map";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
-import BreadCrumb from '../../../components/BreadCrumb';
-import { auth } from '../../../services/auth.services';
-import { retentionData, summaryApiData } from '../../../services/main.service';
-import { handleSearch } from '../../../utils/helpers';
-import { GenericObject } from '../../../types/dseaseData';
+import { summaryApiData } from '../../../services/main.service';
 import { ConfirmedCasesByLGA, DiseaseData, LGAData, Totals } from '../../../types/interfaces';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
-import SmallCard from '../../../components/SmallCard';
 import SmallCard20x from '../../../components/SmallCard20x';
 highchartsMap(Highcharts);
 
@@ -27,9 +22,6 @@ const YellowFeverDashboard: FunctionComponent = () => {
 	const [chart1Data, setChart1Data] = useState({});
 
 	const [loading, setLoading] = useState(false);
-	const [statsData, setStatsData] = useState<{ [key: string]: any }>({});
-	const [retentionD, setRetentionD] = useState<GenericObject>({});
-	const [user, setUser] = useState<{ [key: string]: any }>({});
 
 	const [yellowFeverCases, setYellowFeverCases] = useState<DiseaseData>({
 		suspectedCases: 0,
@@ -41,7 +33,6 @@ const YellowFeverDashboard: FunctionComponent = () => {
 
 	const fetchMap = async () => {
 		setLoading(true)
-		let state = userData.state
 		const confirmedCases: ConfirmedCasesByLGA = {};
 		const data: { diseaseCascade: LGAData[] } = await summaryApiData(userData.stateId);
 

@@ -3,11 +3,11 @@ import '../../../../App.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
 import React, { useState, useEffect, useCallback } from 'react';
-import BreadCrumb from '../../../../components/BreadCrumb';
 import { LINE_LIST_REPORT } from '../../../../utils/constants';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
 import PaginationComponent from '../../../../components/Pagination';
+import DynamicBreadCrumb from '../../../../components/DynamicBreadCrumb';
 
 const UploadTracker: React.FC = () => {
   const [state, setState] = useState({
@@ -86,7 +86,7 @@ const UploadTracker: React.FC = () => {
 
   return (
     <div className="bg-container container-fluid mt-2">
-      <BreadCrumb state="General" page="Upload Tracker" />
+      <DynamicBreadCrumb page="Upload Tracker" />
       <div style={{ height: 400, width: '100%' }}>
         <Box sx={{ padding: 2 }}>
           <Grid container spacing={2} mb={4}>

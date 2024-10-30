@@ -1,5 +1,5 @@
-import React, { lazy } from "react";
-import { Navigate, useRoutes } from "react-router-dom";
+import  { lazy } from "react";
+import {useRoutes } from "react-router-dom";
 import MainLayout from "./components/Layout";
 import TreamentTrendDashboard from "./pages/dashboards/treamentTrendDashboard";
 
@@ -12,7 +12,6 @@ const VlDashboard = lazy(() => import('./pages/dashboards/vlDashboard'));
 const VlAgeDashboard = lazy(() => import('./pages/dashboards/vlAgeDashboard'));
 const TreamentDashboard = lazy(() => import('./pages/dashboards/treamentDashboard'));
 const SaturationDashboard = lazy(() => import('./pages/dashboards/saturationDashboard'));
-const Somas = lazy(() => import('./pages/dashboards/somasDashboard'));
 const Slideshow = lazy(() => import('./pages/dashboards/slideShow'));
 const ColeraDashboard = lazy(() => import('./pages/dashboards/coleraDashboard'));
 const YellowFeverDashboard = lazy(() => import('./pages/dashboards/yellowFeverDashboard'));
@@ -47,8 +46,6 @@ const routes = [
 ];
 
 const ProjectRoutes = () => {
-  const isLoggedIn = false;
-
   const element = useRoutes(
     routes.map(({ path, element, layout: LayoutComponent }) => ({
       path,

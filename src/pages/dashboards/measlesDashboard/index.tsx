@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
-import { getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
+import { FunctionComponent, useState, useEffect, useCallback } from 'react';
+import { getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, mapChat, somasMap } from '../../../services/Charts.service';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import highchartsMap from "highcharts/modules/map";
@@ -20,7 +20,6 @@ const MeaslesDashboard: FunctionComponent = () => {
   const [chartData, setChartData] = useState({});
   const [chart1Data, setChart1Data] = useState({});
 
-  const [loading, setLoading] = useState(false);
   const [measlesCases, setMeaslesCases] = useState<DiseaseData>({
     suspectedCases: 0,
     confirmedCases: 0,
@@ -28,10 +27,8 @@ const MeaslesDashboard: FunctionComponent = () => {
     rdtRapidDiagnostictestPositive: 0,
     cultured: 0,
   });
-  const [confirmedCasesByLGA, setConfirmedCasesByLGA] = useState<ConfirmedCasesByLGA>({});
 
   const fetchMap = useCallback(async () => {
-    setLoading(true);
     try {
       const data: { diseaseCascade: LGAData[] } = await summaryApiData(userData.stateId);
       const confirmedCases: ConfirmedCasesByLGA = {};
@@ -66,14 +63,11 @@ const MeaslesDashboard: FunctionComponent = () => {
 
     } catch (error) {
       console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
     }
   }, [userData.state, userData.stateId]);
 
 
   const fetchMapBysate = useCallback(async () => {
-    setLoading(true);
     try {
       const data: { diseaseCascade: LGAData[] } = await summaryApiData(userData.stateId);
       const confirmedCases: ConfirmedCasesByLGA = {};
@@ -104,12 +98,10 @@ const MeaslesDashboard: FunctionComponent = () => {
       const mapData = await getNigeriaMapForSomasData(confirmedCases);
 
       setChartData(hivStateMap(map, mapData, `Confirmed cases of Measles by states`, 800));
-      setChart1Data(mapChat(map, mapData, `Measles cases in by state`, 800));
+      setChart1Data(mapChat(map, mapData, `Measles cases in by state`, 800, true));
 
     } catch (error) {
       console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
     }
   }, [userData.state, userData.stateId]);
 
@@ -137,7 +129,7 @@ const MeaslesDashboard: FunctionComponent = () => {
             </div>
 
             <div className="col-12 col-md-12">
-              <SmallCard20x title="Total Patients Cultured" fontColourNumber={"white-color-number"} fontColour={"white-color"} color={"green3"} value={measlesCases.confirmedCases.toString()} />
+              <SmallCard20x title="Total Patients Confirmed" fontColourNumber={"white-color-number"} fontColour={"white-color"} color={"green3"} value={measlesCases.confirmedCases.toString()} />
             </div>
           </div>
 

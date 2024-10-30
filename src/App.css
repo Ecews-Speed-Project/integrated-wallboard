@@ -143,7 +143,7 @@
 
 .small-card-text {
   line-height: 26px;
-  font-size: 46px !important;
+  font-size: 40px !important;
   color: #0e8650;
   text-align: left;
   font-family: Satoshi;
@@ -519,7 +519,33 @@
   background-color: #0056b3;
   color: white;
 }
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+  color: var(--bs-btn-active-color);
+  background-color: #333333 !important;
+  border-color: #333333 !important;
+}
 
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #333333 !important;
+  --bs-btn-border-color: #333333 !important;
+}
+
+
+.bg-gray-800 {
+  --tw-bg-opacity: 1;
+  background-color: #83b136 !important;
+}
+
+.p-2 {
+  padding: 1.2rem !important;
+}
+.bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: #105c1c !important;
+  padding: 1.2rem !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

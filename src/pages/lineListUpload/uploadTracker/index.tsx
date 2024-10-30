@@ -10,6 +10,7 @@ import { LINE_LIST_REPORT } from '../../../utils/constants';
 import { RootState } from '../../../store';
 import BreadCrumb from '../../../components/BreadCrumb';
 import PaginationComponent from '../../../components/Pagination';
+import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
 
 const UploadTracker: React.FC = () => {
   const userData = useSelector((state: RootState) => state.auth);
@@ -96,7 +97,7 @@ const UploadTracker: React.FC = () => {
 
   return (
     <div className="bg-container container-fluid  mt-2">
-      <BreadCrumb state={"General"} page={"Upload Tracker"}></BreadCrumb>
+      <DynamicBreadCrumb page="Upload Tracker" />
 
       <div style={{ height: 400, width: '100%' }}>
         <Box sx={{ padding: 2 }}>

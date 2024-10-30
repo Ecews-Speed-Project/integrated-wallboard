@@ -1,19 +1,15 @@
-import { FunctionComponent, useState, useCallback, useEffect } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 
 import styles from './Style.module.css';
-import osunMap from '../../../demo-data/Osun.json';
-import { stateMaps } from '../../../services/Charts.service';
 
 const Saturation: FunctionComponent = () => {
-	const [chartData, setChartData] = useState({});
 	const fetchMap = async () => {
 
 	}
 
 	useEffect(() => {
-		// Define the fetch function
 		fetchMap()
-		return () => { // cleanup function of type : () => void
+		return () => { 
 			console.log("Cleanup")
 		}
 

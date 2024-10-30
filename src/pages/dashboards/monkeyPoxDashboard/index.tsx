@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
+import { FunctionComponent, useState, useEffect, useCallback } from 'react';
 import { getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, mapChat, somasMap, stateMaps } from '../../../services/Charts.service';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
-import SmallCard from '../../../components/SmallCard';
 import { summaryApiData } from '../../../services/main.service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';

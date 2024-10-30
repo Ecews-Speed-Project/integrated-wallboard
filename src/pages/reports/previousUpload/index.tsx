@@ -3,11 +3,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
 import PaginationComponent from '../../../components/Pagination';
-import BreadCrumb from '../../../components/BreadCrumb';
 import '../../../App.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { VIEW_UPLOADS } from '../../../utils/constants';
+import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
 
 const MainGrid: React.FC = () => {
   const [state, setState] = useState({
@@ -80,7 +80,7 @@ const MainGrid: React.FC = () => {
 
   return (
     <div className="bg-container container-fluid mt-2">
-      <BreadCrumb state="General" page="Previous Upload" />
+      <DynamicBreadCrumb page="Previous Upload" />
       <div style={{ height: 400, width: '100%' }}>
         <Box sx={{ padding: 2 }}>
           <Grid container spacing={2} mb={4}>

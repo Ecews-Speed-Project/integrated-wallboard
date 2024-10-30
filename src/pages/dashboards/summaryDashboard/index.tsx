@@ -2,24 +2,24 @@ import { FunctionComponent, useState, useEffect, useCallback } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import highchartsMap from 'highcharts/modules/map';
-import { getMap, getSomaLiveMapData, somasMap, stateMaps } from '../../../services/Charts.service';
+import { getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, somasMap } from '../../../services/Charts.service';
 import SmallCard from '../../../components/SmallCard';
 import Carousel from 'react-bootstrap/Carousel';
-import { summaryApiData } from '../../../services/main.service';
-import { DiseaseData, LGAData, Totals } from '../../../types/interfaces';
+import { getReportDatesData, summaryApiData } from '../../../services/main.service';
+import { LGAData, Totals } from '../../../types/interfaces';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
 import { GenericObject } from '../../../types/dseaseData';
 import NonHIVTable from '../../../components/NonHIVTable';
+import { getStateById, Shimmer, State } from '../../../utils/helpers';
 
 highchartsMap(Highcharts);
 
 const SummaryBoard: FunctionComponent = () => {
 	const userData = useSelector((state: RootState) => state.auth);
+	let filteredState = useSelector((state: RootState) => state.menu.value);
 
-	const [chartData, setChartData] = useState({});
-	const [loading, setLoading] = useState(false);
 	const [state, setState] = useState({
 		user: {},
 		loading: false,
@@ -51,10 +51,20 @@ const SummaryBoard: FunctionComponent = () => {
 		return await getSomaLiveMapData(Object.entries(diseaseCases).map(([lga, value]) => ({ lgaName: lga, value })));
 	}
 
-	const fetchData = useCallback(async () => {
-		setLoading(true);
+	const fetchData = useCallback(async (userObject?: any) => {
+		setState((prevState) => ({ ...prevState, loading: true }));
+		let stateObj: State;
+		if (userObject !== undefined) {
+			stateObj = getStateById(userObject) as State;
+		}
+
+		let stateId = userObject !== undefined ? stateObj!.stateId : userData.stateId;
+		let stateName = userObject !== undefined ? stateObj!.StateName : userData.state!;
+
+
+
 		try {
-			const data: { diseaseCascade: LGAData[] } = await summaryApiData(userData.stateId);
+			const data: { diseaseCascade: LGAData[] } = await summaryApiData(stateId);
 
 			const choleraConfirmedCases: Record<string, number> = {};
 			const lassaConfirmedCases: Record<string, number> = {};
@@ -129,7 +139,7 @@ const SummaryBoard: FunctionComponent = () => {
 			});
 
 
-			const map = await getMap(userData.state);
+			const map = await getMap(stateName);
 			const measlesMapData = await getMapData(choleraConfirmedCases);
 			const lassaMapData = await getMapData(lassaConfirmedCases);
 			const yellowFeverMapData = await getMapData(measlesConfirmedCases);
@@ -153,64 +163,198 @@ const SummaryBoard: FunctionComponent = () => {
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		} finally {
-			setLoading(false);
 		}
 	}, [userData.state, userData.stateId]);
 
+
+
+	const fetchMapBysate = useCallback(async (userObject?: any) => {
+		setState((prevState) => ({ ...prevState, loading: true }));
+
+		try {
+			const data: { diseaseCascade: LGAData[] } = await summaryApiData(userData.stateId);
+
+			const choleraConfirmedCases: Record<string, number> = {};
+			const lassaConfirmedCases: Record<string, number> = {};
+			const measlesConfirmedCases: Record<string, number> = {};
+			const yellowFeverConfirmedCases: Record<string, number> = {};
+			const monkeyPoxConfirmedCases: Record<string, number> = {};
+			const covid19ConfirmedCases: Record<string, number> = {};
+
+			let mapSize = 1100
+			if (userData.state === 'Delta') {
+				mapSize = 970
+			} else if (userData.state === 'Osun') {
+				mapSize = 1080
+			} else {
+				mapSize = 800
+			}
+
+
+			const totals: Totals = {
+				cholera: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+				lassa: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+				measles: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+				yellowFever: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+				monkeyPox: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+				covid19: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+				diphtheria: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
+			};
+
+			data.diseaseCascade.forEach((current) => {
+				const { measles, yellowFever, choleraCascade, monkeyPox, lassa, covid19, state } = current;
+				totals.measles.suspectedCases += measles.suspectedCases;
+				totals.measles.confirmedCases += measles.confirmedCases;
+				totals.measles.evaluatedCases += measles.evaluatedCases;
+				totals.measles.rdtRapidDiagnostictestPositive += measles.rdtRapidDiagnostictestPositive;
+				totals.measles.cultured += measles.cultured;
+				choleraConfirmedCases[state] = (choleraConfirmedCases[state] || 0) + measles.confirmedCases;
+
+				totals.yellowFever.suspectedCases += yellowFever.suspectedCases;
+				totals.yellowFever.confirmedCases += yellowFever.confirmedCases;
+				totals.yellowFever.evaluatedCases += yellowFever.evaluatedCases;
+				totals.yellowFever.rdtRapidDiagnostictestPositive += yellowFever.rdtRapidDiagnostictestPositive;
+				totals.yellowFever.cultured += yellowFever.cultured;
+				lassaConfirmedCases[state] = (lassaConfirmedCases[state] || 0) + yellowFever.confirmedCases;
+
+				totals.cholera.suspectedCases += choleraCascade.suspectedCases;
+				totals.cholera.confirmedCases += choleraCascade.confirmedCases;
+				totals.cholera.evaluatedCases += choleraCascade.evaluatedCases;
+				totals.cholera.rdtRapidDiagnostictestPositive += choleraCascade.rdtRapidDiagnostictestPositive;
+				totals.cholera.cultured += choleraCascade.cultured;
+				measlesConfirmedCases[state] = (measlesConfirmedCases[state] || 0) + choleraCascade.confirmedCases;
+
+				totals.monkeyPox.suspectedCases += monkeyPox.suspectedCases;
+				totals.monkeyPox.confirmedCases += monkeyPox.confirmedCases;
+				totals.monkeyPox.evaluatedCases += monkeyPox.evaluatedCases;
+				totals.monkeyPox.rdtRapidDiagnostictestPositive += monkeyPox.rdtRapidDiagnostictestPositive;
+				totals.monkeyPox.cultured += monkeyPox.cultured;
+				yellowFeverConfirmedCases[state] = (yellowFeverConfirmedCases[state] || 0) + monkeyPox.confirmedCases;
+
+				totals.lassa.suspectedCases += lassa.suspectedCases;
+				totals.lassa.confirmedCases += lassa.confirmedCases;
+				totals.lassa.evaluatedCases += lassa.evaluatedCases;
+				totals.lassa.rdtRapidDiagnostictestPositive += lassa.rdtRapidDiagnostictestPositive;
+				totals.lassa.cultured += lassa.cultured;
+				monkeyPoxConfirmedCases[state] = (monkeyPoxConfirmedCases[state] || 0) + lassa.confirmedCases;
+
+				totals.covid19.suspectedCases += covid19.suspectedCases;
+				totals.covid19.confirmedCases += covid19.confirmedCases;
+				totals.covid19.evaluatedCases += covid19.evaluatedCases;
+				totals.covid19.rdtRapidDiagnostictestPositive += covid19.rdtRapidDiagnostictestPositive;
+				totals.covid19.cultured += covid19.cultured;
+				covid19ConfirmedCases[state] = (covid19ConfirmedCases[state] || 0) + covid19.confirmedCases;
+			});
+
+
+			const map = await getMap(userData.state);
+			const measlesMapData = await getNigeriaMapForSomasData(choleraConfirmedCases);
+			const lassaMapData = await getNigeriaMapForSomasData(lassaConfirmedCases);
+			const yellowFeverMapData = await getNigeriaMapForSomasData(measlesConfirmedCases);
+			const monkeyPoxMapData = await getNigeriaMapForSomasData(yellowFeverConfirmedCases);
+			const covid19MapData = await getNigeriaMapForSomasData(monkeyPoxConfirmedCases);
+			const choleraMapData = await getNigeriaMapForSomasData(covid19ConfirmedCases);
+
+			setState(prevState => ({
+				...prevState,
+				diseaseCases: totals,
+				lgaData: data.diseaseCascade,
+				measlesMapChartData: hivStateMap(map, measlesMapData, `Confirmed cases of Measles by state`, mapSize),
+				lassaMapChartData: hivStateMap(map, lassaMapData, `Confirmed cases of Lassa  Fever by state`, mapSize),
+				yellowMapChartData: hivStateMap(map, yellowFeverMapData, `Confirmed cases of Yellow Fever by state`, mapSize),
+				monkeyMapChartData: hivStateMap(map, monkeyPoxMapData, `Confirmed cases of Monkey Pox by state`, mapSize),
+				covid19MapChartData: hivStateMap(map, covid19MapData, `Confirmed cases of Covid19 by LGA state`, mapSize),
+				choleraMapChartData: hivStateMap(map, choleraMapData, `Confirmed cases of Cholera by LGA in state`, mapSize),
+				loading: false,
+			}));
+
+		} catch (error) {
+			console.error('Error fetching data:', error);
+			setState((prevState) => ({ ...prevState, loading: true }));
+		}
+	}, [userData.state, userData.stateId]);
+
+	const handleValueChange = (newValue: string) => {
+		if (newValue != "") {
+			fetchData(newValue);
+		} else {
+			fetchMapBysate()
+		}
+	};
+
 	useEffect(() => {
-		fetchData();
-	}, [fetchData]);
+		if (filteredState) {
+			handleValueChange(filteredState);
+		} else {
+			if (userData.stateId != 0) {
+				fetchData();
+			} else {
+				fetchMapBysate()
+			}
+		}
+
+	}, [fetchData, filteredState]);
 
 	return (
 		<div className="bg-container container-fluid mt-2">
 			<DynamicBreadCrumb page="Summary Dashboard" />
 			<div className="row">
-				<div className="col-2 col-md-2">
-					<SmallCard title="Measles Cases" value={state.diseaseCases.measles.suspectedCases.toString()} />
-				</div>
-				<div className="col-2 col-md-2">
-					<SmallCard title="Yellow Fever Cases" value={state.diseaseCases.yellowFever.suspectedCases.toString()} />
-				</div>
-				<div className="col-2 col-md-2">
-					<SmallCard title="New Cholera Cases" value={state.diseaseCases.cholera.suspectedCases.toString()} />
-				</div>
-				<div className="col-2 col-md-2">
-					<SmallCard title="New Monkey Pox Cases" value={state.diseaseCases.monkeyPox.suspectedCases.toString()} />
-				</div>
-				<div className="col-2 col-md-2">
-					<SmallCard title="Lassa Fever Cases" value={state.diseaseCases.lassa.suspectedCases.toString()} />
-				</div>
-				<div className="col-2 col-md-2">
-					<SmallCard title="Covid19 Cases" value={state.diseaseCases.covid19.suspectedCases.toString()} />
-				</div>
-				<div className="col-12 col-md-6">
-					<NonHIVTable data={state.lgaData} />
-				</div>
-				<div className="col-12 col-md-6">
-					<Carousel>
-						{state.diseaseCases.measles.confirmedCases > 0 && <Carousel.Item>
-							<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.measlesMapChartData} />
-						</Carousel.Item>}
-						{state.diseaseCases.yellowFever.confirmedCases > 0 && <Carousel.Item>
-							<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.lassaMapChartData} />
-						</Carousel.Item>
-						}
-						{state.diseaseCases.cholera.confirmedCases > 0 && <Carousel.Item>
-							<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.yellowMapChartData} />
-						</Carousel.Item>
-						}
-						{state.diseaseCases.monkeyPox.confirmedCases > 0 && <Carousel.Item>
-							<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.monkeyMapChartData} />
-						</Carousel.Item>
-						}
-						{state.diseaseCases.lassa.confirmedCases > 0 && <Carousel.Item>
-							<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.covid19MapChartData} />
-						</Carousel.Item>}
-						{state.diseaseCases.covid19.confirmedCases > 0 && <Carousel.Item>
-							<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.choleraMapChartData} />
-						</Carousel.Item>}
-					</Carousel>
-				</div>
+				{state.loading ? (
+					<Shimmer />
+				) : (<div className="row">
+					<div className="col-2 col-md-2">
+						<SmallCard title="Measles Cases" value={state.diseaseCases.measles.suspectedCases.toString()} />
+					</div>
+					<div className="col-2 col-md-2">
+						<SmallCard title="Yellow Fever Cases" value={state.diseaseCases.yellowFever.suspectedCases.toString()} />
+					</div>
+					<div className="col-2 col-md-2">
+						<SmallCard title="New Cholera Cases" value={state.diseaseCases.cholera.suspectedCases.toString()} />
+					</div>
+					<div className="col-2 col-md-2">
+						<SmallCard title="New Monkey Pox Cases" value={state.diseaseCases.monkeyPox.suspectedCases.toString()} />
+					</div>
+					<div className="col-2 col-md-2">
+						<SmallCard title="Lassa Fever Cases" value={state.diseaseCases.lassa.suspectedCases.toString()} />
+					</div>
+					<div className="col-2 col-md-2">
+						<SmallCard title="Covid19 Cases" value={state.diseaseCases.covid19.suspectedCases.toString()} />
+					</div>
+				</div>)}
+				{state.loading ? (
+					<Shimmer />
+				) : (
+					<div className="col-12 col-md-6">
+						<NonHIVTable data={state.lgaData} />
+					</div>)}
+				{state.loading ? (
+					<Shimmer />
+				) : (
+					<div className="col-12 col-md-6">
+						<Carousel>
+							{state.diseaseCases.measles.confirmedCases > 0 && <Carousel.Item>
+								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.measlesMapChartData} />
+							</Carousel.Item>}
+							{state.diseaseCases.yellowFever.confirmedCases > 0 && <Carousel.Item>
+								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.lassaMapChartData} />
+							</Carousel.Item>
+							}
+							{state.diseaseCases.cholera.confirmedCases > 0 && <Carousel.Item>
+								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.yellowMapChartData} />
+							</Carousel.Item>
+							}
+							{state.diseaseCases.monkeyPox.confirmedCases > 0 && <Carousel.Item>
+								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.monkeyMapChartData} />
+							</Carousel.Item>
+							}
+							{state.diseaseCases.lassa.confirmedCases > 0 && <Carousel.Item>
+								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.covid19MapChartData} />
+							</Carousel.Item>}
+							{state.diseaseCases.covid19.confirmedCases > 0 && <Carousel.Item>
+								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.choleraMapChartData} />
+							</Carousel.Item>}
+						</Carousel>
+					</div>)}
 			</div>
 		</div>
 	);

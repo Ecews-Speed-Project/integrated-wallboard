@@ -37,13 +37,13 @@ api.interceptors.response.use(
   (error) => {
     if (error.code === "ERR_NETWORK" || error.code === "ERR_BAD_REQUEST") {
       alert("Please check your internet")
-     // window.location.href = '/login';
+   //   window.location.href = '/login';
     }
     // Handle token expiration or other errors here
     if (error.response?.status === 200) {
     
       // Optionally, redirect to login page
-     // window.location.href = '/login';
+     window.location.href = '/login';
     }
     return Promise.reject(error);
   }

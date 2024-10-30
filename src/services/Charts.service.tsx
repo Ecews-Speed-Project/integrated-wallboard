@@ -1,4 +1,3 @@
-import { color } from "highcharts";
 
 interface mapData {
     value: number;
@@ -91,7 +90,7 @@ export const stateMaps = (map: any, data: any, title: any, height: any = 700) =>
 }
 
 
-export const mapChat = (map: any, data: any, title: any, height: any = 700) => {
+export const mapChat = (map: any, data: any, title: any, height: any = 700 , isShow=false) => {
     return {
         chart: {
             zooming: {
@@ -162,7 +161,7 @@ export const mapChat = (map: any, data: any, title: any, height: any = 700) => {
                 27.6, 28.8, 21.7, 34.1, 29.0, 28.4
             ],
             tooltip: {
-                valueSuffix: ' mm'
+                valueSuffix: ''
             }
 
         }, {
@@ -175,9 +174,9 @@ export const mapChat = (map: any, data: any, title: any, height: any = 700) => {
                 lineWidth: 2 //
             },
             type: 'spline',
-            data: [
+            data: (isShow) ?  [
                 13.0, 14.5, 10.8, 5.8, 5.8, 5.8,
-            ],
+            ] : [],
             tooltip: {
                 valueSuffix: '°C'
             }
@@ -586,7 +585,7 @@ export const getSomaLiveMapForSummaryPageData = async (mapdata: any) => {
                 "code": (p.lgaName === undefined) ? null : p.lgaName
             },
         )
-        p.code = (p.lgaName == undefined) ? null : p.code;
+        p.code = (p.lgaName === undefined) ? null : p.code;
     });
     return mapData;
 }
@@ -785,7 +784,7 @@ export const getData = (state: any, lga: any) => {
                     "id": 1,
                     "stateId": 1,
                     "lgaId": 3,
-                    "lgaName": 'Irepodun\/Ifelodun',
+                    "lgaName": 'Irepodun Ifelodun',
                     "reportingWeek": 29,
                     "txcurr": 2110,
                     "uniqueFingerprints": 2074,

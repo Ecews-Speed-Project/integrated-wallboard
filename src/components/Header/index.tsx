@@ -1,14 +1,12 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS for the navbar toggle functionality
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-//import { format } from "path";
-
-//import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-//import { Filter, Clock, User, Search, Download, ChevronDown } from 'lucide-react';
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { RootState } from "../../store";
+import { setValue } from "../../features/menu/menuSlice";
+import { formatDate } from "../../utils/helpers";
 
 
 
@@ -17,10 +15,18 @@ const Header: FunctionComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((state: RootState) => state.auth);
+
   const handleLogout = () => {
     dispatch(logout());  // Dispatch logout action
     navigate('/');       // Redirect to the login page after logout
   };
+
+
+  const handleClick = (value:any) => {
+    dispatch(setValue(value));
+  };
+
+
   return (<>
 
     <header className="content-container px-6 flex items-center justify-between mb-4 mt-4">
@@ -32,11 +38,17 @@ const Header: FunctionComponent = () => {
         <img src="images/nigeria.svg" alt="Nigeria coat of arms" />
         <img src="images/ecews.svg" alt="ECEWS logo" />
         <div className="flex items-center space-x-4">
-          <span>Last Update:  28 May 2024</span>
+          <span>Last Update:  {formatDate(new Date())}</span>
         </div>
       </div>
 
       <div className="flex items-center space-x-4">
+        <DropdownButton id="dropdown-basic-button" title="Filter" className="btn-dark">
+        <Dropdown.Item  onClick={() => handleClick(0)} >All States</Dropdown.Item> 
+          <Dropdown.Item  onClick={() => handleClick(1)} >Delta</Dropdown.Item>    
+          <Dropdown.Item onClick={() => handleClick(2)}>Ekiti</Dropdown.Item>    
+          <Dropdown.Item onClick={() => handleClick(3)}>Osun</Dropdown.Item>    
+        </DropdownButton>
         <DropdownButton id="dropdown-basic-button" title="Menu" className="btn-dark">
           <Dropdown.Item as={Link} to="/upload-data">  Upload Data</Dropdown.Item>
           <Dropdown.Item as={Link} to="/previous-upload">    Previous Upload</Dropdown.Item>

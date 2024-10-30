@@ -1,6 +1,4 @@
 import { FunctionComponent, useState, useCallback, useEffect } from 'react';
-import Header from '../../../components/Header';
-import osunMap from '../../../demo-data/Osun.json';
 import { columnChart, stateMaps } from '../../../services/Charts.service';
 import Highcharts from 'highcharts'
 import highchartsMap from "highcharts/modules/map";
@@ -8,7 +6,6 @@ import HighchartsReact from 'highcharts-react-official'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import BreadCrumb from '../../../components/BreadCrumb';
-import { auth } from '../../../services/auth.services';
 import { RootState } from '../../../store';
 import { useSelector } from 'react-redux';
 highchartsMap(Highcharts);
