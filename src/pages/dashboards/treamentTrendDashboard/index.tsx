@@ -108,10 +108,10 @@ const Dashboard: React.FC = () => {
 			) : (<Card className="bg-emerald-400 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 banner" >
 				<CardContent className="p-8 flex justify-between items-center">
 					<div className="space-y-3 max-w-lg">
-						<h1 className="banner-text text-3xl font-bold  tracking-tight" style={{ color: '#000 !importent' }}>Quarter ends in 117 days</h1>
+						<h1 className="banner-text text-3xl font-bold  tracking-tight" style={{ color: '#000 !importent' }}>Quarter ends in 33  days</h1>
 						<h2 className="banner-text text-2xl font-bold  tracking-tight">TX_CURR on the NDR today is {state.result.ndr_tx_curr}</h2>
 						<p className=" banner-text text-white/90 text-sm leading-relaxed">
-							95 Reporting Facilities  have upload (100%)
+							22 Reporting Facilities  have upload (100%)
 						</p>
 					</div>
 					<div className="relative">

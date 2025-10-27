@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { loginSuccess } from './authSlice';
+import { BASE_URL } from '../../utils/constants';
 
 // Define LoginCredentials type
 interface LoginCredentials {
@@ -19,7 +20,7 @@ export const login = createAsyncThunk<
   async ({ email, password }, { rejectWithValue, dispatch }) => {
     try {
       // Make the API call
-      const response = await axios.post('http://eboard.ecews.org/api/account/login', { email, password });
+      const response = await axios.post(`${BASE_URL}account/login`, { email, password });
 
       if (response.status !== 200) {
         throw new Error('Login failed');

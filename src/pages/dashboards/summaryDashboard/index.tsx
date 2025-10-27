@@ -3,18 +3,26 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import highchartsMap from 'highcharts/modules/map';
 import { getMap, getNigeriaMapForSomasData, getSomaLiveMapData, hivStateMap, somasMap } from '../../../services/Charts.service';
-import SmallCard from '../../../components/SmallCard';
-import Carousel from 'react-bootstrap/Carousel';
 import { getReportDatesData, summaryApiData } from '../../../services/main.service';
 import { LGAData, Totals } from '../../../types/interfaces';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import DynamicBreadCrumb from '../../../components/DynamicBreadCrumb';
 import { GenericObject } from '../../../types/dseaseData';
 import NonHIVTable from '../../../components/NonHIVTable';
 import { getStateById, Shimmer, State } from '../../../utils/helpers';
+import PageLayout from '../../../components/Layout/PageLayout';
+import { Box, Grid, Card, CardContent, Typography } from '@mui/material';
+import StatusBadge from '../../../components/common/StatusBadge';
 
 highchartsMap(Highcharts);
+
+interface DiseaseCard {
+	title: string;
+	suspectedCases: number;
+	confirmedCases: number;
+	evaluatedCases: number;
+	status: 'active' | 'inactive' | 'scheduled' | 'over' | 'pending';
+}
 
 const SummaryBoard: FunctionComponent = () => {
 	const userData = useSelector((state: RootState) => state.auth);
@@ -47,6 +55,7 @@ const SummaryBoard: FunctionComponent = () => {
 			diphtheria: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
 		},
 	});
+
 	async function getMapData(diseaseCases: any) {
 		return await getSomaLiveMapData(Object.entries(diseaseCases).map(([lga, value]) => ({ lgaName: lga, value })));
 	}
@@ -60,8 +69,6 @@ const SummaryBoard: FunctionComponent = () => {
 
 		let stateId = userObject !== undefined ? stateObj!.stateId : userData.stateId;
 		let stateName = userObject !== undefined ? stateObj!.StateName : userData.state!;
-
-
 
 		try {
 			const data: { diseaseCascade: LGAData[] } = await summaryApiData(stateId);
@@ -81,7 +88,6 @@ const SummaryBoard: FunctionComponent = () => {
 			} else {
 				mapSize = 800
 			}
-
 
 			const totals: Totals = {
 				cholera: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
@@ -138,7 +144,6 @@ const SummaryBoard: FunctionComponent = () => {
 				covid19ConfirmedCases[lga] = (covid19ConfirmedCases[lga] || 0) + covid19.confirmedCases;
 			});
 
-
 			const map = await getMap(stateName);
 			const measlesMapData = await getMapData(choleraConfirmedCases);
 			const lassaMapData = await getMapData(lassaConfirmedCases);
@@ -166,8 +171,6 @@ const SummaryBoard: FunctionComponent = () => {
 		}
 	}, [userData.state, userData.stateId]);
 
-
-
 	const fetchMapBysate = useCallback(async (userObject?: any) => {
 		setState((prevState) => ({ ...prevState, loading: true }));
 
@@ -189,7 +192,6 @@ const SummaryBoard: FunctionComponent = () => {
 			} else {
 				mapSize = 800
 			}
-
 
 			const totals: Totals = {
 				cholera: { suspectedCases: 0, confirmedCases: 0, evaluatedCases: 0, rdtRapidDiagnostictestPositive: 0, cultured: 0 },
@@ -246,7 +248,6 @@ const SummaryBoard: FunctionComponent = () => {
 				covid19ConfirmedCases[state] = (covid19ConfirmedCases[state] || 0) + covid19.confirmedCases;
 			});
 
-
 			const map = await getMap(userData.state);
 			const measlesMapData = await getNigeriaMapForSomasData(choleraConfirmedCases);
 			const lassaMapData = await getNigeriaMapForSomasData(lassaConfirmedCases);
@@ -295,68 +296,179 @@ const SummaryBoard: FunctionComponent = () => {
 
 	}, [fetchData, filteredState]);
 
+	const DiseaseStatCard: React.FC<DiseaseCard> = ({ title, suspectedCases, confirmedCases, evaluatedCases, status }) => (
+	<Card className="h-full">
+		<CardContent>
+			<Box className="flex justify-between items-start mb-4">
+				<Typography variant="h6" className="font-semibold">
+					{title}
+				</Typography>
+				<StatusBadge status={status} />
+			</Box>
+			<Grid container spacing={2}>
+				<Grid item xs={4}>
+					<Typography variant="body2" color="textSecondary">Suspected</Typography>
+					<Typography variant="h5" className="font-semibold">{suspectedCases}</Typography>
+				</Grid>
+				<Grid item xs={4}>
+					<Typography variant="body2" color="textSecondary">Confirmed</Typography>
+					<Typography variant="h5" className="font-semibold">{confirmedCases}</Typography>
+				</Grid>
+				<Grid item xs={4}>
+					<Typography variant="body2" color="textSecondary">Evaluated</Typography>
+					<Typography variant="h5" className="font-semibold">{evaluatedCases}</Typography>
+				</Grid>
+			</Grid>
+		</CardContent>
+	</Card>
+	);
+
 	return (
-		<div className="bg-container container-fluid mt-2">
-			<DynamicBreadCrumb page="Summary Dashboard" />
-			<div className="row">
-				{state.loading ? (
-					<Shimmer />
-				) : (<div className="row">
-					<div className="col-2 col-md-2">
-						<SmallCard title="Measles Cases" value={state.diseaseCases.measles.suspectedCases.toString()} />
-					</div>
-					<div className="col-2 col-md-2">
-						<SmallCard title="Yellow Fever Cases" value={state.diseaseCases.yellowFever.suspectedCases.toString()} />
-					</div>
-					<div className="col-2 col-md-2">
-						<SmallCard title="New Cholera Cases" value={state.diseaseCases.cholera.suspectedCases.toString()} />
-					</div>
-					<div className="col-2 col-md-2">
-						<SmallCard title="New Monkey Pox Cases" value={state.diseaseCases.monkeyPox.suspectedCases.toString()} />
-					</div>
-					<div className="col-2 col-md-2">
-						<SmallCard title="Lassa Fever Cases" value={state.diseaseCases.lassa.suspectedCases.toString()} />
-					</div>
-					<div className="col-2 col-md-2">
-						<SmallCard title="Covid19 Cases" value={state.diseaseCases.covid19.suspectedCases.toString()} />
-					</div>
-				</div>)}
-				{state.loading ? (
-					<Shimmer />
-				) : (
-					<div className="col-12 col-md-6">
-						<NonHIVTable data={state.lgaData} />
-					</div>)}
-				{state.loading ? (
-					<Shimmer />
-				) : (
-					<div className="col-12 col-md-6">
-						<Carousel>
-							{state.diseaseCases.measles.confirmedCases > 0 && <Carousel.Item>
-								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.measlesMapChartData} />
-							</Carousel.Item>}
-							{state.diseaseCases.yellowFever.confirmedCases > 0 && <Carousel.Item>
-								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.lassaMapChartData} />
-							</Carousel.Item>
-							}
-							{state.diseaseCases.cholera.confirmedCases > 0 && <Carousel.Item>
-								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.yellowMapChartData} />
-							</Carousel.Item>
-							}
-							{state.diseaseCases.monkeyPox.confirmedCases > 0 && <Carousel.Item>
-								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.monkeyMapChartData} />
-							</Carousel.Item>
-							}
-							{state.diseaseCases.lassa.confirmedCases > 0 && <Carousel.Item>
-								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.covid19MapChartData} />
-							</Carousel.Item>}
-							{state.diseaseCases.covid19.confirmedCases > 0 && <Carousel.Item>
-								<HighchartsReact constructorType="mapChart" highcharts={Highcharts} options={state.choleraMapChartData} />
-							</Carousel.Item>}
-						</Carousel>
-					</div>)}
-			</div>
-		</div>
+		<PageLayout 
+			title="Disease Summary Dashboard" 
+			breadcrumbs={[{ label: 'Dashboards' }, { label: 'Disease Summary' }]}
+		>
+			{state.loading ? (
+				<Shimmer />
+			) : (
+				<Box>
+					<Grid container spacing={3} className="mb-6">
+						<Grid item xs={12} md={4}>
+							<DiseaseStatCard
+								title="Measles"
+								suspectedCases={state.diseaseCases.measles.suspectedCases}
+								confirmedCases={state.diseaseCases.measles.confirmedCases}
+								evaluatedCases={state.diseaseCases.measles.evaluatedCases}
+								status="active"
+							/>
+						</Grid>
+						<Grid item xs={12} md={4}>
+							<DiseaseStatCard
+								title="Lassa Fever"
+								suspectedCases={state.diseaseCases.lassa.suspectedCases}
+								confirmedCases={state.diseaseCases.lassa.confirmedCases}
+								evaluatedCases={state.diseaseCases.lassa.evaluatedCases}
+								status="active"
+							/>
+						</Grid>
+						<Grid item xs={12} md={4}>
+							<DiseaseStatCard
+								title="Yellow Fever"
+								suspectedCases={state.diseaseCases.yellowFever.suspectedCases}
+								confirmedCases={state.diseaseCases.yellowFever.confirmedCases}
+								evaluatedCases={state.diseaseCases.yellowFever.evaluatedCases}
+								status="scheduled"
+							/>
+						</Grid>
+					</Grid>
+
+					<Grid container spacing={3} className="mb-6">
+						<Grid item xs={12} md={4}>
+							<DiseaseStatCard
+								title="Monkey Pox"
+								suspectedCases={state.diseaseCases.monkeyPox.suspectedCases}
+								confirmedCases={state.diseaseCases.monkeyPox.confirmedCases}
+								evaluatedCases={state.diseaseCases.monkeyPox.evaluatedCases}
+								status="active"
+							/>
+						</Grid>
+						<Grid item xs={12} md={4}>
+							<DiseaseStatCard
+								title="COVID-19"
+								suspectedCases={state.diseaseCases.covid19.suspectedCases}
+								confirmedCases={state.diseaseCases.covid19.confirmedCases}
+								evaluatedCases={state.diseaseCases.covid19.evaluatedCases}
+								status="over"
+							/>
+						</Grid>
+						<Grid item xs={12} md={4}>
+							<DiseaseStatCard
+								title="Cholera"
+								suspectedCases={state.diseaseCases.cholera.suspectedCases}
+								confirmedCases={state.diseaseCases.cholera.confirmedCases}
+								evaluatedCases={state.diseaseCases.cholera.evaluatedCases}
+								status="active"
+							/>
+						</Grid>
+					</Grid>
+
+					<Grid container spacing={3}>
+						<Grid item xs={12} md={6}>
+							<Card>
+								<CardContent>
+									<Typography variant="h6" className="mb-4">Measles Distribution</Typography>
+									<HighchartsReact
+										highcharts={Highcharts}
+										options={state.measlesMapChartData}
+										constructorType={'mapChart'}
+									/>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item xs={12} md={6}>
+							<Card>
+								<CardContent>
+									<Typography variant="h6" className="mb-4">Lassa Fever Distribution</Typography>
+									<HighchartsReact
+										highcharts={Highcharts}
+										options={state.lassaMapChartData}
+										constructorType={'mapChart'}
+									/>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item xs={12} md={6}>
+							<Card>
+								<CardContent>
+									<Typography variant="h6" className="mb-4">Yellow Fever Distribution</Typography>
+									<HighchartsReact
+										highcharts={Highcharts}
+										options={state.yellowMapChartData}
+										constructorType={'mapChart'}
+									/>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item xs={12} md={6}>
+							<Card>
+								<CardContent>
+									<Typography variant="h6" className="mb-4">Monkey Pox Distribution</Typography>
+									<HighchartsReact
+										highcharts={Highcharts}
+										options={state.monkeyMapChartData}
+										constructorType={'mapChart'}
+									/>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item xs={12} md={6}>
+							<Card>
+								<CardContent>
+									<Typography variant="h6" className="mb-4">COVID-19 Distribution</Typography>
+									<HighchartsReact
+										highcharts={Highcharts}
+										options={state.covid19MapChartData}
+										constructorType={'mapChart'}
+									/>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item xs={12} md={6}>
+							<Card>
+								<CardContent>
+									<Typography variant="h6" className="mb-4">Cholera Distribution</Typography>
+									<HighchartsReact
+										highcharts={Highcharts}
+										options={state.choleraMapChartData}
+										constructorType={'mapChart'}
+									/>
+								</CardContent>
+							</Card>
+						</Grid>
+					</Grid>
+				</Box>
+			)}
+		</PageLayout>
 	);
 };
 

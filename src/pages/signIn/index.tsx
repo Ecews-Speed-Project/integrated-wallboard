@@ -28,8 +28,13 @@ interface IconBoxProps {
 }
 
 const SignIn: React.FC = () => {
-  const [email, setUsername] = useState<string>('osun@speed.com');
-  const [password, setPassword] = useState<string>('P@ssw0rd');
+  const [email, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+/*   const [email, setUsername] = useState<string>('osun@speed.com');
+  const [password, setPassword] = useState<string>('P@ssw0rd'); */
+
   const [currentBgIndex, setCurrentBgIndex] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const dispatch = useDispatch<AppDispatch>();
@@ -68,9 +73,13 @@ const SignIn: React.FC = () => {
     try {
 
       await dispatch(login({ email, password })).unwrap();
+      if(email == "external@ecews.org"){
+        navigate('/dashboard');
+      }else{
+        navigate('/cdr-dashboard');
+      }
 
-
-      navigate('/dashboard');
+ 
     } catch {
       // Error is handled by the thunk and stored in Redux state
     }
@@ -142,20 +151,29 @@ const SignIn: React.FC = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label htmlFor="password" className="block mb-2">Password</label>
-            <input
-               style={{
-                padding: '1.2rem !important;',
-                minWidth: '100%'
-              }}
-              type="password"
-              id="password"
-              className="w-full p-2 bg-gray-700 rounded"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                style={{
+                  padding: '1.2rem !important',
+                  minWidth: '100%'
+                }}
+                type={showPassword ? "text" : "password"}
+                id="password"
+                className="w-full p-2 bg-gray-700 rounded pr-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 focus:outline-none"
+              >
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} style={{ fontSize: '1.2rem' }}></i>
+              </button>
+            </div>
           </div>
           <button type="submit" disabled={isLoading} className="p-2 bg-blue-500 text-white rounded" style={{
             paddingTop: '20px !important',

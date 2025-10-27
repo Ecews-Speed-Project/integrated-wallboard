@@ -50,7 +50,7 @@ const GenerateLineList: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     // Simulate API 
-
+    alert('Generating line list')
     const response = await fetch(`${GET_LINE_LIST}?page=1&pageSize=10`, {
       method: 'GET', // Change method to POST
       headers: {
@@ -66,6 +66,7 @@ const GenerateLineList: React.FC = () => {
 
   const generateList = async () => {
     try {
+      alert('Generating line list')
       // Simulate a file upload
       const formData = new FormData();
       formData.append('file', new Blob(['sample data'], { type: 'text/plain' }), 'example.txt');

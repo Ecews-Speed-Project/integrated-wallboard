@@ -6,13 +6,14 @@ import { RootState } from '../../store';
 
 interface DropZoneProps {
   uploadUrl: string;
+  tablename?: string;
 }
 
-const DropZone: React.FC<DropZoneProps> = ({ uploadUrl }) => {
+const DropZone: React.FC<DropZoneProps> = ({ uploadUrl , tablename}) => {
   const [progress, setProgress] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
   const userData = useSelector((state: RootState) => state.auth);
-
+  const tableName = "tablename";
 
   // Function to handle file upload with progress tracking
   const uploadFile = (file: File) => {
@@ -46,10 +47,15 @@ const DropZone: React.FC<DropZoneProps> = ({ uploadUrl }) => {
         reject();
       };
 
+
       xhr.open('POST', uploadUrl);
       xhr.setRequestHeader('Authorization', `Bearer ${userData!.token}`);
 
       const formData = new FormData();
+    
+      // xhr.setRequestHeader('Content-Type', `multipart/form-data`);
+      //formData.append('table_name', tablename);
+    
       formData.append('file', file);
       xhr.send(formData);
 

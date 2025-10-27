@@ -7,16 +7,16 @@ import Header from '../Header';
 
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return (
- 
-      <div className="main-layout">
-             <div className="container-fluid">
+  return (
+
+    <div className="main-layout">
+      <div className="container-fluid">
         <Header />
-        </div>
-        <div className="content-container px-6">{children}</div>
-  
       </div>
-    );
-  };
-  
-  export default MainLayout;
+      <div className="content-container px-6">{children}</div>
+
+    </div>
+  );
+};
+
+export default MainLayout;

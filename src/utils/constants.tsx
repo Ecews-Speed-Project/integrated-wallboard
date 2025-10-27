@@ -10,6 +10,7 @@ export const LINE_LIST_REPORT = `${BASE_URL}data/line-list-report`
 export const GENERATE_LINE_LIST = `${BASE_URL}data/generate-line-list`
 export const GET_LINE_LIST = `${BASE_URL}data/get-line-list`
 export const DOWNLOAD_LINE_LIST = `${BASE_URL}data/web-download/`
+export const DOWNLOAD_UPLOAD = `${BASE_URL}import/download-upload`
 
 
 

@@ -1,8 +1,9 @@
+import { BASE_URL } from '../../utils/constants';
 import axios, { AxiosResponse } from 'axios';
 
 // Create an axios instance
 const api = axios.create({
-  baseURL: 'http://eboard.ecews.org/api', // Replace with your API base URL
+  baseURL: `${BASE_URL}`, // Replace with your API base URL
   headers: {
     'Content-Type': 'application/json',
   },
